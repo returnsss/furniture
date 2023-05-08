@@ -1,6 +1,11 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3308/teamproject_market
+    url: jdbc:mariadb://localhost:3308/furniture
     username: root
     password: 2714
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
