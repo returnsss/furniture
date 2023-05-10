@@ -1,6 +1,7 @@
 package com.teamproject.furniture.member.service;
 
 import com.teamproject.furniture.member.dtos.MemberCreateDto;
+import com.teamproject.furniture.member.dtos.MemberLoginDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.repository.MemberRepository;
@@ -30,11 +31,12 @@ public class MemberService {
     }
 
     private void validateDuplicateMember(MemberCreateDto memberCreateDto) {
-        Optional<Member> findMembers = memberRepository.findByName(memberCreateDto.getName());
+        Optional<Member> findMembers = memberRepository.findByUserId(memberCreateDto.getUserId());
         if (findMembers.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
+
 
     public void update(MemberUpdateDto memberUpdateDto) {
         Member member = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
@@ -43,6 +45,16 @@ public class MemberService {
 //        Optional<Member> a = Optional.ofNullable(null);
 //        a.orElseThrow(); // 있으면 member던지고 없으면 예외
     }
+
+
+    public Optional<Member> login(MemberLoginDto memberLoginDto) {
+        Optional<Member> member = memberRepository.findByUserId(memberLoginDto.getUserId());
+        if (member.isEmpty() || !member.orElseThrow().getPassword().equals(memberLoginDto.getPassword())) {
+            throw new IllegalStateException("로그인에 실패하였습니다.");
+        }
+        return member;
+    }
+
 
 
     public List<Member> findAll() {
