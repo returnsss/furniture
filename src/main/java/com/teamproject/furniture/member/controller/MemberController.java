@@ -1,13 +1,11 @@
 package com.teamproject.furniture.member.controller;
 
 import com.teamproject.furniture.member.dtos.MemberCreateDto;
+import com.teamproject.furniture.member.dtos.MemberLoginDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
 import com.teamproject.furniture.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MemberController { // 기능
@@ -28,6 +26,11 @@ public class MemberController { // 기능
         memberService.update(memberUpdateDto);
     }
 
+
+    @GetMapping("/api/login")
+    public void loginApi(@RequestBody MemberLoginDto memberLoginDto){
+        memberService.login(memberLoginDto);
+    }
 
 
 

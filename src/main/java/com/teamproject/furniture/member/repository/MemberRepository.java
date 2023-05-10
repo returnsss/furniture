@@ -10,7 +10,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //Member save(Member member);
 
-    //Optional<Member> findById(Long id);
+    Optional<Member> findByUserId(String userId);
 
     Optional<Member> findByName(String name);
 
