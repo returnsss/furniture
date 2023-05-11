@@ -1,7 +1,6 @@
 package com.teamproject.furniture.product.service;
 
 import com.teamproject.furniture.product.dtos.AddProductDto;
-import com.teamproject.furniture.product.dtos.GetProductDto;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,8 +26,8 @@ public class ProductService {
         return save.getProductId();
     }
 
-    public Product getProduct(GetProductDto getProductDto) { // 제품 상세정보 조회
-        return productRepository.findById(getProductDto.getProductId())
+    public Product getProduct(Long productId) { // 제품 상세정보 조회
+        return productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
     }
 
