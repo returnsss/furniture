@@ -1,7 +1,6 @@
 package com.teamproject.furniture.product.controller;
 
 import com.teamproject.furniture.product.dtos.AddProductDto;
-import com.teamproject.furniture.product.dtos.GetProductDto;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,9 @@ public class ProductController {
     }
 
     // 제품조회는 @RequestParam 사용해서
-    @GetMapping("/api/product")
-    public Product getProductApi(@RequestBody GetProductDto getProductDto){
-        return productService.getProduct(getProductDto);
+    @GetMapping("/api/products/{productId}")
+    public Product getProductApi(@PathVariable Long productId){
+        return productService.getProduct(productId);
     }
 
     @GetMapping("/api/products")
