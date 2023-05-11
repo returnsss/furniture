@@ -15,8 +15,8 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
-@DynamicUpdate
-@NoArgsConstructor
+@DynamicUpdate // 수정된 부분만 쿼리문 만들도록
+@NoArgsConstructor // 기본 생성자
 public class Member {
 
     @Id
