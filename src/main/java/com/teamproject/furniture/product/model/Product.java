@@ -1,6 +1,7 @@
 package com.teamproject.furniture.product.model;
 
 import com.teamproject.furniture.product.dtos.AddProductDto;
+import com.teamproject.furniture.product.dtos.UpdateProductDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,6 +50,17 @@ public class Product {
         this.fileName = addProductDto.getFileName();
     }
 
+
+    public void updateProduct(UpdateProductDto updateProductDto) {
+
+        this.productName = updateProductDto.getProductName();
+        this.productPrice = updateProductDto.getProductPrice();
+        this.description = updateProductDto.getDescription();
+        this.category = updateProductDto.getCategory();
+        this.productsInStock = updateProductDto.getProductsInStock();
+        this.fileName = updateProductDto.getFileName();
+        this.registDay = updateProductDto.getRegistDay();
+    }
 
 
 

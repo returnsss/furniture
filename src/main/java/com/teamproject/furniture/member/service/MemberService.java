@@ -22,7 +22,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(MemberCreateDto memberCreateDto) {
+    public Long join(MemberCreateDto memberCreateDto) { // 등록
         validateDuplicateMember(memberCreateDto); // 중복 회원 검증
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);
@@ -30,7 +30,7 @@ public class MemberService {
         return member.getMemberId();
     }
 
-    private void validateDuplicateMember(MemberCreateDto memberCreateDto) {
+    private void validateDuplicateMember(MemberCreateDto memberCreateDto) { // 유효성 검사
         Optional<Member> findMembers = memberRepository.findByUserId(memberCreateDto.getUserId());
         if (findMembers.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -38,7 +38,7 @@ public class MemberService {
     }
 
 
-    public void update(MemberUpdateDto memberUpdateDto) {
+    public void update(MemberUpdateDto memberUpdateDto) { // 회원 정보 수정
         Member member = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
         // member에 update함수를 만들어서 인자값으로 MemberUpdateDto 값이 쓰인다
         member.update(memberUpdateDto);
@@ -47,7 +47,7 @@ public class MemberService {
     }
 
 
-    public Optional<Member> login(MemberLoginDto memberLoginDto) {
+    public Optional<Member> login(MemberLoginDto memberLoginDto) { // 로그인
         Optional<Member> member = memberRepository.findByUserId(memberLoginDto.getUserId());
         if (member.isEmpty() || !member.orElseThrow().getPassword().equals(memberLoginDto.getPassword())) {
             throw new IllegalStateException("로그인에 실패하였습니다.");
@@ -57,11 +57,11 @@ public class MemberService {
 
 
 
-    public List<Member> findAll() {
+    public List<Member> findAll() { // 모든 회원 조회
         return memberRepository.findAll();
     }
 
-    public Optional<Member> findOne(Long memberId) {
+    public Optional<Member> findOne(Long memberId) { // 회원 정보 상세 보기
         return memberRepository.findById(memberId);
     }
 
