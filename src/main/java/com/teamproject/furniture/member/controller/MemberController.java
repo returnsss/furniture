@@ -17,18 +17,18 @@ public class MemberController { // 기능
     }
 
     @PostMapping("/api/member")
-    public Long joinApi(@RequestBody MemberCreateDto memberCreateDto){
+    public Long joinApi(@RequestBody MemberCreateDto memberCreateDto){ // 회원등록
         return memberService.join(memberCreateDto);
     }
 
     @PatchMapping("/api/member")
-    public void updateApi(@RequestBody MemberUpdateDto memberUpdateDto){
+    public void updateApi(@RequestBody MemberUpdateDto memberUpdateDto){ // 회원 정보 수정
         memberService.update(memberUpdateDto);
     }
 
 
     @GetMapping("/api/login")
-    public void loginApi(@RequestBody MemberLoginDto memberLoginDto){
+    public void loginApi(@RequestBody MemberLoginDto memberLoginDto){ // 로그인
         memberService.login(memberLoginDto);
     }
 
