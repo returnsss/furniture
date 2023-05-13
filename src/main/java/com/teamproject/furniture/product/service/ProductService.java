@@ -25,65 +25,71 @@ public class ProductService {
     private JPAQueryFactory queryFactory;
 
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
-    public ProductService(EntityManager em){
-        this.queryFactory = new JPAQueryFactory(em);
-    }
-
     @Autowired
-    public ProductService(ProductRepository productRepository, JPAQueryFactory queryFactory) {
+    public ProductService(ProductRepository productRepository, EntityManager entityManager) {
         this.productRepository = productRepository;
-        this.queryFactory = queryFactory;
+        this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
 
-    public Long addProduct(AddProductDto addProductDto) { // 제품 등록
+    /**
+     * 제품 등록
+     * @param addProductDto
+     * @return
+     */
+    public Long addProduct(AddProductDto addProductDto) {
         Product product = new Product(addProductDto);
         Product save = productRepository.save(product);
         return save.getProductId();
     }
 
-    public Product getProduct(Long productId) { // 제품 상세정보 조회
+    /**
+     * 제품 상세정보 조회
+     * @param productId
+     * @return
+     */
+    public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
     }
 
-    public List<Product> getProducts() { // 모든 제품 조회
+    /**
+     * 모든 제품 조회
+     * @return
+     */
+    public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
-    public void updateProduct(UpdateProductDto updateProductDto) { // 제품 수정
+    /**
+     * 제품 수정
+     * @param updateProductDto
+     */
+    public void updateProduct(UpdateProductDto updateProductDto) {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
         existingProduct.updateProduct(updateProductDto);
     }
 
-    public void deleteProduct(Long productId) { // 제품 삭제
+    /**
+     * 제품 삭제
+     * @param productId
+     */
+    public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }
 
 
-
-
+    /**
+     * 제품 검색
+     * @param column
+     * @param keyword
+     * @return
+     */
     public List<Product> searchProducts(String column, String keyword) {
 
-        BooleanExpression searchCondition;
+        return productRepository.searchProducts(column,keyword,queryFactory);
 
-        if (column.equalsIgnoreCase("productName")) {
-            searchCondition = product.productName.containsIgnoreCase(keyword);
-        } else if (column.equalsIgnoreCase("category")) {
-            searchCondition = product.category.containsIgnoreCase(keyword);
-        } else {
-            searchCondition = product.isNotNull();
-        }
-
-        return queryFactory
-                .selectFrom(product)
-                .where(searchCondition)
-                .fetch();
     }
 
 
