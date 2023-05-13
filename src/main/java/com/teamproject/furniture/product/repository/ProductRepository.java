@@ -13,25 +13,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product> {
-
-    default List<Product> searchProducts(String column, String keyword, JPAQueryFactory queryFactory) {
-
-        BooleanExpression searchCondition;
-
-        if ("productName".equals(column)) {
-            searchCondition = product.productName.containsIgnoreCase(keyword);
-        } else if ("category".equals(column)) {
-            searchCondition = product.category.containsIgnoreCase(keyword);
-        } else {
-            searchCondition = product.isNotNull();
-        }
-
-        return queryFactory
-                .selectFrom(product)
-                .where(searchCondition)
-                .fetch();
-
-    }
+public interface ProductRepository extends JpaRepository<Product, Long>, QuerydslPredicateExecutor<Product>, ProductRepositoryCustom  {
 
 }

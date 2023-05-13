@@ -88,7 +88,7 @@ public class ProductService {
      */
     public List<Product> searchProducts(String column, String keyword) {
 
-        return productRepository.searchProducts(column,keyword,queryFactory);
+        return productRepository.searchProducts(column, keyword);
 
     }
 

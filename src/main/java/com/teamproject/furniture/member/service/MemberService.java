@@ -22,7 +22,12 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public Long join(MemberCreateDto memberCreateDto) { // 등록
+    /**
+     * 회원가입
+     * @param memberCreateDto
+     * @return
+     */
+    public Long join(MemberCreateDto memberCreateDto) {
         validateDuplicateMember(memberCreateDto); // 중복 회원 검증
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);
@@ -30,7 +35,11 @@ public class MemberService {
         return member.getMemberId();
     }
 
-    private void validateDuplicateMember(MemberCreateDto memberCreateDto) { // 유효성 검사
+    /**
+     * 유효성 검사
+     * @param memberCreateDto
+     */
+    private void validateDuplicateMember(MemberCreateDto memberCreateDto) {
         Optional<Member> findMembers = memberRepository.findByUserId(memberCreateDto.getUserId());
         if (findMembers.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -38,7 +47,11 @@ public class MemberService {
     }
 
 
-    public void update(MemberUpdateDto memberUpdateDto) { // 회원 정보 수정
+    /**
+     * 회원 정보 수정
+     * @param memberUpdateDto
+     */
+    public void update(MemberUpdateDto memberUpdateDto) {
         Member member = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
         // member에 update함수를 만들어서 인자값으로 MemberUpdateDto 값이 쓰인다
         member.update(memberUpdateDto);
