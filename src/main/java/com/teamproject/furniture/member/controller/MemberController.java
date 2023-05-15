@@ -4,17 +4,13 @@ import com.teamproject.furniture.member.dtos.MemberCreateDto;
 import com.teamproject.furniture.member.dtos.MemberLoginDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
 import com.teamproject.furniture.member.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class MemberController { // 기능
-    private MemberService memberService;
-
-    @Autowired
-    public MemberController(MemberService memberService){
-        this.memberService = memberService;
-    }
+    private final MemberService memberService;
 
     @PostMapping("/api/member")
     public Long joinApi(@RequestBody MemberCreateDto memberCreateDto){ // 회원등록
