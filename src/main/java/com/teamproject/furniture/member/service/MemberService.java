@@ -34,9 +34,13 @@ public class MemberService {
     public Long join(MemberCreateDto memberCreateDto) {
         validateDuplicateMember(memberCreateDto); // 중복 회원 검증
         String encodedPassword = passwordEncoder.encode(memberCreateDto.getPassword()); // 비밀번호 암호화
+
+        memberCreateDto.setPassword(encodedPassword); // 암호화된 비밀번호 설정
+
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);
-        member.setPassword(encodedPassword); // 암호화된 비밀번호 설정
+        //member.setPassword(encodedPassword); // 암호화된 비밀번호 설정
+
         Member save = memberRepository.save(member);
         return save.getMemberId();
     }
@@ -59,27 +63,23 @@ public class MemberService {
      */
     public void update(MemberUpdateDto memberUpdateDto) {
         Member member = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
-        // member에 update함수를 만들어서 인자값으로 MemberUpdateDto 값이 쓰인다
+
         member.update(memberUpdateDto);
-//        Optional<Member> a = Optional.ofNullable(null);
-//        a.orElseThrow(); // 있으면 member던지고 없으면 예외
     }
 
 
     /**
      * 로그인
+     *
      * @param memberLoginDto
      * @return
      */
-    public Optional<Member> login(MemberLoginDto memberLoginDto) {
+    public MemberLoginDto login(MemberLoginDto memberLoginDto) {
         Optional<Member> member = memberRepository.findByUserId(memberLoginDto.getUserId());
-        /*if (member.isEmpty() || !member.orElseThrow().getPassword().equals(memberLoginDto.getPassword())) {
-            throw new IllegalStateException("로그인에 실패하였습니다.");
-        }*/
-        if (member.isEmpty() || !passwordEncoder.matches(memberLoginDto.getPassword(), member.orElseThrow().getPassword())) {
+        if (member.isEmpty() || !passwordEncoder.matches(memberLoginDto.getPassword(), member.get().getPassword())) {
             throw new IllegalStateException("로그인에 실패하였습니다.");
         }
-        return member;
+        return memberLoginDto;
     }
 
 
