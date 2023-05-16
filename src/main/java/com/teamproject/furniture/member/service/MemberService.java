@@ -6,6 +6,9 @@ import com.teamproject.furniture.member.dtos.MemberUpdateDto;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +39,10 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(memberCreateDto.getPassword()); // 비밀번호 암호화
 
         memberCreateDto.setPassword(encodedPassword); // 암호화된 비밀번호 설정
+        memberCreateDto.setState(0);
 
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);
-        //member.setPassword(encodedPassword); // 암호화된 비밀번호 설정
 
         Member save = memberRepository.save(member);
         return save.getMemberId();
@@ -99,7 +102,6 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
-
 
 
 }
