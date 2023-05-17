@@ -39,12 +39,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable();
 
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
-        // 익명 객체 사용
-        // 익명 객체 사용
+
+
         http.formLogin() // form 로그인 인증 기능이 작동함
                 .loginPage("/login") // 사용자 정의 로그인 페이지, default: /login
                 .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
@@ -55,12 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler( // 로그인 성공 후 핸들러
                         (request, response, authentication) -> {
                             log.info("authentication: " + authentication.getName());
-                            response.sendRedirect("/");
+                            //response.sendRedirect("/");
                         })
                 .failureHandler( // 로그인 실패 후 핸들러
                         (request, response, exception) -> {
                             log.info("exception: " + exception.getMessage());
-                            response.sendRedirect("/login");
+                            //response.sendRedirect("/login");
                         })
                 .permitAll(); // loginPage 접근은 인증 없이 접근 가능
 
