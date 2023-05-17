@@ -1,31 +1,22 @@
 package com.teamproject.furniture;
 
 import com.teamproject.furniture.member.service.UserDetailsServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
-import static org.hibernate.internal.CoreLogging.logger;
 
 @Configuration
 @EnableWebSecurity // Spring Security 설정을 시작
+@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
@@ -63,12 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/user/login") // 로그인 Form Action Url, default: /login
                 .successHandler( // 로그인 성공 후 핸들러
                         (request, response, authentication) -> {
-                            logger("authentication: " + authentication.getName());
+                            log.info("authentication: " + authentication.getName());
                             response.sendRedirect("/");
                         })
                 .failureHandler( // 로그인 실패 후 핸들러
                         (request, response, exception) -> {
-                            logger("exception: " + exception.getMessage());
+                            log.info("exception: " + exception.getMessage());
                             response.sendRedirect("/login");
                         })
                 .permitAll(); // loginPage 접근은 인증 없이 접근 가능
