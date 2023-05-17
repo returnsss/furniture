@@ -2,13 +2,14 @@ package com.teamproject.furniture.member.service;
 
 import com.teamproject.furniture.member.dtos.MemberCreateDto;
 import com.teamproject.furniture.member.dtos.MemberLoginDto;
+import com.teamproject.furniture.member.dtos.MemberPageDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.repository.MemberRepository;
+import com.teamproject.furniture.member.repository.MemberRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +23,14 @@ import static com.teamproject.furniture.member.model.Member.STATE_USER;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final MemberRepositoryCustom memberRepositoryCustom;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, MemberRepositoryCustom memberRepositoryCustom) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.memberRepositoryCustom = memberRepositoryCustom;
     }
 
     /**
@@ -106,4 +108,7 @@ public class MemberService {
     }
 
 
+    public Page<MemberPageDto> selectMemberList(String searchVal, Pageable pageable) {
+        return memberRepositoryCustom.selectMemberList(searchVal, pageable);
+    }
 }
