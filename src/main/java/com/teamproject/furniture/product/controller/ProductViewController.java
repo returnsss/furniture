@@ -1,7 +1,7 @@
 package com.teamproject.furniture.product.controller;
 
 import com.teamproject.furniture.product.dtos.ProductPageDto;
-import com.teamproject.furniture.product.repository.ProductRepositoryCustomPage;
+import com.teamproject.furniture.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ProductViewController {
 
-    private final ProductRepositoryCustomPage productRepositoryCustomPage;
+    private final ProductService productService;
 
-    public ProductViewController(ProductRepositoryCustomPage productRepositoryCustomPage) {
-        this.productRepositoryCustomPage = productRepositoryCustomPage;
+    public ProductViewController(ProductService productService) {
+        this.productService = productService;
     }
 
 
     @GetMapping("/products")
     public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
-        Page<ProductPageDto> results = productRepositoryCustomPage.selectProductList(searchVal, pageable);
+        Page<ProductPageDto> results = productService.selectProductList(searchVal, pageable);
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);
         pageModelPut(results, model);

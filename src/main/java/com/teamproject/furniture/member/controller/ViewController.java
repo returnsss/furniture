@@ -1,7 +1,7 @@
 package com.teamproject.furniture.member.controller;
 
 import com.teamproject.furniture.member.dtos.MemberPageDto;
-import com.teamproject.furniture.member.repository.MemberRepositoryCustom;
+import com.teamproject.furniture.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
-    private final MemberRepositoryCustom memberRepositoryCustom;
 
-    public ViewController(MemberRepositoryCustom memberRepositoryCustom) {
-        this.memberRepositoryCustom = memberRepositoryCustom;
+    private final MemberService memberService;
+
+    public ViewController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("/login")
@@ -25,7 +26,7 @@ public class ViewController {
 
     @GetMapping("/members")
     public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
-        Page<MemberPageDto> results = memberRepositoryCustom.selectMemberList(searchVal, pageable);
+        Page<MemberPageDto> results = memberService.selectMemberList(searchVal, pageable);
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);
         pageModelPut(results, model);

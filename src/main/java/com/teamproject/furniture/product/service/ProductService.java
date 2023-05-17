@@ -1,14 +1,17 @@
 package com.teamproject.furniture.product.service;
 
 import com.teamproject.furniture.product.dtos.AddProductDto;
+import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.dtos.UpdateProductDto;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
+import com.teamproject.furniture.product.repository.ProductRepositoryCustomPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,10 +20,12 @@ import java.util.NoSuchElementException;
 public class ProductService {
 
     private ProductRepository productRepository;
+    private ProductRepositoryCustomPage productRepositoryCustomPage;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductRepositoryCustomPage productRepositoryCustomPage) {
         this.productRepository = productRepository;
+        this.productRepositoryCustomPage = productRepositoryCustomPage;
     }
 
     /**
@@ -84,5 +89,7 @@ public class ProductService {
     }
 
 
-
+    public Page<ProductPageDto> selectProductList(String searchVal, Pageable pageable) {
+        return productRepositoryCustomPage.selectProductList(searchVal, pageable);
+    }
 }

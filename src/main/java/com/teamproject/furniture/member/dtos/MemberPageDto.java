@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MemberPageDto {
-    //private Long memberId;
+
     private String userId;
     private String name;
     private String birth;
