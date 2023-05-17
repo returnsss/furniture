@@ -22,11 +22,7 @@ public class MemberController { // 기능
         memberService.update(memberUpdateDto);
     }
 
-
-    /*@GetMapping("/api/login")
-    public void loginApi(@RequestBody MemberLoginDto memberLoginDto){ // 로그인
-        memberService.login(memberLoginDto);
-    }*/
+    
 
 
 

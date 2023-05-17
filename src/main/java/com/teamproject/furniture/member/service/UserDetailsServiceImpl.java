@@ -25,7 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (member.isEmpty()) {
             throw new UsernameNotFoundException("User not found with username: " + userId);
         }
-        UserDto userDto = new UserDto(member.get());
-        return userDto;
+        return new UserDto(member.get());
     }
 }

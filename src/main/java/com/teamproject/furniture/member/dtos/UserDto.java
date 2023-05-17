@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.teamproject.furniture.member.model.Member.STATE_ADMIN;
+
 public class UserDto implements UserDetails {
 
     private String userId;
@@ -26,7 +28,7 @@ public class UserDto implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        if (state == 3) {
+        if (state == STATE_ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return authorities;

@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.teamproject.furniture.member.model.Member.STATE_USER;
+
 @Service
 @Transactional
 public class MemberService {
@@ -39,7 +41,7 @@ public class MemberService {
         String encodedPassword = passwordEncoder.encode(memberCreateDto.getPassword()); // 비밀번호 암호화
 
         memberCreateDto.setPassword(encodedPassword); // 암호화된 비밀번호 설정
-        memberCreateDto.setState(0);
+        memberCreateDto.setState(STATE_USER);
 
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);

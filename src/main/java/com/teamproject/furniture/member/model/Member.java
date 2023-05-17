@@ -42,6 +42,11 @@ public class Member {
     private String registDay;
     private int state;
 
+    public static final int STATE_USER = 0;         // 일반회원
+    public static final int STATE_REPORT = 1;       // 제재된 회원
+    public static final int STATE_WITHDRAWAL = 2;   // 탈퇴한 회원
+    public static final int STATE_ADMIN = 3;        // 관리자
+
 
     public Member(Long memberId, String userId, String password, String name, String birth, String gender, String email, String address, String phone, String receiveMail, String receivePhone, String agreement, String registDay, int state) {
         //this.memberId = memberId;

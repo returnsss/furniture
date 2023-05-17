@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static org.hibernate.internal.CoreLogging.logger;
+
 @Configuration
 @EnableWebSecurity // Spring Security 설정을 시작
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -50,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
+        // 익명 객체 사용
+        // 익명 객체 사용
         http.formLogin() // form 로그인 인증 기능이 작동함
                 .loginPage("/login") // 사용자 정의 로그인 페이지, default: /login
                 .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
@@ -58,20 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("passwd") // 패스워드 파라미터명 설정, default: password
                 .loginProcessingUrl("/user/login") // 로그인 Form Action Url, default: /login
                 .successHandler( // 로그인 성공 후 핸들러
-                        new AuthenticationSuccessHandler() { // 익명 객체 사용
-                            @Override
-                            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                                System.out.println("authentication: " + authentication.getName());
-                                response.sendRedirect("/");
-                            }
+                        (request, response, authentication) -> {
+                            logger("authentication: " + authentication.getName());
+                            response.sendRedirect("/");
                         })
                 .failureHandler( // 로그인 실패 후 핸들러
-                        new AuthenticationFailureHandler() { // 익명 객체 사용
-                            @Override
-                            public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                                System.out.println("exception: " + exception.getMessage());
-                                response.sendRedirect("/login");
-                            }
+                        (request, response, exception) -> {
+                            logger("exception: " + exception.getMessage());
+                            response.sendRedirect("/login");
                         })
                 .permitAll(); // loginPage 접근은 인증 없이 접근 가능
 
