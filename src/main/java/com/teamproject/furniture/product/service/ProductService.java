@@ -1,7 +1,5 @@
 package com.teamproject.furniture.product.service;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.teamproject.furniture.product.dtos.AddProductDto;
 import com.teamproject.furniture.product.dtos.UpdateProductDto;
 import com.teamproject.furniture.product.model.Product;
@@ -14,23 +12,16 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static com.teamproject.furniture.product.model.QProduct.product;
-
 @Service
 @Transactional
 public class ProductService {
 
     private ProductRepository productRepository;
 
-    private JPAQueryFactory queryFactory;
-
-
     @Autowired
-    public ProductService(ProductRepository productRepository, EntityManager entityManager) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.queryFactory = new JPAQueryFactory(entityManager);
     }
-
 
     /**
      * 제품 등록
