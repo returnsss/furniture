@@ -1,4 +1,4 @@
-package com.teamproject.furniture;
+package com.teamproject.furniture.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

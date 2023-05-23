@@ -1,4 +1,4 @@
-package com.teamproject.furniture;
+package com.teamproject.furniture.config;
 
 import com.teamproject.furniture.member.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;

@@ -22,6 +22,23 @@ public class MemberController { // 기능
         memberService.update(memberUpdateDto);
     }
 
+    @PatchMapping("/api/members-user/{memberId}")
+    public  void updateStateUserApi(@PathVariable Long memberId){
+        memberService.updateStateUser(memberId);
+    }
+    @PatchMapping("/api/members-report/{memberId}")
+    public  void updateStateReportApi(@PathVariable Long memberId){
+        memberService.updateStateReport(memberId);
+    }
+    @PatchMapping("/api/members-withdrawal/{memberId}")
+    public  void updateStateWithdrawalApi(@PathVariable Long memberId){
+        memberService.updateStateWithdrawal(memberId);
+    }
+    @PatchMapping("/api/members-admin/{memberId}")
+    public  void updateStateAdminApi(@PathVariable Long memberId){
+        memberService.updateStateAdmin(memberId);
+    }
+
     
 
 
