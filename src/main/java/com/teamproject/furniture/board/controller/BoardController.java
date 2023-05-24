@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BoardController {
+public class BoardController { //todo 금일 작업 예정
 
     private final BoardService boardService;
 

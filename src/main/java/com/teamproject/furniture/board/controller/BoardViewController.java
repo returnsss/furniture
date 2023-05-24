@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Log4j2
 @RequiredArgsConstructor
-public class BoardViewController {
+public class BoardViewController { //todo 금일 작업 예정
 
     private final BoardService boardService;
 

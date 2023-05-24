@@ -20,7 +20,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
     }
 
     @Override
-    public Page<Board> search1(Pageable pageable) {
+    public Page<Board> search1(Pageable pageable) { //todo 추후 삭제 예정. 필요없는 코드임
         QBoard board = QBoard.board; // Q도메인 객체
         JPQLQuery<Board> query = from(board); // select ... from board
         query.where(board.title.contains("1")); // where title like
@@ -56,8 +56,7 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
             query.where(booleanBuilder);
         } // end if
 
-        // bno > 0
-        query.where(board.bno.gt(0L));
+
 
         // paging
         this.getQuerydsl().applyPagination(pageable, query);

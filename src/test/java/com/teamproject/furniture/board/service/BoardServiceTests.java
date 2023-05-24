@@ -1,8 +1,8 @@
 package com.teamproject.furniture.board.service;
 
 import com.teamproject.furniture.board.dtos.BoardDto;
-import com.teamproject.furniture.board.dtos.PageRequestDto;
-import com.teamproject.furniture.board.dtos.PageResponseDto;
+import com.teamproject.furniture.board.dtos.PageBoardRequestDto;
+import com.teamproject.furniture.board.dtos.PageBoardResponseDto;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,14 +58,14 @@ public class BoardServiceTests {
 
     @Test
     public void testList(){ // 검색기능
-        PageRequestDto pageRequestDto = PageRequestDto.builder()
+        PageBoardRequestDto pageBoardRequestDto = PageBoardRequestDto.builder()
                 .type("tcw")
                 .keyword("1")
                 .page(1)
                 .size(10)
                 .build();
 
-        PageResponseDto<BoardDto> responseDto = boardService.list(pageRequestDto);
+        PageBoardResponseDto<BoardDto> responseDto = boardService.list(pageBoardRequestDto);
         log.info(responseDto);
     }
 }

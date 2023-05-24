@@ -1,8 +1,8 @@
 package com.teamproject.furniture.board.service;
 
 import com.teamproject.furniture.board.dtos.BoardDto;
-import com.teamproject.furniture.board.dtos.PageRequestDto;
-import com.teamproject.furniture.board.dtos.PageResponseDto;
+import com.teamproject.furniture.board.dtos.PageBoardRequestDto;
+import com.teamproject.furniture.board.dtos.PageBoardResponseDto;
 import com.teamproject.furniture.board.domain.Board;
 import com.teamproject.furniture.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,13 +70,13 @@ public class BoardService {
 
     /**
      * 목록 / 검색 처리
-     * @param pageRequestDto
+     * @param pageBoardRequestDto
      * @return
      */
-    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto) {
-        String[] types = pageRequestDto.getTypes();
-        String keyword = pageRequestDto.getKeyword();
-        Pageable pageable = pageRequestDto.getPageable("bno");
+    public PageBoardResponseDto<BoardDto> list(PageBoardRequestDto pageBoardRequestDto) {
+        String[] types = pageBoardRequestDto.getTypes();
+        String keyword = pageBoardRequestDto.getKeyword();
+        Pageable pageable = pageBoardRequestDto.getPageable("bno");
 
         Page<Board> result = boardRepository.searchAll(types, keyword, pageable);
 
@@ -84,8 +84,8 @@ public class BoardService {
                 .map(board -> modelMapper.map(board, BoardDto.class))
                 .collect(Collectors.toList());
 
-        return PageResponseDto.<BoardDto>withAll()
-                .pageRequestDto(pageRequestDto)
+        return PageBoardResponseDto.<BoardDto>withAll()
+                .pageRequestDto(pageBoardRequestDto)
                 .boardList(boardDtoList)
                 .total((int)result.getTotalElements())
                 .build();
