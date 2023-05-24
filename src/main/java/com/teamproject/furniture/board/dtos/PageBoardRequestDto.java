@@ -51,23 +51,25 @@ public class PageBoardRequestDto {
      */
     public String getLink(){
 
-        if(link == null){
-            StringBuilder builder = new StringBuilder();
-            builder.append("page=" + this.page);
-            builder.append("&size=" + this.size);
-
-            if(type != null && type.length() > 0){
-                builder.append("&type=" + this.type);
-            }
-            if(keyword != null){
-                try{
-                    builder.append("&keyword=" + URLEncoder.encode(this.keyword, "UTF-8"));
-                }catch (UnsupportedEncodingException e){
-
-                }
-            }
-            link = builder.toString();
+        if(link != null){
+            return link;
         }
+        StringBuilder builder = new StringBuilder();
+        builder.append("page=" + this.page);
+        builder.append("&size=" + this.size);
+
+        if(type != null && type.length() > 0){
+            builder.append("&type=" + this.type);
+        }
+        if(keyword != null){
+            try{
+                builder.append("&keyword=" + URLEncoder.encode(this.keyword, "UTF-8"));
+            }catch (UnsupportedEncodingException e){
+
+            }
+        }
+        link = builder.toString();
+
         return link;
     }
 }
