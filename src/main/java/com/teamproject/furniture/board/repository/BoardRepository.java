@@ -4,9 +4,7 @@ import com.teamproject.furniture.board.domain.Board;
 import com.teamproject.furniture.board.repository.search.BoardSearch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch {
 
 }

@@ -17,14 +17,14 @@ public class BoardDto {
 
     private Long bno;
 
-    @NotEmpty
-    @Size(min = 3, max = 100)
+    /*@NotEmpty
+    @Size(min = 3, max = 100)*/
     private String title;
 
-    @NotEmpty
+    //@NotEmpty
     private String content;
 
-    @NotEmpty
+    //@NotEmpty
     private String writer;
 
     private LocalDateTime regDate;

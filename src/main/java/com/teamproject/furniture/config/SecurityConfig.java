@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })  // 로그아웃 핸들러 추가
                 .logoutSuccessHandler((request, response, authentication) -> {
-                    response.sendRedirect("/member/login");
+                    response.sendRedirect("/login");
                 }) // 로그아웃 성공 핸들러
                 .deleteCookies("JSESSIONID"); // 로그아웃 후 삭제할 쿠키 지정
     }
