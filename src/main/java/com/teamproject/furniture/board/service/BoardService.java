@@ -85,7 +85,7 @@ public class BoardService {
                 .collect(Collectors.toList());
 
         return PageBoardResponseDto.<BoardDto>withAll()
-                .pageRequestDto(pageBoardRequestDto)
+                .pageBoardRequestDto(pageBoardRequestDto)
                 .boardList(boardDtoList)
                 .total((int)result.getTotalElements())
                 .build();

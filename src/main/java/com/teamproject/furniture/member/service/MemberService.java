@@ -112,27 +112,27 @@ public class MemberService {
         return memberRepositoryCustom.selectMemberList(searchVal, pageable);
     }
 
-    public void updateStateUser(Long memberId) {
+
+    public void updateMemberState(Long memberId, String stateType){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
 
-        member.updateStateUser(memberId);
+        switch (stateType) {
+            case "user":
+                member.updateStateUser(memberId);
+                break;
+            case "report":
+                member.updateStateReport(memberId);
+                break;
+            case "withdrawal":
+                member.updateStateWithdrawal(memberId);
+                break;
+            case "admin":
+                member.updateStateAdmin(memberId);
+                break;
+            default:
+                break;
+        }
     }
 
-    public void updateStateReport(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
 
-        member.updateStateReport(memberId);
-    }
-
-    public void updateStateWithdrawal(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
-
-        member.updateStateWithdrawal(memberId);
-    }
-
-    public void updateStateAdmin(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
-
-        member.updateStateAdmin(memberId);
-    }
 }
