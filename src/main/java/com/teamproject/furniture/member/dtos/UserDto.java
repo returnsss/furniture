@@ -1,6 +1,7 @@
 package com.teamproject.furniture.member.dtos;
 
 import com.teamproject.furniture.member.model.Member;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static com.teamproject.furniture.member.model.Member.STATE_ADMIN;
 
+@Getter
 public class UserDto implements UserDetails {
 
     private String userId;

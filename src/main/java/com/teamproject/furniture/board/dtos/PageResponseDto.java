@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PageBoardResponseDto<E> {
+public class PageResponseDto<E> {
     private int page;
     private int size;
     private int total;
@@ -29,17 +29,17 @@ public class PageBoardResponseDto<E> {
 
     /**
      * 화면에 DTO 목록과 시작 페이지 / 끝 페이지 등에 대한 처리를 담당
-     * @param pageBoardRequestDto
+     * @param pageRequestDto
      * @param boardList
      * @param total
      */
     @Builder(builderMethodName = "withAll")
-    public PageBoardResponseDto(PageBoardRequestDto pageBoardRequestDto, List<E> boardList, int total){
+    public PageResponseDto(PageRequestDto pageRequestDto, List<E> boardList, int total){
         if(total <= 0){
             return;
         }
-        this.page = pageBoardRequestDto.getPage();
-        this.size = pageBoardRequestDto.getSize();
+        this.page = pageRequestDto.getPage();
+        this.size = pageRequestDto.getSize();
 
         this.total = total;
         this.boardList = boardList;
