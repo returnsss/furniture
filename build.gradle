@@ -40,7 +40,7 @@ dependencies {
 
 	// modelmapper, thymeleaf
 	implementation 'org.modelmapper:modelmapper:3.1.0'
-	// implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
 	// @Valid를 위한 라이브러리
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.7.1'
