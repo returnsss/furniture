@@ -22,6 +22,12 @@ public class MemberController { // 기능
         memberService.update(memberUpdateDto);
     }
 
+
+    @PatchMapping("/api/members/{memberId}/state")
+    public void updateMemberStateApi(@PathVariable Long memberId, @RequestParam("stateType") String stateType) {
+        memberService.updateMemberState(memberId, stateType);
+    }
+
     
 
 

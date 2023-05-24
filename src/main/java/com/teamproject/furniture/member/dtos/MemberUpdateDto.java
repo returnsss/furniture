@@ -19,5 +19,6 @@ public class MemberUpdateDto {
     private String receiveMail;
     private String receivePhone;
     private String agreement;
+    private int state;
 
 }

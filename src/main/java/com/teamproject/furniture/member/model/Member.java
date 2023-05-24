@@ -99,4 +99,19 @@ public class Member {
 
     }
 
+    public void updateStateUser(Long memberId){
+        this.state = STATE_USER;
+    }
+
+    public void updateStateReport(Long memberId) {
+        this.state = STATE_REPORT;
+    }
+
+    public void updateStateWithdrawal(Long memberId) {
+        this.state = STATE_WITHDRAWAL;
+    }
+
+    public void updateStateAdmin(Long memberId) {
+        this.state = STATE_ADMIN;
+    }
 }

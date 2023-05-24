@@ -111,4 +111,28 @@ public class MemberService {
     public Page<MemberPageDto> selectMemberList(String searchVal, Pageable pageable) {
         return memberRepositoryCustom.selectMemberList(searchVal, pageable);
     }
+
+
+    public void updateMemberState(Long memberId, String stateType){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+
+        switch (stateType) {
+            case "user":
+                member.updateStateUser(memberId);
+                break;
+            case "report":
+                member.updateStateReport(memberId);
+                break;
+            case "withdrawal":
+                member.updateStateWithdrawal(memberId);
+                break;
+            case "admin":
+                member.updateStateAdmin(memberId);
+                break;
+            default:
+                break;
+        }
+    }
+
+
 }
