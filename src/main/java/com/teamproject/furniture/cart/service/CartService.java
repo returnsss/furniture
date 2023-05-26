@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,25 +28,20 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
-    public void addToCart(AddCartDto addCartDto, String userId, Long productId, int cnt){
+    public void addToCart(AddCartDto addCartDto, String userId, Long productId){
         // 상품 정보 가져오기
-        Product product = productRepository.findByProductId(productId);
-
-        if(product == null){
-            throw new IllegalArgumentException("상품이 존재하지 않습니다.");
-        }
+        Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
         // 유저 정보 가져오기
-        Optional<Member> member = memberRepository.findByUserId(userId);
-        member.get();
+        Member member = memberRepository.findByUserId(userId).orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
-        if(member == null){
-            throw new IllegalArgumentException("유저가 존재하지 않습니다.");
-        }
 
         // 주문번호 생성(데이터 입력 날짜시간초단위 + userId)
         LocalDateTime now = LocalDateTime.now();
         String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + userId;
+
+        // 장바구니에 담을 때 개수는 1개로 고정
+        int cnt = 1;
 
         // 장바구니에 상품 추가
         Cart cart = new Cart(addCartDto);
@@ -67,7 +63,7 @@ public class CartService {
 
     public void removeCartItem(String userId, Long cartId) {
         // cartRepository.findByCartId(cartId);
-        cartRepository.deleteByCartIdAndUserId(cartId, userId);
+        cartRepository.deleteByCartIdAndUserId(userId, cartId);
     }
 
     public void clearCart(String userId) {

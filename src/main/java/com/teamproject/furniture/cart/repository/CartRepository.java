@@ -20,10 +20,10 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     /**
      * 장바구니에서 특정 상품 삭제
-     * @param cartId
      * @param userId
+     * @param cartId
      */
-    void deleteByCartIdAndUserId(Long cartId, String userId);
+    void deleteByCartIdAndUserId(String userId, Long cartId);
 
     /**
      * 장바구니 전체 삭제
