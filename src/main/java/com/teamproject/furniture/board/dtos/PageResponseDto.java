@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @ToString
-public class PageResponseDto<E> {
+public class PageResponseDto<E> { // board의 페이징
     private int page;
     private int size;
     private int total;

@@ -30,8 +30,6 @@ public class BoardViewController {
     public void list(PageRequestDto pageRequestDto, Model model){ // 화면에 목록 데이터를 출력
         PageResponseDto<BoardDto> responseDto = boardService.list(pageRequestDto);
 
-        log.info(responseDto);
-
         model.addAttribute("responseDto", responseDto);
     }
 
