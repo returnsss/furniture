@@ -103,8 +103,8 @@ public class MemberService {
      * @param memberId
      * @return
      */
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
     }
 
 

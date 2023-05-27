@@ -42,7 +42,7 @@ public class CartService {
 
         // 주문번호 생성(데이터 입력 날짜시간초단위 + userId)
         LocalDateTime now = LocalDateTime.now();
-        String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + userId;
+        String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + userId;
 
         // 장바구니에 담을 때 개수는 1개로 고정
         int cnt = 1;
@@ -65,13 +65,36 @@ public class CartService {
         return cartRepository.findByUserId(userId);
     }
 
-    public void removeCartItem(String userId, Long cartId) {
+    public void removeCartItem(Long cartId, String userId) {
         // cartRepository.findByCartId(cartId);
-        cartRepository.deleteByCartIdAndUserId(userId, cartId);
+        cartRepository.deleteByCartIdAndUserId(cartId, userId);
     }
 
     public void clearCart(String userId) {
         cartRepository.deleteAllByUserId(userId);
+    }
+
+    public void updateCartItemCount(String userId, Long cartId, int cnt) {
+        Cart cart = cartRepository.findByCartIdAndUserId(cartId, userId).orElseThrow(() -> new NoSuchElementException("장바구니 항목을 찾을 수 없습니다."));
+
+        if (cnt <= 0) {
+            throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+        }
+
+        cart.setCnt(cnt);
+        cartRepository.save(cart);
+    }
+
+
+    public int cartTotalPrice(String userId){
+        List<Cart> cartItems = cartRepository.findByUserId(userId);
+        int totalPrice = 0;
+
+        for (Cart cart : cartItems) {
+            totalPrice += cart.getProductPrice() * cart.getCnt();
+        }
+
+        return totalPrice;
     }
 
 

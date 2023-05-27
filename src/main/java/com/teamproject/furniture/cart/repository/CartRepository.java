@@ -5,11 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
-
-    //Cart findByCartId(Long CartId);
 
     /**
      * 장바구니에서 특정 userId에 해당하는 상품들 가져오기
@@ -23,7 +22,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
      * @param userId
      * @param cartId
      */
-    void deleteByCartIdAndUserId(String userId, Long cartId);
+    void deleteByCartIdAndUserId(Long cartId, String userId);
 
     /**
      * 장바구니 전체 삭제
@@ -31,4 +30,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
      */
     void deleteAllByUserId(String userId);
 
+    Optional<Cart> findByCartIdAndUserId(Long cartId, String userId);
 }

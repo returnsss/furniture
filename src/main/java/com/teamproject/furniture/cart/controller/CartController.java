@@ -29,9 +29,9 @@ public class CartController {
         return cartItems;
     }
 
-    @DeleteMapping("/{userId}/{cartId}")
-    public void removeCartItem(@PathVariable String userId, @PathVariable Long cartId) {
-        cartService.removeCartItem(userId, cartId);
+    @DeleteMapping("/{cartId}/{userId}")
+    public void removeCartItem(@PathVariable Long cartId, @PathVariable String userId) {
+        cartService.removeCartItem(cartId, userId);
     }
 
     @DeleteMapping("/{userId}")
@@ -39,5 +39,16 @@ public class CartController {
         cartService.clearCart(userId);
 
     }
+
+    @PostMapping("/{userId}/{cartId}/{cnt}")
+    public void updatCartItemCount(@PathVariable String userId, @PathVariable Long cartId, @RequestParam int cnt){
+        cartService.updateCartItemCount(userId, cartId, cnt);
+    }
+
+    @GetMapping("/{userId}/total-price")
+    public int getCartTotalPrice(@PathVariable String userId) {
+        return cartService.cartTotalPrice(userId);
+    }
+
 
 }
