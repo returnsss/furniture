@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageRequestDto {
+public class PageRequestDto { // board의 페이징
 
     @Builder.Default
     private int page = 1;
