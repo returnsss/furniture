@@ -66,23 +66,39 @@ public class CartService {
     }
 
     public void removeCartItem(Long cartId, String userId) {
-        // cartRepository.findByCartId(cartId);
-        cartRepository.deleteByCartIdAndUserId(cartId, userId);
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalStateException("존재하지 않는 cartId입니다."));
+
+        if(userId.equals(cart.getUserId())){
+            cartRepository.deleteById(cartId);
+        }
+        else {
+            new Exception("userId가 일치하지 않아 실행할수 없습니다.");
+        }
     }
 
     public void clearCart(String userId) {
         cartRepository.deleteAllByUserId(userId);
     }
 
+    /**
+     * 장바구니에서 수량 변경
+     * @param userId
+     * @param cartId
+     * @param cnt
+     */
     public void updateCartItemCount(String userId, Long cartId, int cnt) {
-        Cart cart = cartRepository.findByCartIdAndUserId(cartId, userId).orElseThrow(() -> new NoSuchElementException("장바구니 항목을 찾을 수 없습니다."));
+        //Cart cart = cartRepository.findByCartIdAndUserId(cartId, userId).orElseThrow(() -> new NoSuchElementException("장바구니 항목을 찾을 수 없습니다."));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalStateException("존재하지 않는 cartId입니다."));
 
-        if (cnt <= 0) {
-            throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+        if(userId.equals(cart.getUserId())) {
+            if (cnt <= 0) {
+                throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
+            }
+
+            cart.setCnt(cnt);
+            cartRepository.save(cart);
         }
 
-        cart.setCnt(cnt);
-        cartRepository.save(cart);
     }
 
 

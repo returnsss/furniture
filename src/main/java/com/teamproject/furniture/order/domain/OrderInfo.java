@@ -36,12 +36,12 @@ public class OrderInfo {
     private LocalDateTime dateOrder;// 주문한 시간
 
 
-    public OrderInfo(MemberOrderDto memberOrderDto, OrderInfoDto orderInfoDto){
+    public OrderInfo(OrderInfoDto orderInfoDto){
 
-        this.userId = memberOrderDto.getUserId();
-        this.orderName = memberOrderDto.getName();
-        this.orderTel = memberOrderDto.getPhone();
-        this.orderEmail = memberOrderDto.getEmail();
+        this.userId = orderInfoDto.getUserId();
+        this.orderName = orderInfoDto.getOrderName();
+        this.orderTel = orderInfoDto.getOrderTel();
+        this.orderEmail = orderInfoDto.getOrderEmail();
         this.receiveName = orderInfoDto.getReceiveName();
         this.receiveTel = orderInfoDto.getReceiveTel();
         this.receiveAddress = orderInfoDto.getReceiveAddress();

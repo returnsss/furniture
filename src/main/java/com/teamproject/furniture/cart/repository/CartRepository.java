@@ -22,7 +22,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
      * @param userId
      * @param cartId
      */
-    void deleteByCartIdAndUserId(Long cartId, String userId);
+    //void deleteByCartIdAndUserId(Long cartId, String userId);
 
     /**
      * 장바구니 전체 삭제
@@ -30,5 +30,5 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
      */
     void deleteAllByUserId(String userId);
 
-    Optional<Cart> findByCartIdAndUserId(Long cartId, String userId);
+    // Optional<Cart> findByCartIdAndUserId(Long cartId, String userId);
 }
