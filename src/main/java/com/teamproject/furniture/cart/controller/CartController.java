@@ -1,10 +1,9 @@
 package com.teamproject.furniture.cart.controller;
 
 import com.teamproject.furniture.cart.domain.Cart;
-import com.teamproject.furniture.cart.dtos.AddCartDto;
+import com.teamproject.furniture.cart.dtos.CartDto;
 import com.teamproject.furniture.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/{userId}/{productId}")
-    public void addToCart(@PathVariable String userId, @PathVariable Long productId, @RequestBody AddCartDto cartDto) {
+    public void addToCart(@PathVariable String userId, @PathVariable Long productId, @RequestBody CartDto cartDto) {
         cartService.addToCart(cartDto, userId, productId);
 
     }
@@ -24,14 +23,14 @@ public class CartController {
 
 
     @GetMapping("/{userId}")
-    public List<Cart> getCartItems(@PathVariable String userId) {
-        List<Cart> cartItems = cartService.getCartItems(userId);
+    public List<CartDto> getCartItems(@PathVariable String userId) {
+        List<CartDto> cartItems = cartService.getCartItems(userId);
         return cartItems;
     }
 
-    @DeleteMapping("/{cartId}/{userId}")
-    public void removeCartItem(@PathVariable Long cartId, @PathVariable String userId) {
-        cartService.removeCartItem(cartId, userId);
+    @DeleteMapping("/{userId}/{cartId}")
+    public void removeCartItem(@PathVariable String userId, @PathVariable Long cartId) {
+        cartService.removeCartItem(userId, cartId);
     }
 
     @DeleteMapping("/{userId}")
@@ -40,7 +39,7 @@ public class CartController {
 
     }
 
-    @PostMapping("/{userId}/{cartId}/{cnt}")
+    @PostMapping("/{userId}/{cartId}/cnt")
     public void updatCartItemCount(@PathVariable String userId, @PathVariable Long cartId, @RequestParam int cnt){
         cartService.updateCartItemCount(userId, cartId, cnt);
     }

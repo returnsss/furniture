@@ -1,7 +1,7 @@
 package com.teamproject.furniture.cart.service;
 
 import com.teamproject.furniture.cart.domain.Cart;
-import com.teamproject.furniture.cart.dtos.AddCartDto;
+import com.teamproject.furniture.cart.dtos.CartDto;
 import com.teamproject.furniture.cart.repository.CartRepository;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.repository.MemberRepository;
@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,7 +31,7 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
-    public void addToCart(AddCartDto addCartDto, String userId, Long productId){
+    public void addToCart(CartDto cartDto, String userId, Long productId){
         // 상품 정보 가져오기
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
@@ -48,7 +47,7 @@ public class CartService {
         int cnt = 1;
 
         // 장바구니에 상품 추가
-        Cart cart = new Cart(addCartDto);
+        Cart cart = new Cart(cartDto);
         cart.setProductId(productId);
         cart.setProductName(product.getProductName());
         cart.setUserId(userId);
@@ -61,19 +60,17 @@ public class CartService {
 
     }
 
-    public List<Cart> getCartItems(String userId){
+    public List<CartDto> getCartItems(String userId){
         return cartRepository.findByUserId(userId);
     }
 
-    public void removeCartItem(Long cartId, String userId) {
+    public void removeCartItem(String userId, Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalStateException("존재하지 않는 cartId입니다."));
 
-        if(userId.equals(cart.getUserId())){
-            cartRepository.deleteById(cartId);
+        if(!cart.getUserId().equals(userId)){
+            throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
         }
-        else {
-            new Exception("userId가 일치하지 않아 실행할수 없습니다.");
-        }
+        cartRepository.deleteById(cartId);
     }
 
     public void clearCart(String userId) {
@@ -87,10 +84,9 @@ public class CartService {
      * @param cnt
      */
     public void updateCartItemCount(String userId, Long cartId, int cnt) {
-        //Cart cart = cartRepository.findByCartIdAndUserId(cartId, userId).orElseThrow(() -> new NoSuchElementException("장바구니 항목을 찾을 수 없습니다."));
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalStateException("존재하지 않는 cartId입니다."));
 
-        if(userId.equals(cart.getUserId())) {
+        if(cart.getUserId().equals(userId)){
             if (cnt <= 0) {
                 throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
             }
@@ -103,10 +99,10 @@ public class CartService {
 
 
     public int cartTotalPrice(String userId){
-        List<Cart> cartItems = cartRepository.findByUserId(userId);
+        List<CartDto> cartItems = cartRepository.findByUserId(userId);
         int totalPrice = 0;
 
-        for (Cart cart : cartItems) {
+        for (CartDto cart : cartItems) {
             totalPrice += cart.getProductPrice() * cart.getCnt();
         }
 

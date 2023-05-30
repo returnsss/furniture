@@ -1,9 +1,5 @@
 package com.teamproject.furniture.order.service;
 
-import com.teamproject.furniture.cart.service.CartService;
-import com.teamproject.furniture.member.dtos.MemberOrderDto;
-import com.teamproject.furniture.member.model.Member;
-import com.teamproject.furniture.member.repository.MemberRepository;
 import com.teamproject.furniture.order.domain.OrderInfo;
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import com.teamproject.furniture.order.repository.OrderDataRepository;

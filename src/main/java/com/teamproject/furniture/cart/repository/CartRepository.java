@@ -1,6 +1,7 @@
 package com.teamproject.furniture.cart.repository;
 
 import com.teamproject.furniture.cart.domain.Cart;
+import com.teamproject.furniture.cart.dtos.CartDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
      * @param userId
      * @return
      */
-    List<Cart> findByUserId(String userId);
+    List<CartDto> findByUserId(String userId);
 
     /**
      * 장바구니에서 특정 상품 삭제

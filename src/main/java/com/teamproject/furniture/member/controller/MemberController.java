@@ -33,12 +33,7 @@ public class MemberController { // 기능
 
     @GetMapping("/api/members/{memberId}")
     public MemberDto getMember(@PathVariable Long memberId){ // 회원 정보 조회
-        Member member = memberService.findOne(memberId);
-        return MemberDto.builder()
-                .userId(member.getUserId())
-                .name(member.getName())
-                .phone(member.getPhone())
-                .build();
+        return memberService.getMember(memberId);
     }
 
 

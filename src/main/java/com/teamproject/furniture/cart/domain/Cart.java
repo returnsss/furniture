@@ -1,6 +1,6 @@
 package com.teamproject.furniture.cart.domain;
 
-import com.teamproject.furniture.cart.dtos.AddCartDto;
+import com.teamproject.furniture.cart.dtos.CartDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,13 +35,13 @@ public class Cart {
     private int cnt;
 
 
-    public Cart(AddCartDto addCartDto){
-        this.productId = addCartDto.getProductId();
-        this.productName = addCartDto.getProductName();
-        this.userId = addCartDto.getUserId();
-        this.orderNum = addCartDto.getOrderNum();
-        this.productPrice = addCartDto.getProductPrice();
-        this.cnt = addCartDto.getCnt();
+    public Cart(CartDto cartDto){
+        this.productId = cartDto.getProductId();
+        this.productName = cartDto.getProductName();
+        this.userId = cartDto.getUserId();
+        this.orderNum = cartDto.getOrderNum();
+        this.productPrice = cartDto.getProductPrice();
+        this.cnt = cartDto.getCnt();
     }
 
 

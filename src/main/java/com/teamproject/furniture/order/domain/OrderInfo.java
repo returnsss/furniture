@@ -1,6 +1,5 @@
 package com.teamproject.furniture.order.domain;
 
-import com.teamproject.furniture.member.dtos.MemberOrderDto;
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
