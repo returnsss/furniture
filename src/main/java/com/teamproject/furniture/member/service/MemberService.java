@@ -1,9 +1,6 @@
 package com.teamproject.furniture.member.service;
 
-import com.teamproject.furniture.member.dtos.MemberCreateDto;
-import com.teamproject.furniture.member.dtos.MemberLoginDto;
-import com.teamproject.furniture.member.dtos.MemberPageDto;
-import com.teamproject.furniture.member.dtos.MemberUpdateDto;
+import com.teamproject.furniture.member.dtos.*;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.repository.MemberRepository;
 import com.teamproject.furniture.member.repository.MemberRepositoryCustom;
@@ -103,9 +100,21 @@ public class MemberService {
      * @param memberId
      * @return
      */
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findOne(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
     }
+
+
+    public MemberDto getMember(Long memberId){
+        Member member = findOne(memberId);
+        return MemberDto.builder()
+                .userId(member.getUserId())
+                .name(member.getName())
+                .phone(member.getPhone())
+                .build();
+    }
+
+
 
 
     public Page<MemberPageDto> selectMemberList(String searchVal, Pageable pageable) {

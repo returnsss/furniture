@@ -1,8 +1,10 @@
 package com.teamproject.furniture.member.controller;
 
 import com.teamproject.furniture.member.dtos.MemberCreateDto;
+import com.teamproject.furniture.member.dtos.MemberDto;
 import com.teamproject.furniture.member.dtos.MemberLoginDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
+import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +26,15 @@ public class MemberController { // 기능
 
 
     @PatchMapping("/api/members/{memberId}/state")
-    public void updateMemberStateApi(@PathVariable Long memberId, @RequestParam("stateType") String stateType) {
+    public void updateMemberStateApi(@PathVariable Long memberId, @RequestParam("stateType") String stateType) { // 회원 상태 변경
         memberService.updateMemberState(memberId, stateType);
     }
 
-    
+
+    @GetMapping("/api/members/{memberId}")
+    public MemberDto getMember(@PathVariable Long memberId){ // 회원 정보 조회
+        return memberService.getMember(memberId);
+    }
 
 
 
