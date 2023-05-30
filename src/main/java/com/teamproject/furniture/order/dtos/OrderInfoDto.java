@@ -1,5 +1,6 @@
 package com.teamproject.furniture.order.dtos;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class OrderInfoDto {
     private Long orderNo;        // 주문번호
     private String userId;          // 사용자 아이디

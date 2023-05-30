@@ -1,5 +1,6 @@
 package com.teamproject.furniture.order.domain;
 
+import com.teamproject.furniture.order.dtos.OrderDataDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,4 +28,15 @@ public class OrderData {
     private int cnt;            // 주문 수량
     private int totalPrice;     // 총액
 
+
+    public OrderData(OrderDataDto orderDataDto){
+        this.num = orderDataDto.getNum();
+        this.orderNum = orderDataDto.getOrderNum();
+        this.cartId = orderDataDto.getCartId();
+        this.productId = orderDataDto.getProductId();
+        this.productName = orderDataDto.getProductName();
+        this.productPrice = orderDataDto.getProductPrice();
+        this.cnt = orderDataDto.getCnt();
+        this.totalPrice = orderDataDto.getTotalPrice();
+    }
 }
