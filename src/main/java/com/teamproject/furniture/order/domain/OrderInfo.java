@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class OrderInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderNo;        // 주문번호
+    private Long orderNo;           // key
     private String userId;          // 사용자 아이디
     private String orderName;       // 주문자 이름
     private String orderTel;        // 주문자 번호
@@ -28,7 +28,7 @@ public class OrderInfo {
     private String receiveName;     // 받는사람 이름
     private String receiveTel;      // 받는사람 번호
     private String receiveAddress;  // 받는사람 주소
-    private int payAmount;       // 결제 금액
+    private int payAmount;          // 결제 금액
 
     @CreatedDate
     @Column(updatable = false)
