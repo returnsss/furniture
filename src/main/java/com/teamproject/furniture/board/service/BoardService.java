@@ -91,4 +91,13 @@ public class BoardService {
                 .build();
     }
 
+    /**
+     * 내가 쓴 글 목록 출력
+     * @param writer
+     * @return
+     */
+    public List<BoardDto> getMyBoards(String writer){
+        return boardRepository.findByWirter(writer);
+    }
+
 }

@@ -29,5 +29,9 @@ public class OrderController {
         return orderService.getOrderInfoDto(orderNo);
     }
 
+    @PostMapping("/{orderNo}/{userId}")
+    public void updateOrderStep(@PathVariable Long orderNo, @PathVariable String userId){
+        orderService.updateOrderStep(orderNo,userId);
+    }
 
 }

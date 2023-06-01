@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -28,11 +29,15 @@ public class OrderInfo {
     private String receiveName;     // 받는사람 이름
     private String receiveTel;      // 받는사람 번호
     private String receiveAddress;  // 받는사람 주소
+    private String orderStep;       // 주문 단계
     private int payAmount;          // 결제 금액
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime dateOrder;// 주문한 시간
+
+    @LastModifiedDate
+    private LocalDateTime datePay; // 결제한 시간
 
 
     public OrderInfo(OrderInfoDto orderInfoDto){
@@ -44,6 +49,7 @@ public class OrderInfo {
         this.receiveName = orderInfoDto.getReceiveName();
         this.receiveTel = orderInfoDto.getReceiveTel();
         this.receiveAddress = orderInfoDto.getReceiveAddress();
+        this.orderStep = orderInfoDto.getOrderStep();
         this.payAmount = orderInfoDto.getPayAmount();
     }
 
