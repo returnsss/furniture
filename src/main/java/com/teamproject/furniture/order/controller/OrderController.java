@@ -14,12 +14,12 @@ public class OrderController {
     private final OrderService orderService;
 
 
-    @PostMapping("/orderdata/add")
+    @PostMapping("/data/add")
     public void addToOrderData(@RequestBody OrderDataDto orderDataDto){
         orderService.addToOrderData(orderDataDto);
     }
 
-    @PostMapping("/orderinfo/add")
+    @PostMapping("/info/add")
     public void addToOrderInfo(@RequestBody OrderInfoDto orderInfoDto) {
         orderService.addToOrderInfo(orderInfoDto);
     }
