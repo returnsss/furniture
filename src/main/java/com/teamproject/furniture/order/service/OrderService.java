@@ -29,6 +29,7 @@ public class OrderService {
 
     public void addToOrderInfo(OrderInfoDto orderInfoDto){
 
+        orderInfoDto.setOrderStep("ORDER_FAIL");
         OrderInfo orderInfo = new OrderInfo(orderInfoDto);
 
         orderInfoRepository.save(orderInfo);
@@ -37,6 +38,7 @@ public class OrderService {
     public OrderInfoDto getOrderInfoDto(Long orderNo){
         OrderInfo orderInfo = orderInfoRepository.findById(orderNo).orElseThrow();
         return OrderInfoDto.builder()
+                .orderNo(orderInfo.getOrderNo())
                 .userId(orderInfo.getUserId())
                 .orderName(orderInfo.getOrderName())
                 .orderTel(orderInfo.getOrderTel())
@@ -44,9 +46,22 @@ public class OrderService {
                 .receiveName(orderInfo.getReceiveName())
                 .receiveTel(orderInfo.getReceiveTel())
                 .receiveAddress(orderInfo.getReceiveAddress())
+                .orderStep(orderInfo.getOrderStep())
                 .payAmount(orderInfo.getPayAmount())
+                .orderDate(orderInfo.getOrderDate())
+                .payDate(orderInfo.getPayDate())
                 .build();
 
+    }
+
+    public void updateOrderStep(Long orderNo, String userId){
+        OrderInfo orderInfo = orderInfoRepository.findById(orderNo).orElseThrow(() -> new IllegalStateException("존재하지 않는 orderNo입니다."));
+
+        if(!orderInfo.getUserId().equals(userId)){
+            throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
+        }
+        orderInfo.setOrderStep("ORDER_SUCCESS");
+        orderInfoRepository.save(orderInfo);
     }
 
 
