@@ -4,6 +4,8 @@ import com.teamproject.furniture.order.dtos.OrderDataDto;
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import com.teamproject.furniture.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +33,12 @@ public class OrderController {
 
     @PostMapping("/{orderNo}/{userId}")
     public void updateOrderStep(@PathVariable Long orderNo, @PathVariable String userId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
+        String currentUserId = authentication.getName(); // 현재 사용자의 아이디 가져오기
+
+        if(!currentUserId.equals(userId)){
+            throw new IllegalStateException("사용자 아이디가 다릅니다.");
+        }
         orderService.updateOrderStep(orderNo,userId);
     }
 

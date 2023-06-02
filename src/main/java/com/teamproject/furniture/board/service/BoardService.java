@@ -97,7 +97,7 @@ public class BoardService {
      * @return
      */
     public List<BoardDto> getMyBoards(String writer){
-        return boardRepository.findByWirter(writer);
+        return boardRepository.findMyBoardList(writer);
     }
 
 }

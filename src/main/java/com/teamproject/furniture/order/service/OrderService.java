@@ -29,7 +29,7 @@ public class OrderService {
 
     public void addToOrderInfo(OrderInfoDto orderInfoDto){
 
-        orderInfoDto.setOrderStep("orderFail");
+        orderInfoDto.setOrderStep("ORDER_FAIL");
         OrderInfo orderInfo = new OrderInfo(orderInfoDto);
 
         orderInfoRepository.save(orderInfo);
@@ -48,8 +48,8 @@ public class OrderService {
                 .receiveAddress(orderInfo.getReceiveAddress())
                 .orderStep(orderInfo.getOrderStep())
                 .payAmount(orderInfo.getPayAmount())
-                .dateOrder(orderInfo.getDateOrder())
-                .datePay(orderInfo.getDatePay())
+                .orderDate(orderInfo.getOrderDate())
+                .payDate(orderInfo.getPayDate())
                 .build();
 
     }
@@ -60,7 +60,7 @@ public class OrderService {
         if(!orderInfo.getUserId().equals(userId)){
             throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
         }
-        orderInfo.setOrderStep("orderSuccess");
+        orderInfo.setOrderStep("ORDER_SUCCESS");
         orderInfoRepository.save(orderInfo);
     }
 

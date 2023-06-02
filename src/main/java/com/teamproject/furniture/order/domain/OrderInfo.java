@@ -34,10 +34,10 @@ public class OrderInfo {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime dateOrder;// 주문한 시간
+    private LocalDateTime orderDate;// 주문한 시간
 
     @LastModifiedDate
-    private LocalDateTime datePay; // 결제한 시간
+    private LocalDateTime payDate; // 결제한 시간
 
 
     public OrderInfo(OrderInfoDto orderInfoDto){
