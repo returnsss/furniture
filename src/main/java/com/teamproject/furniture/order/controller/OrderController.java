@@ -31,15 +31,15 @@ public class OrderController {
         return orderService.getOrderInfoDto(orderNo);
     }
 
-    @PostMapping("/{orderNo}/{userId}")
-    public void updateOrderStep(@PathVariable Long orderNo, @PathVariable String userId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
+    @PostMapping("/{orderNo}")
+    public void updateOrderStep(@PathVariable Long orderNo){
+        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
         String currentUserId = authentication.getName(); // 현재 사용자의 아이디 가져오기
 
         if(!currentUserId.equals(userId)){
             throw new IllegalStateException("사용자 아이디가 다릅니다.");
-        }
-        orderService.updateOrderStep(orderNo,userId);
+        }*/
+        orderService.updateOrderStep(orderNo);
     }
 
 }

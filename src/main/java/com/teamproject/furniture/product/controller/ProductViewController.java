@@ -8,8 +8,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/product")
 public class ProductViewController {
 
     private final ProductService productService;
@@ -18,6 +20,10 @@ public class ProductViewController {
         this.productService = productService;
     }
 
+    @GetMapping("/addproduct")
+    public String addProduct(){
+        return "/product/addProduct";
+    }
 
     @GetMapping("/products")
     public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
@@ -25,7 +31,7 @@ public class ProductViewController {
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);
         pageModelPut(results, model);
-        return "products-list";
+        return "/product/products-list";
     }
 
     private void pageModelPut(Page<ProductPageDto> results, Model model){

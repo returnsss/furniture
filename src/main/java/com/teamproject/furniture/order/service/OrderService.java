@@ -6,6 +6,8 @@ import com.teamproject.furniture.order.dtos.OrderDataDto;
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import com.teamproject.furniture.order.repository.OrderDataRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,10 +56,13 @@ public class OrderService {
 
     }
 
-    public void updateOrderStep(Long orderNo, String userId){
+    public void updateOrderStep(Long orderNo){
         OrderInfo orderInfo = orderInfoRepository.findById(orderNo).orElseThrow(() -> new IllegalStateException("존재하지 않는 orderNo입니다."));
 
-        if(!orderInfo.getUserId().equals(userId)){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
+        String currentUserId = authentication.getName(); // 현재 사용자의 아이디 가져오기
+
+        if(!orderInfo.getUserId().equals(currentUserId)){
             throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
         }
         orderInfo.setOrderStep("ORDER_SUCCESS");

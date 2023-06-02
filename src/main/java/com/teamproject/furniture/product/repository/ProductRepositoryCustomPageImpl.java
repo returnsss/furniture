@@ -43,8 +43,7 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
                 .select(new QProductPageDto(
                         product.productName
                         ,product.description
-                        ,product.fileName
-                        ,product.registDay))
+                        ,product.fileName))
                 .from(product)
                 .orderBy(product.productName.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
