@@ -24,8 +24,18 @@ public class ProductController {
      * @param addProductDto
      * @return
      */
+    /*@RequestMapping(value="/api/product", method = {RequestMethod.POST})
+    public Long addProductApi(@ModelAttribute AddProductDto addProductDto){
+        return productService.addProduct(addProductDto);
+    }*/
+
+    /**
+     * 제품 등록
+     * @param addProductDto
+     * @return
+     */
     @PostMapping("/api/product")
-    public Long addProductApi(@RequestBody AddProductDto addProductDto){
+    public Long addProductApi(@ModelAttribute AddProductDto addProductDto){
         return productService.addProduct(addProductDto);
     }
 

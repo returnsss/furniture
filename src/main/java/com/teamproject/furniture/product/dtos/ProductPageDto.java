@@ -15,14 +15,13 @@ public class ProductPageDto {
     //private String category;    // 카테고리
     //private int productsInStock;// 제품 남은 수량
     private String fileName;    // 이미지 파일 이름
-    private String registDay;   // 등록 날짜
+    //private String registDay;   // 등록 날짜
 
 
     @QueryProjection
-    public ProductPageDto(String productName, String description, String fileName, String registDay) {
+    public ProductPageDto(String productName, String description, String fileName) {
         this.productName = productName;
         this.description = description;
         this.fileName = fileName;
-        this.registDay = registDay;
     }
 }

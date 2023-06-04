@@ -43,7 +43,7 @@ public class Member {
     private int state;
 
     public static final int STATE_USER = 0;         // 일반회원
-    public static final int STATE_REPORT = 1;       // 제재된 회원
+    public static final int STATE_LIMIT = 1;       // 제재된 회원
     public static final int STATE_WITHDRAWAL = 2;   // 탈퇴한 회원
     public static final int STATE_ADMIN = 3;        // 관리자
 
@@ -103,8 +103,8 @@ public class Member {
         this.state = STATE_USER;
     }
 
-    public void updateStateReport(Long memberId) {
-        this.state = STATE_REPORT;
+    public void updateStateLimit(Long memberId) {
+        this.state = STATE_LIMIT;
     }
 
     public void updateStateWithdrawal(Long memberId) {

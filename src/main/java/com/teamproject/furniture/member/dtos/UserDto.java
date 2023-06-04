@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.teamproject.furniture.member.model.Member.STATE_ADMIN;
+import static com.teamproject.furniture.member.model.Member.*;
 
 @Getter
 public class UserDto implements UserDetails {
@@ -32,6 +32,12 @@ public class UserDto implements UserDetails {
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (state == STATE_ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        else if(state == STATE_WITHDRAWAL){
+            authorities.add(new SimpleGrantedAuthority("ROLE_WITHDRAWAL"));
+        }
+        else if (state == STATE_LIMIT){
+            authorities.add(new SimpleGrantedAuthority("ROLE_LIMIT"));
         }
         return authorities;
     }
