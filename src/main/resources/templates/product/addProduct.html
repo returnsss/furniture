@@ -102,9 +102,11 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    const formObj = document.querySelector("form");
+
 
     document.querySelector(".regist").addEventListener("click", function (e){
+        const formObj = document.querySelector("form");
+
         if (confirm("등록하시겠습니까?")) {
             fetch('/api/product', {
                 method: 'POST',

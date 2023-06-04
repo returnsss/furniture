@@ -29,9 +29,8 @@ public class Product {
     private String category;    // 카테고리
     private int productsInStock;// 제품 남은 수량
     private String fileName;    // 이미지 파일 이름
-    private String imgPath;     // 이미지 조회 경로
+    //private String imgPath;     // 이미지 조회 경로
     @CreatedDate
-    @Column
     private LocalDateTime registDay;   // 등록 날짜
 
     public Product(Long productId, String productName, int productPrice, String description, String category, int productsInStock, String fileName, LocalDateTime registDay) {
@@ -51,7 +50,7 @@ public class Product {
         this.description = addProductDto.getDescription();
         this.category = addProductDto.getCategory();
         this.productsInStock = addProductDto.getProductsInStock();
-        this.fileName = addProductDto.getFileName();
+        this.fileName = addProductDto.getProductImage().getOriginalFilename();
     }
 
 

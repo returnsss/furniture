@@ -103,7 +103,7 @@ public class Member {
         this.state = STATE_USER;
     }
 
-    public void updateStateReport(Long memberId) {
+    public void updateStateLimit(Long memberId) {
         this.state = STATE_LIMIT;
     }
 

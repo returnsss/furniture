@@ -130,7 +130,7 @@ public class MemberService {
                 member.updateStateUser(memberId);
                 break;
             case "report":
-                member.updateStateReport(memberId);
+                member.updateStateLimit(memberId);
                 break;
             case "withdrawal":
                 member.updateStateWithdrawal(memberId);

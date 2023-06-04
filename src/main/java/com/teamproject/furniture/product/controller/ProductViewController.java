@@ -25,7 +25,7 @@ public class ProductViewController {
         return "/product/addProduct";
     }
 
-    @GetMapping("/products")
+    @GetMapping("/list")
     public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
         Page<ProductPageDto> results = productService.selectProductList(searchVal, pageable);
         model.addAttribute("list", results);
