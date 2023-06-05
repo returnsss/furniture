@@ -2,6 +2,7 @@ package com.teamproject.furniture.product.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
@@ -14,7 +15,7 @@ public class AddProductDto {
     private String category;    // 카테고리
     private int productsInStock;// 제품 남은 수량
     private String fileName;    // 이미지 파일 이름
-    //private String imgPath;     // 이미지 조회 경로
+    private String imgPath;     // 이미지 조회 경로
     //private String registDay;   // 등록 날짜
     private MultipartFile productImage;
 }

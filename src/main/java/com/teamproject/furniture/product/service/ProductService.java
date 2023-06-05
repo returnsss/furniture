@@ -7,11 +7,17 @@ import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
 import com.teamproject.furniture.product.repository.ProductRepositoryCustomPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,13 +34,25 @@ public class ProductService {
         this.productRepositoryCustomPage = productRepositoryCustomPage;
     }
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+
     /**
      * 제품 등록
      * @param addProductDto
      * @return
      */
-    public Long addProduct(AddProductDto addProductDto) {
+    public Long addProduct(AddProductDto addProductDto) throws IOException {
         Product product = new Product(addProductDto);
+
+        LocalDateTime now = LocalDateTime.now();
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + addProductDto.getProductImage().getOriginalFilename();
+
+        addProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+        product.setFileName(fileName);
+        product.setImgPath(uploadDir + fileName);
+
         Product save = productRepository.save(product);
         return save.getProductId();
     }

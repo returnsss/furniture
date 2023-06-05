@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -29,7 +30,8 @@ public class Product {
     private String category;    // 카테고리
     private int productsInStock;// 제품 남은 수량
     private String fileName;    // 이미지 파일 이름
-    //private String imgPath;     // 이미지 조회 경로
+
+    private String imgPath;     // 이미지 조회 경로
     @CreatedDate
     private LocalDateTime registDay;   // 등록 날짜
 

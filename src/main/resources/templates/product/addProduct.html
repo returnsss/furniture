@@ -105,7 +105,48 @@
 
 
     document.querySelector(".regist").addEventListener("click", function (e){
-        const formObj = document.querySelector("form");
+        const formObj = document.querySelector("form")
+
+        var num_check = /[0-9]/;	// 숫자만
+
+        if(!formObj.productName.value){
+            alert("제품명을 입력해주세요!!");
+            return false;
+        }
+        if(!formObj.productPrice.value){
+            alert("가격을 입력해주세요!!");
+            return false;
+        }
+
+        if(num_check.test(formObj.productPrice.value) == false){
+            alert("가격은 숫자만 입력해주세요!!");
+            return false;
+        }
+
+        if(!formObj.description.value){
+            alert("설명을 기입해주세요!!");
+            return false;
+        }
+        if(!formObj.category.value){
+            alert("카테고리를 입력해주세요!!");
+            return false;
+        }
+        if(!formObj.productsInStock.value){
+            alert("재고수를 입력해주세요!!");
+            return false;
+        }
+
+        if(num_check.test(formObj.productsInStock.value) == false){
+            alert("재고 수는 숫자만 입력해주세요!!");
+            return false;
+        }
+
+        if(!formObj.productImage.value){
+            alert("사진을 첨부해주세요!!");
+            return false;
+        }
+
+
 
         if (confirm("등록하시겠습니까?")) {
             fetch('/api/product', {
