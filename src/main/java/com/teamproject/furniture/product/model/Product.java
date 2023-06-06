@@ -63,8 +63,7 @@ public class Product {
         this.description = updateProductDto.getDescription();
         this.category = updateProductDto.getCategory();
         this.productsInStock = updateProductDto.getProductsInStock();
-        this.fileName = updateProductDto.getFileName();
-        //this.registDay = updateProductDto.getRegistDay();
+        this.fileName = updateProductDto.getProductImage().getOriginalFilename();
     }
 
 

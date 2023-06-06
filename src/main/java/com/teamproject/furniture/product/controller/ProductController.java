@@ -57,7 +57,7 @@ public class ProductController {
      * @param updateProductDto
      */
     @PatchMapping("/api/product")
-    public void updateApi(@RequestBody UpdateProductDto updateProductDto){
+    public void updateApi(@ModelAttribute UpdateProductDto updateProductDto) throws IOException {
         productService.updateProduct(updateProductDto);
     }
 

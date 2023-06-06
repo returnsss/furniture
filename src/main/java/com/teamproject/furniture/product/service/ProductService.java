@@ -34,7 +34,7 @@ public class ProductService {
         this.productRepositoryCustomPage = productRepositoryCustomPage;
     }
 
-    @Value("${file.upload-dir}")
+    @Value("${image.path}")
     private String uploadDir;
 
 
@@ -51,7 +51,7 @@ public class ProductService {
 
         addProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
         product.setFileName(fileName);
-        product.setImgPath(uploadDir + fileName);
+        product.setImgPath("/PjImg/" + fileName);
 
         Product save = productRepository.save(product);
         return save.getProductId();
@@ -79,10 +79,20 @@ public class ProductService {
      * 제품 수정
      * @param updateProductDto
      */
-    public void updateProduct(UpdateProductDto updateProductDto) {
+    public void updateProduct(UpdateProductDto updateProductDto) throws IOException {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
+
+        LocalDateTime now = LocalDateTime.now();
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + updateProductDto.getProductImage().getOriginalFilename();
+
+        updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+
         existingProduct.updateProduct(updateProductDto);
+
+        existingProduct.setFileName(fileName);
+        existingProduct.setImgPath("/PjImg/" + fileName);
+
     }
 
     /**
