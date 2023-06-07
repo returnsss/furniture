@@ -26,7 +26,7 @@ public class ProductViewController {
     }
 
     @GetMapping("/list")
-    public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
+    public String list(String searchVal, @PageableDefault(size = 6) Pageable pageable, Model model){
         Page<ProductPageDto> results = productService.selectProductList(searchVal, pageable);
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);

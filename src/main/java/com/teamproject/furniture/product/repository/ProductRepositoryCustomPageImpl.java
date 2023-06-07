@@ -1,5 +1,6 @@
 package com.teamproject.furniture.product.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.dtos.QProductPageDto;
@@ -39,16 +40,27 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
     }
 
     private List<ProductPageDto> getProductDtos(String searchVal, Pageable pageable) {
+
+        BooleanBuilder whereClause = new BooleanBuilder();  // Create a BooleanBuilder for dynamic WHERE conditions
+
+        // Add conditions based on the searchVal
+        if (searchVal != null && !searchVal.isEmpty()) {
+            // Assuming 'product.productName' is the field to be searched
+            whereClause.and(product.productName.containsIgnoreCase(searchVal));
+        }
+
         List<ProductPageDto> content = queryFactory
                 .select(new QProductPageDto(
-                        product.productName
-                        ,product.description
-                        ,product.fileName))
+                        product.productName,
+                        product.description,
+                        product.imgPath))
                 .from(product)
+                .where(whereClause)  // Apply the WHERE conditions
                 .orderBy(product.productName.desc())
-                .offset(pageable.getOffset())   // 페이지 번호
-                .limit(pageable.getPageSize())  // 페이지 사이즈
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
         return content;
     }
 }

@@ -7,6 +7,7 @@ import com.teamproject.furniture.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,15 +20,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-    /**
-     * 제품 등록
-     * @param addProductDto
-     * @return
-     */
-    /*@RequestMapping(value="/api/product", method = {RequestMethod.POST})
-    public Long addProductApi(@ModelAttribute AddProductDto addProductDto){
-        return productService.addProduct(addProductDto);
-    }*/
 
     /**
      * 제품 등록
@@ -35,7 +27,9 @@ public class ProductController {
      * @return
      */
     @PostMapping("/api/product")
-    public Long addProductApi(@ModelAttribute AddProductDto addProductDto){
+    public Long addProductApi(@ModelAttribute AddProductDto addProductDto) throws IOException {
+
+
         return productService.addProduct(addProductDto);
     }
 
@@ -63,7 +57,7 @@ public class ProductController {
      * @param updateProductDto
      */
     @PatchMapping("/api/product")
-    public void updateApi(@RequestBody UpdateProductDto updateProductDto){
+    public void updateApi(@ModelAttribute UpdateProductDto updateProductDto) throws IOException {
         productService.updateProduct(updateProductDto);
     }
 

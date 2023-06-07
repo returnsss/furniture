@@ -7,11 +7,17 @@ import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
 import com.teamproject.furniture.product.repository.ProductRepositoryCustomPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -28,13 +34,24 @@ public class ProductService {
         this.productRepositoryCustomPage = productRepositoryCustomPage;
     }
 
+    @Value("${image.path}")
+    private String uploadDir;
+
+
     /**
      * 제품 등록
      * @param addProductDto
      * @return
      */
-    public Long addProduct(AddProductDto addProductDto) {
+    public Long addProduct(AddProductDto addProductDto) throws IOException {
         Product product = new Product(addProductDto);
+
+        String fileName = getFileName(addProductDto.getProductImage());
+
+        addProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+        product.setFileName(fileName);
+        product.setImgPath("/PjImg/" + fileName);
+
         Product save = productRepository.save(product);
         return save.getProductId();
     }
@@ -61,10 +78,25 @@ public class ProductService {
      * 제품 수정
      * @param updateProductDto
      */
-    public void updateProduct(UpdateProductDto updateProductDto) {
+    public void updateProduct(UpdateProductDto updateProductDto) throws IOException {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
+
+        String fileName = getFileName(updateProductDto.getProductImage());
+
+        updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+
         existingProduct.updateProduct(updateProductDto);
+
+        existingProduct.setFileName(fileName);
+        existingProduct.setImgPath("/PjImg/" + fileName);
+
+    }
+
+    private String getFileName(MultipartFile productImage){
+        LocalDateTime now = LocalDateTime.now();
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + productImage.getOriginalFilename();
+        return fileName;
     }
 
     /**
