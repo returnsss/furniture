@@ -42,6 +42,12 @@ public class MemberService {
         memberCreateDto.setPassword(encodedPassword); // 암호화된 비밀번호 설정
         memberCreateDto.setState(STATE_USER);
 
+        memberCreateDto.setBirth(memberCreateDto.getBirthyy() + "/" + memberCreateDto.getBirthmm() + "/" + memberCreateDto.getBirthdd());
+        memberCreateDto.setEmail(memberCreateDto.getMail1() + "@" + memberCreateDto.getMail2());
+        memberCreateDto.setAddress(memberCreateDto.getZipcode() + "/" + memberCreateDto.getAddress1() + "/" + memberCreateDto.getAddress2());
+        memberCreateDto.setPhone(memberCreateDto.getPhone1() + "-" + memberCreateDto.getPhone2() + "-" + memberCreateDto.getPhone3());
+
+
         // memberCreateDto를 member로 바꿔야함Member
         Member member = new Member(memberCreateDto);
 
@@ -58,6 +64,11 @@ public class MemberService {
         if (findMembers.isPresent()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
+    }
+
+    public boolean validate(String userId){
+        Optional<Member> findMembers = memberRepository.findByUserId(userId);
+        return findMembers.isPresent();
     }
 
 
