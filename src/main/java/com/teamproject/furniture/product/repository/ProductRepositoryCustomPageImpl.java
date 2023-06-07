@@ -40,17 +40,7 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
     }
 
     private List<ProductPageDto> getProductDtos(String searchVal, Pageable pageable) {
-        /*List<ProductPageDto> content = queryFactory
-                .select(new QProductPageDto(
-                        product.productName
-                        ,product.description
-                        ,product.imgPath))
-                .from(product)
-                .orderBy(product.productName.desc())
-                .offset(pageable.getOffset())   // 페이지 번호
-                .limit(pageable.getPageSize())  // 페이지 사이즈
-                .fetch();
-        return content;*/
+
         BooleanBuilder whereClause = new BooleanBuilder();  // Create a BooleanBuilder for dynamic WHERE conditions
 
         // Add conditions based on the searchVal

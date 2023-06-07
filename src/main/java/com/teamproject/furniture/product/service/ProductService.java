@@ -46,8 +46,7 @@ public class ProductService {
     public Long addProduct(AddProductDto addProductDto) throws IOException {
         Product product = new Product(addProductDto);
 
-        LocalDateTime now = LocalDateTime.now();
-        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + addProductDto.getProductImage().getOriginalFilename();
+        String fileName = getFileName(addProductDto.getProductImage());
 
         addProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
         product.setFileName(fileName);
@@ -83,8 +82,7 @@ public class ProductService {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
-        LocalDateTime now = LocalDateTime.now();
-        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + updateProductDto.getProductImage().getOriginalFilename();
+        String fileName = getFileName(updateProductDto.getProductImage());
 
         updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
 
@@ -93,6 +91,12 @@ public class ProductService {
         existingProduct.setFileName(fileName);
         existingProduct.setImgPath("/PjImg/" + fileName);
 
+    }
+
+    private String getFileName(MultipartFile productImage){
+        LocalDateTime now = LocalDateTime.now();
+        String fileName = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + productImage.getOriginalFilename();
+        return fileName;
     }
 
     /**
