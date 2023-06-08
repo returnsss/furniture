@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -26,11 +27,11 @@
                 <a href="../index.jsp"
                    class="d-flex align-items-center mb-2 mb-md-0 text-dark text-decoration-none">
                     <img width="120" height="120" role="img"
-                         src="/images/logo3.png"></img>
+                         src="/images/logo3.png"/>
                 </a>
 
                 <ul class="nav my-2 justify-content-center my-md-0 text-small">
-                    <li><a href="../index.jsp" class="nav-link text-black"> Home
+                    <li><a href="http://localhost:8080" class="nav-link text-black"> Home
                     </a></li>
                     <li><a href="../shop_db/productsList.ad"
                            class="nav-link text-muted"> 제품 </a></li>
@@ -52,12 +53,12 @@
                 </ul>
 
 
-                <div th:if="${sessionId == null}">
+                <div sec:authorize="isAnonymous()">
                     <a class="btn btn-outline-primary" th:href="@{/LoginPage.lo}">로그인</a>
-                    <a class="btn btn-primary" th:href="@{/AddMemberPage.lo}">회원가입</a>
+                    <a class="btn btn-primary" th:href="@{/member/addmember}">회원가입</a>
                 </div>
-                <div th:unless="${sessionId != null}">
-                    [<span th:text="${sessionId}"></span>님]
+                <div sec:authorize="isAuthenticated()">
+                    [<span sec:authentication="userId"></span>님]
                     <a class="btn btn-outline-primary" th:href="@{/Logout.lo}">로그아웃</a>
                     <a class="btn btn-primary" th:href="@{/UpdateMemberPage.lo}">회원 수정</a>
                 </div>
