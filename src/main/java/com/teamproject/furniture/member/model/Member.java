@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.List;
 @Setter
 @DynamicUpdate // 수정된 부분만 쿼리문 만들도록
 @NoArgsConstructor // 기본 생성자
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Member {
 
     @Id
@@ -39,7 +40,9 @@ public class Member {
     private String receiveMail;
     private String receivePhone;
     private String agreement;
-    private String registDay;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime registDay;
     private int state;
 
     public static final int STATE_USER = 0;         // 일반회원
@@ -48,8 +51,8 @@ public class Member {
     public static final int STATE_ADMIN = 3;        // 관리자
 
 
-    public Member(Long memberId, String userId, String password, String name, String birth, String gender, String email, String address, String phone, String receiveMail, String receivePhone, String agreement, String registDay, int state) {
-        //this.memberId = memberId;
+    public Member(String userId, String password, String name, String birth, String gender, String email, String address, String phone, String receiveMail, String receivePhone, String agreement) {
+
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -61,8 +64,7 @@ public class Member {
         this.receiveMail = receiveMail;
         this.receivePhone = receivePhone;
         this.agreement = agreement;
-        //this.regist_day = regist_day;
-        //this.state = state;
+
     }
 
     public Member(MemberCreateDto memberCreateDto){

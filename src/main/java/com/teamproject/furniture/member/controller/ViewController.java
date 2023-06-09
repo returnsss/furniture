@@ -27,6 +27,11 @@ public class ViewController {
         return "/member/login_form";
     }
 
+    @GetMapping("/addmember")
+    public String addMember(){
+        return "/member/addMember";
+    }
+
 
     @GetMapping("/members")
     public String list(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){

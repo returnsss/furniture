@@ -19,6 +19,11 @@ public class MemberController { // 기능
         return memberService.join(memberCreateDto);
     }
 
+    @PostMapping("/api/validate")
+    public Boolean validateDuplicateMember(@RequestParam String userId){
+        return memberService.validate(userId);
+    }
+
     @PatchMapping("/api/member")
     public void updateApi(@RequestBody MemberUpdateDto memberUpdateDto){ // 회원 정보 수정
         memberService.update(memberUpdateDto);
