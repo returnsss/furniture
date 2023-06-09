@@ -1,4 +1,4 @@
-function checkForm() {
+function checkForm(action) {
 
     const frmMemberInsert = document.frmMemberInsert; // 폼을 들고옴.
 
@@ -168,34 +168,67 @@ function checkForm() {
         return false;
     }
 
-    if (confirm("가입하시겠습니까?")) {
+    if(action == 'join'){
+        if (confirm("가입하시겠습니까?")) {
 
-        const payload = new FormData(frmMemberInsert);
-        const jsonData = {};
+            const payload = new FormData(frmMemberInsert);
+            const jsonData = {};
 
-        // FormData 객체의 값을 JSON 객체로 변환
-        for (const [key, value] of payload.entries()) {
-            jsonData[key] = value;
-        }
+            // FormData 객체의 값을 JSON 객체로 변환
+            for (const [key, value] of payload.entries()) {
+                jsonData[key] = value;
+            }
 
-        fetch('/api/member', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(jsonData)
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // 서버에서 받은 응답 데이터 처리
-                window.location.href = '/';
+            fetch('/api/member', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // 서버에서 받은 응답 데이터 처리
+                    window.location.href = '/member/resultMember?msg=1';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
 
 
+        }
+    }else if(action == 'update'){
+        if (confirm("수정하시겠습니까?")) {
+
+            const payload = new FormData(frmMemberInsert);
+            const jsonData = {};
+
+            // FormData 객체의 값을 JSON 객체로 변환
+            for (const [key, value] of payload.entries()) {
+                jsonData[key] = value;
+            }
+
+            fetch('/api/updateMember', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(data => {
+                    console.log(data); // 서버에서 받은 응답 데이터 처리
+                    window.location.href = '/member/resultMember?msg=0';
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+
+        }
     }
+
+
 
 
 }

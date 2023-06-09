@@ -2,6 +2,7 @@ package com.teamproject.furniture.member.dtos;
 
 import com.teamproject.furniture.member.model.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +14,15 @@ import java.util.List;
 import static com.teamproject.furniture.member.model.Member.*;
 
 @Getter
+@NoArgsConstructor // 기본 생성자
 public class UserDto implements UserDetails {
-
+    private Long memberId;
     private String userId;
     private String password;
     private int state;
 
     public UserDto(Member member) {
+        this.memberId = member.getMemberId();
         this.userId = member.getUserId();
         this.password = member.getPassword();
         this.state = member.getState();
@@ -29,15 +32,15 @@ public class UserDto implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority("USER"));
         if (state == STATE_ADMIN) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
         }
         else if(state == STATE_WITHDRAWAL){
-            authorities.add(new SimpleGrantedAuthority("ROLE_WITHDRAWAL"));
+            authorities.add(new SimpleGrantedAuthority("WITHDRAWAL"));
         }
         else if (state == STATE_LIMIT){
-            authorities.add(new SimpleGrantedAuthority("ROLE_LIMIT"));
+            authorities.add(new SimpleGrantedAuthority("LIMIT"));
         }
         return authorities;
     }

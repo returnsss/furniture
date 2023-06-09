@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 @Configuration
@@ -42,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()    // 요청에대한 권한부여 설정
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN") // /admin/ 또는 /api/admin/으로 시작하는 경로에 대해서는 ADMIN 역할을 가진 사용자만 접근 할수 있다.
+                .antMatchers("/member/loginFailed").hasRole("WITHDRAWAL")
                 //todo 추후에 아래거 지우고 이 메서드 사용 .antMatchers("/api/member").permitAll() // /api/member 경로에 대해서는 인증되지 않은 사용자도 접근할수있다.
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated(); // 위에서 설정한 경로 이외의 모든 요청은 인증된 사용자만 접근할 수 있습니다.
@@ -50,11 +52,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin() // form 로그인 인증 기능이 작동함
                 .loginPage("/member/login") // 사용자 정의 로그인 페이지, default: /login
-                .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
                 .failureUrl("/member/login?error=1") // 로그인 실패 후 이동 페이지
                 .usernameParameter("userId") // 아이디 파라미터명 설정, default: username
                 .passwordParameter("password") // 패스워드 파라미터명 설정, default: password
-                .loginProcessingUrl("/member/login") // 로그인 Form Action Url, default: /login
+                .loginProcessingUrl("/member/loginSuccess") // 로그인 Form Action Url, default: /login
+                .successHandler((request, response, exception) -> {
+                    if (request.isUserInRole("WITHDRAWAL")) {
+                        try {
+                            response.sendRedirect("/member/loginFailed");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    response.sendRedirect("/");
+                })
                 .permitAll(); // loginPage 접근은 인증 없이 접근 가능
 
         http.logout()

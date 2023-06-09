@@ -77,7 +77,18 @@ public class MemberService {
      * @param memberUpdateDto
      */
     public void update(MemberUpdateDto memberUpdateDto) {
-        Member member = memberRepository.findById(memberUpdateDto.getMemberId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        Member member = memberRepository.findByUserId(memberUpdateDto.getUserId()).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        String encodedPassword = passwordEncoder.encode(memberUpdateDto.getPassword()); // 비밀번호 암호화
+
+        memberUpdateDto.setPassword(encodedPassword); // 암호화된 비밀번호 설정
+        memberUpdateDto.setState(STATE_USER);
+
+        memberUpdateDto.setMemberId(member.getMemberId());
+        memberUpdateDto.setBirth(memberUpdateDto.getBirthyy() + "/" + memberUpdateDto.getBirthmm() + "/" + memberUpdateDto.getBirthdd());
+        memberUpdateDto.setEmail(memberUpdateDto.getMail1() + "@" + memberUpdateDto.getMail2());
+        memberUpdateDto.setAddress(memberUpdateDto.getZipcode() + "/" + memberUpdateDto.getAddress1() + "/" + memberUpdateDto.getAddress2());
+        memberUpdateDto.setPhone(memberUpdateDto.getPhone1() + "-" + memberUpdateDto.getPhone2() + "-" + memberUpdateDto.getPhone3());
+
 
         member.update(memberUpdateDto);
     }
@@ -119,9 +130,18 @@ public class MemberService {
     public MemberDto getMember(Long memberId){
         Member member = findOne(memberId);
         return MemberDto.builder()
+                .memberId(member.getMemberId())
                 .userId(member.getUserId())
+                .password(member.getPassword())
                 .name(member.getName())
+                .birth(member.getBirth())
+                .gender(member.getGender())
+                .email(member.getEmail())
+                .address(member.getAddress())
                 .phone(member.getPhone())
+                .receiveMail(member.getReceiveMail())
+                .receivePhone(member.getReceivePhone())
+                .agreement(member.getAgreement())
                 .build();
     }
 
