@@ -188,6 +188,7 @@ function checkForm() {
             .then(response => response.json())
             .then(data => {
                 console.log(data); // 서버에서 받은 응답 데이터 처리
+                window.location.href = '/';
             })
             .catch(error => {
                 console.error('Error:', error);

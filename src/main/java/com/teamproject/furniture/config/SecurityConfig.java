@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin() // form 로그인 인증 기능이 작동함
                 .loginPage("/member/login") // 사용자 정의 로그인 페이지, default: /login
-                .defaultSuccessUrl("http://localhost:8080") // 로그인 성공 후 이동 페이지
+                .defaultSuccessUrl("/") // 로그인 성공 후 이동 페이지
                 .failureUrl("/member/login?error=1") // 로그인 실패 후 이동 페이지
                 .usernameParameter("userId") // 아이디 파라미터명 설정, default: username
                 .passwordParameter("password") // 패스워드 파라미터명 설정, default: password
