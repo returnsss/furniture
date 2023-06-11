@@ -24,7 +24,7 @@ public class MemberController { // 기능
         return memberService.validate(userId);
     }
 
-    @PostMapping("/api/updateMember")
+    @PatchMapping("/api/member")
     public void updateApi(@RequestBody MemberUpdateDto memberUpdateDto){ // 회원 정보 수정
         memberService.update(memberUpdateDto);
     }

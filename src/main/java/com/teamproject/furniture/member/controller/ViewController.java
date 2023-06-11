@@ -32,11 +32,6 @@ public class ViewController {
         return "/member/login_form";
     }
 
-    @GetMapping("/loginSuccess")
-    public String loginSuccess(@AuthenticationPrincipal UserDto userDto, Request request){
-        request.getAttribute(userDto.getAuthorities().toString());
-        return "/member/login_form";
-    }
 
     @GetMapping("/addmember")
     public String addMember(){

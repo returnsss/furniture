@@ -32,15 +32,15 @@ public class UserDto implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("USER"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (state == STATE_ADMIN) {
-            authorities.add(new SimpleGrantedAuthority("ADMIN"));
-        }
-        else if(state == STATE_WITHDRAWAL){
-            authorities.add(new SimpleGrantedAuthority("WITHDRAWAL"));
-        }
-        else if (state == STATE_LIMIT){
-            authorities.add(new SimpleGrantedAuthority("LIMIT"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if(state == STATE_WITHDRAWAL){
+            authorities.clear();
+            authorities.add(new SimpleGrantedAuthority("ROLE_WITHDRAWAL"));
+        } else if (state == STATE_LIMIT){
+            authorities.clear();
+            authorities.add(new SimpleGrantedAuthority("ROLE_LIMIT"));
         }
         return authorities;
     }
