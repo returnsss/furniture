@@ -1,72 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{/layout/basic}">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
+    <meta charset="UTF-8">
     <title>furniture</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/main.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
     <!-- Page content wrapper-->
     <div id="page-content-wrapper">
-
-        <!-- Top navigation-->
-        <div class="container">
-            <header
-                    class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between py-3 mb-1 border-bottom">
-                <a href="/"
-                   class="d-flex align-items-center mb-2 mb-md-0 text-dark text-decoration-none">
-                    <img width="120" height="120" role="img"
-                         src="/images/logo3.png"/>
-                </a>
-
-                <ul class="nav my-2 justify-content-center my-md-0 text-small">
-                    <li><a href="/" class="nav-link text-black"> Home
-                    </a></li>
-                    <li><a href="../shop_db/productsList.ad"
-                           class="nav-link text-muted"> 제품 </a></li>
-                    <li><a th:href="@{/board/list}"
-                           class="nav-link text-muted"> 게시판 </a></li>
-                    <li><a href="../shop_db/cart.jsp" class="nav-link text-muted">
-                        장바구니 </a></li>
-                    <li class="nav-item dropdown"><a
-                            class="nav-link dropdown-toggle text-muted" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false"> 내정보 </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item"
-                                   href="../shop_db/jjimListAction.my">찜한 목록</a></li>
-                            <li><a class="dropdown-item" href="../shop_db/orderList.my">주문
-                                목록</a></li>
-                            <li><a class="dropdown-item" href="../shop_db/myPostList.my">내가
-                                쓴 글</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-
-                <div sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-primary" th:href="@{/member/login}">로그인</a>
-                    <a class="btn btn-primary" th:href="@{/member/addmember}">회원가입</a>
-                </div>
-                <div sec:authorize="isAuthenticated()">
-                    [<span sec:authentication="name"></span>님]
-                    <a class="btn btn-outline-primary" th:href="@{/logout}">로그아웃</a>
-                    <a class="btn btn-primary" th:href="@{/UpdateMemberPage.lo}">회원 수정</a>
-                </div>
-            </header>
-
-        </div>
-
 
         <!-- Page content-->
         <div class="container-fluid" layout:fragment="content">

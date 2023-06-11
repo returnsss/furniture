@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{index.html}">
+      layout:decorate="~{/layout/basic}">
 
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
 
             <h3 class="form-signin-heading">Please sign in</h3>
 
-            <div class="insertHere">
+            <div id="error-msg-div">
 
             </div>
 
@@ -46,7 +46,7 @@
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
-    let insertHere = document.querySelector('.insertHere');
+    let errorMsgDiv = document.querySelector('#error-msg-div');
 
     const urlParams = new URL(location.href).searchParams;
     const error = urlParams.get('error');
@@ -61,7 +61,7 @@
 
         div.appendChild(text);
 
-        insertHere.appendChild(div);
+        errorMsgDiv.appendChild(div);
 
     }
 </script>

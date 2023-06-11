@@ -1,4 +1,4 @@
-function checkForm() {
+function checkForm(action) {
 
     const frmMemberInsert = document.frmMemberInsert; // 폼을 들고옴.
 
@@ -151,51 +151,78 @@ function checkForm() {
     }
 
 
-    if (num_check.test(frmMemberInsert.phone2.value) == false) {
+    if (num_check.test(frmMemberInsert.phone2.value) === false) {
         alert("숫자만 입력할 수 있습니다.");
         frmMemberInsert.phone2.focus();
         return false;
     }
 
-    if (num_check.test(frmMemberInsert.phone3.value) == false) {
+    if (num_check.test(frmMemberInsert.phone3.value) === false) {
         alert("숫자만 입력할 수 있습니다.");
         frmMemberInsert.phone3.focus();
         return false;
     }
 
-    if (frmMemberInsert.agreement.value == "no") {
+    if (frmMemberInsert.agreement.value === "no") {
         alert("약관에 동의해 주세요.");
         return false;
     }
 
-    if (confirm("가입하시겠습니까?")) {
+    upsertMember(action,frmMemberInsert);
 
-        const payload = new FormData(frmMemberInsert);
-        const jsonData = {};
 
-        // FormData 객체의 값을 JSON 객체로 변환
-        for (const [key, value] of payload.entries()) {
-            jsonData[key] = value;
-        }
+}
+
+function upsertMember(action,frmMemberInsert){
+    let confirmMsg = "";
+    let method = "";
+    let returnMsgType = "";
+
+
+    if (action === 'join') {
+
+        confirmMsg = "가입하시겠습니까?";
+        method = 'POST';
+        returnMsgType = '1';
+
+    } else if (action === 'update') {
+
+        confirmMsg = "수정하시겠습니까?";
+        method = 'PATCH';
+        returnMsgType = '0';
+
+    }else {
+        return ;
+    }
+
+
+
+    const payload = new FormData(frmMemberInsert);
+    const jsonData = {};
+
+    // FormData 객체의 값을 JSON 객체로 변환
+    for (const [key, value] of payload.entries()) {
+        jsonData[key] = value;
+    }
+
+    if (confirm(confirmMsg)) {
+
 
         fetch('/api/member', {
-            method: 'POST',
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(jsonData)
         })
-            .then(response => response.json())
             .then(data => {
                 console.log(data); // 서버에서 받은 응답 데이터 처리
-                window.location.href = '/';
+                window.location.href = `/member/resultMember?msg=${returnMsgType}`;
+
             })
             .catch(error => {
                 console.error('Error:', error);
             });
 
-
     }
-
-
 }

@@ -7,16 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>furniture</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}"/>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="d-flex" id="wrapper">
-
     <!-- Page content wrapper-->
     <div id="page-content-wrapper">
 
@@ -24,18 +24,18 @@
         <div class="container">
             <header
                     class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between py-3 mb-1 border-bottom">
-                <a href="../index.jsp"
+                <a href="/"
                    class="d-flex align-items-center mb-2 mb-md-0 text-dark text-decoration-none">
                     <img width="120" height="120" role="img"
                          src="/images/logo3.png"/>
                 </a>
 
                 <ul class="nav my-2 justify-content-center my-md-0 text-small">
-                    <li><a href="http://localhost:8080" class="nav-link text-black"> Home
+                    <li><a href="/" class="nav-link text-black"> Home
                     </a></li>
                     <li><a href="../shop_db/productsList.ad"
                            class="nav-link text-muted"> 제품 </a></li>
-                    <li><a href="../board/BoardListAction.do?pageNum=1"
+                    <li><a th:href="@{/board/list}"
                            class="nav-link text-muted"> 게시판 </a></li>
                     <li><a href="../shop_db/cart.jsp" class="nav-link text-muted">
                         장바구니 </a></li>
@@ -49,36 +49,31 @@
                                 목록</a></li>
                             <li><a class="dropdown-item" href="../shop_db/myPostList.my">내가
                                 쓴 글</a></li>
-                        </ul></li>
+                        </ul>
+                    </li>
                 </ul>
 
 
                 <div sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-primary" th:href="@{/LoginPage.lo}">로그인</a>
+                    <a class="btn btn-outline-primary" th:href="@{/member/login}">로그인</a>
                     <a class="btn btn-primary" th:href="@{/member/addmember}">회원가입</a>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                    [<span sec:authentication="userId"></span>님]
-                    <a class="btn btn-outline-primary" th:href="@{/Logout.lo}">로그아웃</a>
-                    <a class="btn btn-primary" th:href="@{/UpdateMemberPage.lo}">회원 수정</a>
+                    [<span sec:authentication="name"></span>님]
+                    <a class="btn btn-outline-primary" th:href="@{/logout}">로그아웃</a>
+                    <a class="btn btn-primary" th:href="@{/member/updateMember}">회원 수정</a>
                 </div>
             </header>
 
         </div>
 
+
         <!-- Page content-->
         <div class="container-fluid" layout:fragment="content">
-            <h1 class="mt-4">Simple Sidebar</h1>
-            <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on
-                larger screens. When toggled using the button below, the menu will change.</p>
-            <p>
-                Make sure to keep all page content within the
-                <code>#page-content-wrapper</code>
-                . The top navbar is optional, and just for demonstration. Just create an element with the
-                <code>#sidebarToggle</code>
-                ID which will toggle the menu when clicked.
-            </p>
+            <h1>basic</h1>
+
         </div>
+
     </div>
 </div>
 <!-- Bootstrap core JS-->

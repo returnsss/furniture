@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{index.html}">
+      layout:decorate="~{/layout/basic}">
 
 <head>
     <meta charset="UTF-8">
@@ -232,7 +232,7 @@
             <button type="button" onclick="goIndex()"
                     class="btn btn-primary">취소하기
             </button>
-            <button type="button" class="btn btn-primary join" onclick="return checkForm()">가입하기</button>
+            <button type="button" class="btn btn-primary join" onclick="checkForm('join')">가입하기</button>
         </div>
 
     </form>
