@@ -91,6 +91,24 @@ public class BoardService {
                 .build();
     }
 
+    public PageResponseDto<BoardDto> myPost(String userId, PageRequestDto pageRequestDto) {
+
+        Pageable pageable = pageRequestDto.getPageable("bno");
+
+        Page<Board> result = boardRepository.searchMyPost(userId, pageable);
+
+        List<BoardDto> boardDtoList = result.getContent().stream()
+                .map(board -> modelMapper.map(board, BoardDto.class))
+                .collect(Collectors.toList());
+
+        return PageResponseDto.<BoardDto>withAll()
+                .pageRequestDto(pageRequestDto)
+                .boardList(boardDtoList)
+                .total((int)result.getTotalElements())
+                .build();
+    }
+
+
     /**
      * 내가 쓴 글 목록 출력
      * @param writer

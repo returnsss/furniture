@@ -1,6 +1,7 @@
 package com.teamproject.furniture.product.controller;
 
 import com.teamproject.furniture.product.dtos.ProductPageDto;
+import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,14 @@ public class ProductViewController {
     @GetMapping("/addproduct")
     public String addProduct(){
         return "/product/addProduct";
+    }
+
+    @GetMapping("/product")
+    public String product(Long productId, Model model){
+        Product product = productService.getProduct(productId);
+        model.addAttribute("product", product);
+
+        return "/product/product";
     }
 
     @GetMapping("/list")

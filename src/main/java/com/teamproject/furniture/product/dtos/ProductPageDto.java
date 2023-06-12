@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class ProductPageDto {
 
+    private Long productId;
 
     private String productName; // 제품명
 
@@ -18,7 +19,8 @@ public class ProductPageDto {
 
 
     @QueryProjection
-    public ProductPageDto(String productName, String description, String imgPath) {
+    public ProductPageDto(Long productId, String productName, String description, String imgPath) {
+        this.productId = productId;
         this.productName = productName;
         this.description = description;
         this.imgPath = imgPath;

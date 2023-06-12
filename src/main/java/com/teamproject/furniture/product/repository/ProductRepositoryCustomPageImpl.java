@@ -51,6 +51,7 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
 
         List<ProductPageDto> content = queryFactory
                 .select(new QProductPageDto(
+                        product.productId,
                         product.productName,
                         product.description,
                         product.imgPath))
