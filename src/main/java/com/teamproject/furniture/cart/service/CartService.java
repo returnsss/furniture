@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -61,7 +63,27 @@ public class CartService {
     }
 
     public List<CartDto> getCartItems(String userId){
-        return cartRepository.findByUserId(userId);
+        List<Cart> carts = cartRepository.findByUserId(userId);
+        List<CartDto> cartDtoList = new ArrayList<>();
+
+        for (Cart cart : carts) {
+            CartDto cartDto = new CartDto();
+            cartDto.setCartId(cart.getCartId());
+            cartDto.setProductId(cart.getProductId());
+            cartDto.setProductName(cart.getProductName());
+            cartDto.setUserId(cart.getUserId());
+            cartDto.setOrderNum(cart.getOrderNum());
+            cartDto.setProductPrice(cart.getProductPrice());
+            cartDto.setCnt(cart.getCnt());
+
+            Optional<Product> byId = productRepository.findById(cartDto.getProductId());
+            Optional<String> s = byId.map(Product::getImgPath);
+            cartDto.setImgPath(s.orElse(""));
+
+            cartDtoList.add(cartDto);
+        }
+
+        return cartDtoList;
     }
 
     public void removeCartItem(String userId, Long cartId) {
@@ -99,10 +121,10 @@ public class CartService {
 
 
     public int cartTotalPrice(String userId){
-        List<CartDto> cartItems = cartRepository.findByUserId(userId);
+        List<Cart> cartItems = cartRepository.findByUserId(userId);
         int totalPrice = 0;
 
-        for (CartDto cart : cartItems) {
+        for (Cart cart : cartItems) {
             totalPrice += cart.getProductPrice() * cart.getCnt();
         }
 

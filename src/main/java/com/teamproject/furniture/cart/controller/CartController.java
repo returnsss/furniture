@@ -3,7 +3,9 @@ package com.teamproject.furniture.cart.controller;
 import com.teamproject.furniture.cart.domain.Cart;
 import com.teamproject.furniture.cart.dtos.CartDto;
 import com.teamproject.furniture.cart.service.CartService;
+import com.teamproject.furniture.member.dtos.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +17,8 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping("/{userId}/{productId}")
-    public void addToCart(@PathVariable String userId, @PathVariable Long productId, @RequestBody CartDto cartDto) {
+    public void addToCart(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, @RequestBody CartDto cartDto) {
+        String userId = userDto.getUserId();
         cartService.addToCart(cartDto, userId, productId);
 
     }
@@ -34,13 +37,15 @@ public class CartController {
     }
 
     @DeleteMapping("/{userId}")
-    public void clearCart(@PathVariable String userId) {
+    public void clearCart(@AuthenticationPrincipal UserDto userDto) {
+        String userId = userDto.getUserId();
         cartService.clearCart(userId);
 
     }
 
     @PostMapping("/{userId}/{cartId}/cnt")
-    public void updatCartItemCount(@PathVariable String userId, @PathVariable Long cartId, @RequestParam int cnt){
+    public void updatCartItemCount(@AuthenticationPrincipal UserDto userDto, @PathVariable Long cartId, @RequestParam int cnt){
+        String userId = userDto.getUserId();
         cartService.updateCartItemCount(userId, cartId, cnt);
     }
 

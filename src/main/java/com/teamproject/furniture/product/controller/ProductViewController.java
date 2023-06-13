@@ -1,11 +1,13 @@
 package com.teamproject.furniture.product.controller;
 
+import com.teamproject.furniture.member.dtos.UserDto;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +30,12 @@ public class ProductViewController {
     }
 
     @GetMapping("/{productId}")
-    public String product(@PathVariable Long productId, Model model){
+    public String product(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, Model model){
         Product product = productService.getProduct(productId);
+        String userId = userDto.getUserId();
+
         model.addAttribute("product", product);
+        model.addAttribute("userId", userId);
 
         return "/product/product";
     }

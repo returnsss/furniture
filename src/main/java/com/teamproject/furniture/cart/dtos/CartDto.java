@@ -1,11 +1,14 @@
 package com.teamproject.furniture.cart.dtos;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CartDto {
     private Long cartId;
 
@@ -21,7 +24,11 @@ public class CartDto {
 
     private int cnt;
 
-    //@QueryProjection
+    private String imgPath;
+
+
+
+    @QueryProjection
     public CartDto(Long cartId, Long productId, String productName, String userId, String orderNum, int productPrice, int cnt) {
         this.cartId = cartId;
         this.productId = productId;
@@ -30,5 +37,6 @@ public class CartDto {
         this.orderNum = orderNum;
         this.productPrice = productPrice;
         this.cnt = cnt;
+
     }
 }
