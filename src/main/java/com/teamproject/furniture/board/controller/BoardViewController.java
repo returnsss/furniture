@@ -33,6 +33,16 @@ public class BoardViewController {
         model.addAttribute("responseDto", responseDto);
     }
 
+    @GetMapping("/mypost")
+    public String myPost(@AuthenticationPrincipal UserDto userDto, PageRequestDto pageRequestDto, Model model){ // 화면에 목록 데이터를 출력
+        String userId = userDto.getUserId();
+        PageResponseDto<BoardDto> responseDto = boardService.myPost(userId, pageRequestDto);
+
+        model.addAttribute("responseDto", responseDto);
+        return "/mypage/myPost";
+    }
+
+
     @GetMapping("/register")
     public void registerGET(@AuthenticationPrincipal UserDto userDto, Model model){
         String userId = userDto.getUserId();

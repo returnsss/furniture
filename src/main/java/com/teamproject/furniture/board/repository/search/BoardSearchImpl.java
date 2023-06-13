@@ -20,17 +20,17 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
     }
 
     @Override
-    public Page<Board> search1(Pageable pageable) { //todo 추후 삭제 예정. 필요없는 코드임
+    public Page<Board> searchMyPost(String userId, Pageable pageable) { //todo 추후 삭제 예정. 필요없는 코드임
         QBoard board = QBoard.board; // Q도메인 객체
         JPQLQuery<Board> query = from(board); // select ... from board
-        query.where(board.title.contains("1")); // where title like
+        query.where(board.writer.eq(userId)); // where title like
 
         // paging
         this.getQuerydsl().applyPagination(pageable, query);
 
         List<Board> list = query.fetch();
         long count = query.fetchCount();
-        return null;
+        return new PageImpl<>(list, pageable, count);
     }
 
     @Override

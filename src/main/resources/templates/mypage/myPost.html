@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 쓴 글</title>
+    <style>
+        .list-group {
+            max-width: 600px;
+            margin: 4rem auto;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content" class="content">
+
+    <h2 class="text-center mt-5">내가 쓴 글</h2>
+    <form action="/board/mypost" method="get">
+    <div class="list-group w-auto my-5">
+        <!-- 목록 출력 -->
+        <div th:each="dto:${responseDto.boardList}">
+
+        <a th:href="@{/board/read(bno=${dto.bno})}"
+           class="list-group-item list-group-item-action d-flex gap-3 py-3"
+           aria-current="true">
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">[[${dto.title}]]</h6>
+                </div>
+                <small class="opacity-50 text-nowrap">[[${#temporals.format(dto.regDate, 'yyyy-MM-dd')}]]</small>
+            </div>
+        </a>
+        </div>
+
+
+    </div>
+    </form>
+
+
+
+
+    <div aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item" th:if="${responseDto.prev}">
+                <a class="page-link" th:data-num="${responseDto.start - 1}">Previous</a>
+            </li>
+            <th:block th:each="i: ${#numbers.sequence(responseDto.start, responseDto.end)}">
+                <li th:class="${responseDto.page == i} ? 'page-item active' : 'page-item'">
+                    <a class="page-link" th:data-num="${i}">[[${i}]]</a>
+                </li>
+            </th:block>
+            <li class="page-item" th:if="${responseDto.next}">
+                <a class="page-link" th:data-num="${responseDto.end + 1}">Next</a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    document.querySelector(".pagination").addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = e.target;
+
+        if(target.tagName !== 'A'){
+            return;
+        }
+
+        const num = target.getAttribute("data-num");
+        const formObj = document.querySelector("form");
+
+        formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`;
+        formObj.submit();
+
+    }, false)
+
+
+</script>

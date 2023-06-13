@@ -33,7 +33,7 @@
                 <ul class="nav my-2 justify-content-center my-md-0 text-small">
                     <li><a href="/" class="nav-link text-black"> Home
                     </a></li>
-                    <li><a href="../shop_db/productsList.ad"
+                    <li><a th:href="@{/product/list}"
                            class="nav-link text-muted"> 제품 </a></li>
                     <li><a th:href="@{/board/list}"
                            class="nav-link text-muted"> 게시판 </a></li>
@@ -43,11 +43,9 @@
                             class="nav-link dropdown-toggle text-muted" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false"> 내정보 </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item"
-                                   href="../shop_db/jjimListAction.my">찜한 목록</a></li>
                             <li><a class="dropdown-item" href="../shop_db/orderList.my">주문
                                 목록</a></li>
-                            <li><a class="dropdown-item" href="../shop_db/myPostList.my">내가
+                            <li><a class="dropdown-item" th:href="@{/board/mypost}">내가
                                 쓴 글</a></li>
                         </ul>
                     </li>
