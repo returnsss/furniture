@@ -37,8 +37,17 @@
             <h2 class="featurette-heading" th:text="${product.productPrice}"></h2>
             <p class="text-muted col-md-6" style="margin: auto;" th:text="${product.description}"></p>
             <div class="d-grid gap-2 d-md-flex justify-content-center mt-5">
-                <form name="addForm" action="" method="post">
-                    <div class="btn btn-primary" onclick="addToCart()">
+                <form name="addToCart">
+                    <input type="hidden" th:value="${product.productId}">
+                    <input type="hidden" th:value="${product.productName}">
+                    <input type="hidden" th:value="${product.productPrice}">
+                    <input type="hidden" th:value="${product.description}">
+                    <input type="hidden" th:value="${product.category}">
+                    <input type="hidden" th:value="${product.productsInStock}">
+                    <input type="hidden" th:value="${product.fileName}">
+                    <input type="hidden" th:value="${product.imgPath}">
+                    <input type="hidden" th:value="${product.registDay}">
+                    <div class="btn btn-primary" onclick="addCart()">
                         <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
@@ -65,3 +74,49 @@
 
 
 </div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    function addCart(){
+        const productId = [[${product.productId}]];
+        console.log(productId);
+        const addToCart = document.addToCart;
+
+        const payload = new FormData(addToCart);
+        const jsonData = {};
+
+        // FormData 객체의 값을 JSON 객체로 변환
+        for (const [key, value] of payload.entries()) {
+            jsonData[key] = value;
+        }
+
+
+        if(!confirm("장바구니에 추가 하시겠습니까?")){
+            return;
+        }
+        fetch(`/api/cart/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error: ' + response.status);
+                }
+                // 요청이 성공한 경우 추가적인 로직을 작성하세요
+                console.log('Item added to cart successfully.');
+                alert("장바구니에 추가되었습니다!");
+                window.location.href = `/cart/list`;
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리 로직을 작성하세요
+                console.error('Error:', error);
+            });
+    }
+
+
+
+
+</script>
