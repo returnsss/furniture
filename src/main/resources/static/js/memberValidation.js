@@ -217,8 +217,7 @@ function upsertMember(action,frmMemberInsert){
         })
             .then(data => {
                 console.log(data); // 서버에서 받은 응답 데이터 처리
-                window.location.href = `/member/resultMember?msg=
-                ${returnMsgType}`;
+                window.location.href = `/member/resultMember?msg=${returnMsgType}`;
 
             })
             .catch(error => {

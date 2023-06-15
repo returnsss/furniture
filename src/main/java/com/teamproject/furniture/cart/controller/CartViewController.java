@@ -23,12 +23,18 @@ public class CartViewController {
     private final CartService cartService;
 
     @GetMapping("/list")
-    public String list(@AuthenticationPrincipal UserDto userDto, Model model){ // 화면에 목록 데이터를 출력
+    public String list(@AuthenticationPrincipal UserDto userDto, Model model) { // 화면에 목록 데이터를 출력
         String userId = userDto.getUserId();
         List<CartDto> cartDtoList = cartService.getCartItems(userId);
-        Integer totalPrice = cartService.cartTotalPrice(userId);
 
-        model.addAttribute("userId", userId);
+        int thisPrice;
+        int totalPrice = 0;
+
+        for (CartDto cartDto : cartDtoList) {
+            thisPrice = cartDto.getProductPrice() * cartDto.getCnt();
+            totalPrice += thisPrice;
+        }
+        
         model.addAttribute("cartDtoList", cartDtoList);
         model.addAttribute("totalPrice", totalPrice);
         return "/mypage/cart";

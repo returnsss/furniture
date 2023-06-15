@@ -48,7 +48,7 @@
                     <input type="hidden" th:value="${product.fileName}">
                     <input type="hidden" th:value="${product.imgPath}">
                     <input type="hidden" th:value="${product.registDay}">
-                    <div class="btn btn-primary" id="addCart">
+                    <div class="btn btn-primary" onclick="addCart()">
                         <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
@@ -78,7 +78,7 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    document.querySelector("#addCart").addEventListener('click',function (){
+    function addCart(){
         const userId = [[${userId}]];
         const productId = [[${product.productId}]];
         console.log(userId);
@@ -94,31 +94,31 @@
         }
 
 
-        if(confirm("장바구니에 추가 하시겠습니까?")){
-            fetch(`/api/cart/${userId}/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error: ' + response.status);
-                    }
-                    // 요청이 성공한 경우 추가적인 로직을 작성하세요
-                    console.log('Item added to cart successfully.');
-                    alert("장바구니에 추가되었습니다!");
-                    window.location.href = `/cart/list`;
-                })
-                .catch(error => {
-                    // 요청이 실패한 경우 에러 처리 로직을 작성하세요
-                    console.error('Error:', error);
-                });
+        if(!confirm("장바구니에 추가 하시겠습니까?")){
+            return;
         }
+        fetch(`/api/cart/${userId}/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error: ' + response.status);
+                }
+                // 요청이 성공한 경우 추가적인 로직을 작성하세요
+                console.log('Item added to cart successfully.');
+                alert("장바구니에 추가되었습니다!");
+                window.location.href = `/cart/list`;
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리 로직을 작성하세요
+                console.error('Error:', error);
+            });
+    }
 
-
-    })
 
 
 

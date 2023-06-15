@@ -29,7 +29,7 @@
                 <table class="table table-hover">
                     <tr>
                         <td>
-                            <button type="button" class="btn btn-danger" id="clearCart">장바구니 비우기</button>
+                            <button type="button" class="btn btn-danger" onclick="clearCart()">장바구니 비우기</button>
                         </td>
                     </tr>
 
@@ -43,26 +43,27 @@
                     </tr>
 
 
-                    <tr th:each="cartDtoList, index : ${cartDtoList}">
+                    <tr th:each="cartDto, index : ${cartDtoList}">
 
                         <td>
-                            <input type="hidden" name="productId" th:value="${cartDtoList.productId}">
-                            <a th:href="@{/product/{productId}(productId=${cartDtoList.productId})}"
-                               th:text="${cartDtoList.productName}"
+                            <input type="hidden" name="productId" th:value="${cartDto.productId}">
+                            <input type="hidden" name="cartId" th:value="${cartDto.cartId}">
+                            <a th:href="@{/product/{productId}(productId=${cartDto.productId})}"
+                               th:text="${cartDto.productName}"
                                class="btn btn-outline-primary"></a>
                         </td>
                         <td><img
-                                th:src="@{${cartDtoList.imgPath}}"
+                                th:src="@{${cartDto.imgPath}}"
                                 class="img-thumbnail" style="width: 200px"></td>
-                        <td class="price" th:text="${cartDtoList.productPrice}"></td>
+                        <td class="price" th:text="${cartDto.productPrice}"></td>
                         <td>
-                            <input type="number" th:value="${cartDtoList.cnt}" id="productCnt"
+                            <input type="number" th:value="${cartDto.cnt}" name="cnt"
                                    class="productCnt" min="1">
-                            <input type="button" value="수정" id="modify"
+                            <input type="button" value="수정" onclick="updateCartItemCnt(this)"
                                    class="btn btn-primary btn-sm">
                         </td>
-                        <td class="total" th:text="${cartDtoList.productPrice} * ${cartDtoList.cnt}"></td>
-                        <td><span class="badge text-bg-danger">삭제</span></td>
+                        <td class="total" th:text="${cartDto.productPrice} * ${cartDto.cnt}"></td>
+                        <td><span class="badge text-bg-danger" onclick="deleteCartItem(this)">삭제</span></td>
                     </tr>
 
 
@@ -87,76 +88,103 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const clearAllButton = document.querySelector('#clearCart');
+    function clearCart(){
 
-        clearAllButton.addEventListener('click', function() {
-            const userId = [[${userId}]];
-
-            if (confirm('장바구니를 비우시겠습니까?')) {
-                fetch(`/api/cart/${userId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('장바구니가 성공적으로 비워졌습니다.');
-                            alert('장바구니가 비워졌습니다!');
-                            window.location.reload();
-                        } else {
-                            console.error('장바구니 비우기 실패');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('네트워크 오류:', error);
-                    });
+        if (!confirm('장바구니를 비우시겠습니까?')) {
+            return;
+        }
+        fetch(`/api/cart`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
             }
-        });
-    });
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('장바구니가 성공적으로 비워졌습니다.');
+                    alert('장바구니가 비워졌습니다!');
+                    window.location.reload();
+                } else {
+                    console.error('장바구니 비우기 실패');
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
+
+    }
 
 
 
-/*
-    const modify = document.querySelector('#modify');
 
+    function deleteCartItem(element) {
 
-    modify.addEventListener('click', function (e) {
+        let cartId = element.parentNode.parentNode.querySelector('input[name="cartId"]').value;
 
-        const userId = [[${userId}]];
-        const cartId = [[${cartDtoList.cartId}]];
-        const productCnt = document.querySelector('#productCnt');
-        const cnt = parseInt(productCnt.value);
-
-        console.log(userId);
         console.log(cartId);
-        console.log(productCnt);
+
+        if (!confirm('해당 상품을 장바구니에서 삭제하시겠습니까?')) {
+            return;
+        }
+        fetch(`/api/cart/${cartId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('장바구니가 성공적으로 비워졌습니다.');
+                    alert('해당 상품이 장바구니에서 삭제되었습니다.');
+                    window.location.reload();
+                } else {
+                    console.error('해당 상품 장바구니 비우기 실패');
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
+
+    }
+
+
+    function updateCartItemCnt(element) {
+
+        let cartId = element.parentNode.parentNode.querySelector('input[name="cartId"]').value;
+        let cnt = element.parentNode.querySelector('input[name="cnt"]').value;
+
+        console.log(cartId);
         console.log(cnt);
 
 
-        if (confirm("수량을 수정 하시겠습니까?")) {
-            fetch(`/api/cart/${userId}/${cartId}/cnt?cnt=${cnt}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error: ' + response.status);
-                    }
-                    // 요청이 성공한 경우 추가적인 로직을 작성하세요
-                    console.log('Cart item count updated successfully.');
-                    alert("수량이 수정 되었습니다!");
-                    window.location.href = `/cart/list`;
-                })
-                .catch(error => {
-                    // 요청이 실패한 경우 에러 처리 로직을 작성하세요
-                    console.error('Error:', error);
-                });
+        if (!confirm("수량을 수정 하시겠습니까?")) {
+            return;
         }
+        fetch(`/api/cart/${cartId}/cnt?cnt=${cnt}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error: ' + response.status);
+                }
+                // 요청이 성공한 경우 추가적인 로직을 작성하세요
+                console.log('수량이 수정 되었습니다.');
+                alert("수량이 수정 되었습니다!");
+                window.location.reload();
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리 로직을 작성하세요
+                console.error('Error:', error);
+            });
 
-    })*/
+
+    }
+
+
+
+
 
 </script>

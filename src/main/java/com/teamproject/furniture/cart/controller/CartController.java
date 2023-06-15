@@ -31,20 +31,21 @@ public class CartController {
         return cartItems;
     }
 
-    @DeleteMapping("/{userId}/{cartId}")
-    public void removeCartItem(@PathVariable String userId, @PathVariable Long cartId) {
+    @DeleteMapping("/{cartId}")
+    public void removeCartItem(@AuthenticationPrincipal UserDto userDto, @PathVariable Long cartId) {
+        String userId = userDto.getUserId();
         cartService.removeCartItem(userId, cartId);
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("")
     public void clearCart(@AuthenticationPrincipal UserDto userDto) {
         String userId = userDto.getUserId();
         cartService.clearCart(userId);
 
     }
 
-    @PostMapping("/{userId}/{cartId}/cnt")
-    public void updatCartItemCount(@AuthenticationPrincipal UserDto userDto, @PathVariable Long cartId, @RequestParam int cnt){
+    @PostMapping("/{cartId}/cnt")
+    public void updateCartItemCount(@AuthenticationPrincipal UserDto userDto, @PathVariable Long cartId, @RequestParam int cnt){
         String userId = userDto.getUserId();
         cartService.updateCartItemCount(userId, cartId, cnt);
     }
