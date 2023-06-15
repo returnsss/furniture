@@ -57,13 +57,13 @@
                                 class="img-thumbnail" style="width: 200px"></td>
                         <td class="price" th:text="${cartDto.productPrice}"></td>
                         <td>
-                            <input type="number" th:value="${cartDto.cnt}" name="cnt"
+                            <input type="number" th:value="${cartDto.cnt}" th:attr="cart-id=${cartDto.cartId}" name="cnt"
                                    class="productCnt" min="1">
-                            <input type="button" value="수정" onclick="updateCartItemCnt(this)"
+                            <input type="button" value="수정" th:attr="data-cart-id=${cartDto.cartId}" onclick="updateCartItemCnt(this)"
                                    class="btn btn-primary btn-sm">
                         </td>
                         <td class="total" th:text="${cartDto.productPrice} * ${cartDto.cnt}"></td>
-                        <td><span class="badge text-bg-danger" onclick="deleteCartItem(this)">삭제</span></td>
+                        <td><span class="badge text-bg-danger" th:attr="data-cart-id=${cartDto.cartId}" onclick="deleteCartItem(this)">삭제</span></td>
                     </tr>
 
 
@@ -119,7 +119,7 @@
 
     function deleteCartItem(element) {
 
-        let cartId = element.parentNode.parentNode.querySelector('input[name="cartId"]').value;
+        let cartId = element.dataset.cartId;
 
         console.log(cartId);
 
@@ -150,8 +150,8 @@
 
     function updateCartItemCnt(element) {
 
-        let cartId = element.parentNode.parentNode.querySelector('input[name="cartId"]').value;
-        let cnt = element.parentNode.querySelector('input[name="cnt"]').value;
+        let cartId = element.dataset.cartId;
+        let cnt = document.querySelector(`.productCnt[cart-id='${cartId}']`).value;
 
         console.log(cartId);
         console.log(cnt);

@@ -28,7 +28,6 @@ public class CartDto {
 
 
 
-    //@QueryProjection
     public CartDto(Long cartId, Long productId, String productName, String userId, String orderNum, int productPrice, int cnt) {
         this.cartId = cartId;
         this.productId = productId;
