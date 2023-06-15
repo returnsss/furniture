@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/basic}"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      layout:decorate="~{/layout/basic}">
 <head>
     <meta charset="UTF-8">
     <title>제품상세</title>
@@ -79,9 +78,7 @@
 <script layout:fragment="script" th:inline="javascript">
 
     function addCart(){
-        const userId = [[${userId}]];
         const productId = [[${product.productId}]];
-        console.log(userId);
         console.log(productId);
         const addToCart = document.addToCart;
 
@@ -97,7 +94,7 @@
         if(!confirm("장바구니에 추가 하시겠습니까?")){
             return;
         }
-        fetch(`/api/cart/${userId}/${productId}`, {
+        fetch(`/api/cart/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

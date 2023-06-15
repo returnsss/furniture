@@ -30,12 +30,10 @@ public class ProductViewController {
     }
 
     @GetMapping("/{productId}")
-    public String product(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, Model model){
+    public String product(@PathVariable Long productId, Model model){
         Product product = productService.getProduct(productId);
-        String userId = userDto.getUserId();
 
         model.addAttribute("product", product);
-        model.addAttribute("userId", userId);
 
         return "/product/product";
     }

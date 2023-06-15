@@ -16,7 +16,7 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-    @PostMapping("/{userId}/{productId}")
+    @PostMapping("/{productId}")
     public void addToCart(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, @RequestBody CartDto cartDto) {
         String userId = userDto.getUserId();
         cartService.addToCart(cartDto, userId, productId);
