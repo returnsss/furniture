@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
-    public void addToCart(CartDto cartDto, String userId, Long productId){
+    public void addToCart(CartDto cartDto, String userId, Long productId, String sessionId){
         // 상품 정보 가져오기
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
@@ -42,8 +43,9 @@ public class CartService {
 
 
         // 주문번호 생성(데이터 입력 날짜시간초단위 + userId)
-        LocalDateTime now = LocalDateTime.now();
-        String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + userId;
+        //LocalDateTime now = LocalDateTime.now();
+        //String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + userId;
+        String orderNum = sessionId;
 
         // 장바구니에 담을 때 개수는 1개로 고정
         int cnt = 1;

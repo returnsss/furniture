@@ -24,6 +24,16 @@ public class ProductViewController {
         this.productService = productService;
     }
 
+
+    @GetMapping("/adminProductList")
+    public String adminProductList(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
+        Page<ProductPageDto> results = productService.selectProductList(searchVal, pageable);
+        model.addAttribute("list", results);
+        model.addAttribute("maxPage", 10);
+        pageModelPut(results, model);
+        return "/admin/adminProducts";
+    }
+
     @GetMapping("/addproduct")
     public String addProduct(){
         return "/product/addProduct";

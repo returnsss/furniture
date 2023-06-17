@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/order")
@@ -17,8 +19,9 @@ public class OrderController {
 
 
     @PostMapping("/data/add")
-    public void addToOrderData(@RequestBody OrderDataDto orderDataDto){
-        orderService.addToOrderData(orderDataDto);
+    public void addToOrderData(@RequestBody OrderDataDto orderDataDto, HttpSession session){
+
+        orderService.addToOrderData(orderDataDto, session);
     }
 
     @PostMapping("/info/add")

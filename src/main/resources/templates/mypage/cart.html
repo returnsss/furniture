@@ -17,7 +17,7 @@
         <div class="row">
             <table width="100%">
                 <tr>
-                    <td align="right"><a href="#" class="btn btn-primary btn-lg">주문하기</a></td>
+                    <td align="right"><button type="button" class="btn btn-primary btn-lg" onclick="addToOrderData(this)">주문하기</button></td>
                 </tr>
             </table>
         </div>
@@ -56,6 +56,10 @@
                                 th:src="@{${cartDto.imgPath}}"
                                 class="img-thumbnail" style="width: 200px"></td>
                         <td class="price" th:text="${cartDto.productPrice}"></td>
+                        <input type="hidden" name="productPrice" th:value="${cartDto.productPrice}">
+                        <input type="hidden" name="orderNum" th:value="${cartDto.orderNum}">
+                        <input type="hidden" name="productName" th:value="${cartDto.productName}">
+                        <input type="hidden" name="totalPrice" th:value="${cartDto.productPrice} * ${cartDto.cnt}">
                         <td>
                             <input type="number" th:value="${cartDto.cnt}" th:attr="cart-id=${cartDto.cartId}" name="cnt"
                                    class="productCnt" min="1">
@@ -87,6 +91,42 @@
 
 
 <script layout:fragment="script" th:inline="javascript">
+
+    const frmCart = document.frmCart;
+
+    function addToOrderData(){
+
+        const payload = new FormData(frmCart);
+        const jsonData = {};
+
+        // FormData 객체의 값을 JSON 객체로 변환
+        for (const [key, value] of payload.entries()) {
+            jsonData[key] = value;
+        }
+
+        if (!confirm('주문하시겠습니까?')) {
+            return;
+        }
+        fetch(`/api/order/data/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = `/order/orderInfo`;
+                } else {
+                    console.error('orderData에 담기 실패');
+                }
+            })
+            .catch(error => {
+                console.error('네트워크 오류:', error);
+            });
+
+    }
+
 
     function clearCart(){
 

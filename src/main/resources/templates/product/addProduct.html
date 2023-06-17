@@ -36,7 +36,7 @@
                             <h3>제품 등록</h3>
                         </div>
                         <div class="col-1">
-                            <a th:href="AdminProductsList.ad" class="btn btn-primary" role="button">등록 취소</a>
+                            <a th:href="@{/product/adminProductList}" class="btn btn-primary" role="button">등록 취소</a>
                         </div>
                     </div>
                     <br>
@@ -155,9 +155,9 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        // Handle successful response
+                        window.location.href = `/product/adminProductList`;
                     } else {
-                        // Handle error response
+                        console.log("제품 등록 실패.");
                     }
                 })
                 .catch(error => {

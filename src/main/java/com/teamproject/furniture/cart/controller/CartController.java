@@ -7,7 +7,9 @@ import com.teamproject.furniture.member.dtos.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -19,7 +21,8 @@ public class CartController {
     @PostMapping("/{productId}")
     public void addToCart(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, @RequestBody CartDto cartDto) {
         String userId = userDto.getUserId();
-        cartService.addToCart(cartDto, userId, productId);
+        String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
+        cartService.addToCart(cartDto, userId, productId, sessionId);
 
     }
 
