@@ -12,9 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface OrderDataRepository extends JpaRepository<OrderData, Long> {
-    @Modifying
-    @Query(value = "delete from order_data od WHERE od.orderNum = :orderNum", nativeQuery = true)
-    void clearOrderData(String orderNum);
+
+    void deleteOrderDataByOrderNum(String orderNum);
 
     List<OrderData> findByOrderNum(String orderNum);
 }

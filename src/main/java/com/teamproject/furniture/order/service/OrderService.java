@@ -31,10 +31,10 @@ public class OrderService {
 
     public void addToOrderData(OrderDataDto orderDataDto, HttpSession session){
         String orderNum = getOrderNum(session);
-        /*List<OrderData> orderDataExist = orderDataRepository.findByOrderNum(orderNum);
+        List<OrderData> orderDataExist = orderDataRepository.findByOrderNum(orderNum);
         if (orderDataExist != null){
-            orderDataRepository.clearOrderData(orderNum);
-        }*/
+            orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+        }
 
         OrderData orderData = new OrderData(orderDataDto);
         orderData.setOrderNum(orderNum);

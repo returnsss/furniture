@@ -103,6 +103,9 @@
         for (const [key, value] of payload.entries()) {
             jsonData[key] = value;
         }
+        console.log(frmCart);
+        console.log(payload);
+        console.log(jsonData);
 
         if (!confirm('주문하시겠습니까?')) {
             return;
