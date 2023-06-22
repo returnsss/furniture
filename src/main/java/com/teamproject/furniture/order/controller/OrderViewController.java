@@ -24,7 +24,7 @@ public class OrderViewController {
         this.cartService = cartService;
     }
 
-    @GetMapping("/getInfo")
+    @GetMapping("/Info")
     public String getOrderInfo(@AuthenticationPrincipal UserDto userDto, Model model){
         String userId = userDto.getUserId();
         List<CartDto> cartDtoList = cartService.getCartItems(userId);

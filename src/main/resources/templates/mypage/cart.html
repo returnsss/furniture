@@ -43,32 +43,34 @@
                     </tr>
 
 
-                    <tr th:each="cartDto, index : ${cartDtoList}" id="cartData">
+                    <tbody id="cartData">
+                        <tr th:each="cartDto, index : ${cartDtoList}">
 
-                        <td>
-                            <input type="hidden" name="productId" th:value="${cartDto.productId}">
-                            <input type="hidden" name="cartId" th:value="${cartDto.cartId}">
-                            <a th:href="@{/product/{productId}(productId=${cartDto.productId})}"
-                               th:text="${cartDto.productName}"
-                               class="btn btn-outline-primary"></a>
-                        </td>
-                        <td><img
-                                th:src="@{${cartDto.imgPath}}"
-                                class="img-thumbnail" style="width: 200px"></td>
-                        <td class="price" th:text="${cartDto.productPrice}"></td>
-                        <input type="hidden" name="productPrice" th:value="${cartDto.productPrice}">
-                        <input type="hidden" name="orderNum" th:value="${cartDto.orderNum}">
-                        <input type="hidden" name="productName" th:value="${cartDto.productName}">
-                        <input type="hidden" name="totalPrice" th:value="${cartDto.productPrice} * ${cartDto.cnt}">
-                        <td>
-                            <input type="number" th:value="${cartDto.cnt}" th:attr="cart-id=${cartDto.cartId}" name="cnt"
-                                   class="productCnt" min="1">
-                            <input type="button" value="수정" th:attr="data-cart-id=${cartDto.cartId}" onclick="updateCartItemCnt(this)"
-                                   class="btn btn-primary btn-sm">
-                        </td>
-                        <td class="total" th:text="${cartDto.productPrice} * ${cartDto.cnt}"></td>
-                        <td><span class="badge text-bg-danger" th:attr="data-cart-id=${cartDto.cartId}" onclick="deleteCartItem(this)">삭제</span></td>
-                    </tr>
+                            <td>
+                                <input type="hidden" name="productId" th:value="${cartDto.productId}">
+                                <input type="hidden" name="cartId" th:value="${cartDto.cartId}">
+                                <a th:href="@{/product/{productId}(productId=${cartDto.productId})}"
+                                   th:text="${cartDto.productName}"
+                                   class="btn btn-outline-primary"></a>
+                            </td>
+                            <td><img
+                                    th:src="@{${cartDto.imgPath}}"
+                                    class="img-thumbnail" style="width: 200px"></td>
+                            <td class="price" th:text="${cartDto.productPrice}"></td>
+                            <input type="hidden" name="productPrice" th:value="${cartDto.productPrice}">
+                            <input type="hidden" name="orderNum" th:value="${cartDto.orderNum}">
+                            <input type="hidden" name="productName" th:value="${cartDto.productName}">
+                            <input type="hidden" name="totalPrice" th:value="${cartDto.productPrice} * ${cartDto.cnt}">
+                            <td>
+                                <input type="number" th:value="${cartDto.cnt}" th:attr="cart-id=${cartDto.cartId}" name="cnt"
+                                       class="productCnt" min="1">
+                                <input type="button" value="수정" th:attr="data-cart-id=${cartDto.cartId}" onclick="updateCartItemCnt(this)"
+                                       class="btn btn-primary btn-sm">
+                            </td>
+                            <td class="total" th:text="${cartDto.productPrice} * ${cartDto.cnt}"></td>
+                            <td><span class="badge text-bg-danger" th:attr="data-cart-id=${cartDto.cartId}" onclick="deleteCartItem(this)">삭제</span></td>
+                        </tr>
+                    </tbody>
 
 
                     <tr class="table-secondary">
@@ -103,7 +105,7 @@
         const cartDtoList = [];
 
         // 반복되는 데이터를 각각 담아서 cartDtoList에 추가
-        document.querySelectorAll('#cartData').forEach(row => {
+        document.querySelectorAll('#cartData tr').forEach(row => {
             const cartDto = {
                 productId : row.querySelector('input[name="productId"]').value,
                 cartId: row.querySelector('input[name="cartId"]').value,
@@ -129,7 +131,7 @@
         })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = `/order/getInfo`;
+                    window.location.href = `/order/Info`;
                 } else {
                     console.error('orderData에 담기 실패');
                 }
