@@ -15,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,17 +30,21 @@ public class OrderService {
         this.orderInfoRepository = orderInfoRepository;
     }
 
-    public void addToOrderData(OrderDataDto orderDataDto, HttpSession session){
+    public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
         String orderNum = getOrderNum(session);
-        List<OrderData> orderDataExist = orderDataRepository.findByOrderNum(orderNum);
-        if (orderDataExist != null){
-            orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+
+        orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+
+        List<OrderData> orderDataList = new ArrayList<>();
+
+        for (OrderDataDto orderDataDto : orderDataDtoList){
+            OrderData orderData = new OrderData(orderDataDto);
+            orderData.setOrderNum(orderNum);
+            orderDataList.add(orderData);
         }
 
-        OrderData orderData = new OrderData(orderDataDto);
-        orderData.setOrderNum(orderNum);
+        orderDataRepository.saveAll(orderDataList);
 
-        orderDataRepository.save(orderData);
     }
 
 

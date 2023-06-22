@@ -34,17 +34,18 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
-    public void addToCart(CartDto cartDto, String userId, Long productId, String sessionId){
-        // 상품 정보 가져오기
+    public void addToCart(CartDto cartDto, String userId, String sessionId){
+        // 상품 정보
+        Long productId = cartDto.getProductId();
         Product product = productRepository.findById(productId).orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
         // 유저 정보 가져오기
-        Member member = memberRepository.findByUserId(userId).orElseThrow(()-> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        Optional<Member> member = memberRepository.findByUserId(userId);
+        if (member.isEmpty()){
+            throw new IllegalStateException("유저가 존재하지 않습니다.");
+        }
 
-
-        // 주문번호 생성(데이터 입력 날짜시간초단위 + userId)
-        //LocalDateTime now = LocalDateTime.now();
-        //String orderNum = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")) + "-" + userId;
+        // 주문번호 생성(세션아이디 넣기)
         String orderNum = sessionId;
 
         // 장바구니에 담을 때 개수는 1개로 고정

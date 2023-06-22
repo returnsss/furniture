@@ -20,7 +20,7 @@ public class AdminViewController {
         this.productService = productService;
     }
 
-    @GetMapping("/adminProductList")
+    @GetMapping("/products")
     public String adminProductList(String searchVal, @PageableDefault(size = 10) Pageable pageable, Model model){
         Page<ProductPageDto> results = productService.selectProductList(searchVal, pageable);
         model.addAttribute("list", results);

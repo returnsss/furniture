@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +20,9 @@ public class OrderController {
 
 
     @PostMapping("/data/add")
-    public void addToOrderData(@RequestBody OrderDataDto orderDataDto, HttpSession session){
+    public void addToOrderData(@RequestBody List<OrderDataDto> orderDataList, HttpSession session){
 
-        orderService.addToOrderData(orderDataDto, session);
+        orderService.addToOrderData(orderDataList, session);
     }
 
     @PostMapping("/info/add")

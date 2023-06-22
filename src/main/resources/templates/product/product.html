@@ -38,9 +38,9 @@
             <p class="text-muted col-md-6" style="margin: auto;" th:text="${product.description}"></p>
             <div class="d-grid gap-2 d-md-flex justify-content-center mt-5">
                 <form name="addToCart">
-                    <input type="hidden" th:value="${product.productId}">
-                    <input type="hidden" th:value="${product.productName}">
-                    <input type="hidden" th:value="${product.productPrice}">
+                    <input type="hidden" th:value="${product.productId}" name="productId">
+                    <input type="hidden" th:value="${product.productName}" name="productName">
+                    <input type="hidden" th:value="${product.productPrice}" name="productPrice">
                     <input type="hidden" th:value="${product.description}">
                     <input type="hidden" th:value="${product.category}">
                     <input type="hidden" th:value="${product.productsInStock}">
@@ -94,7 +94,7 @@
         if(!confirm("장바구니에 추가 하시겠습니까?")){
             return;
         }
-        fetch(`/api/cart/${productId}`, {
+        fetch(`/api/cart/product`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

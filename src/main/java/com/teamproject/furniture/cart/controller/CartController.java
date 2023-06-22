@@ -1,15 +1,13 @@
 package com.teamproject.furniture.cart.controller;
 
-import com.teamproject.furniture.cart.domain.Cart;
 import com.teamproject.furniture.cart.dtos.CartDto;
 import com.teamproject.furniture.cart.service.CartService;
 import com.teamproject.furniture.member.dtos.UserDto;
+import com.teamproject.furniture.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -18,11 +16,11 @@ import java.util.List;
 public class CartController {
     private final CartService cartService;
 
-    @PostMapping("/{productId}")
-    public void addToCart(@AuthenticationPrincipal UserDto userDto, @PathVariable Long productId, @RequestBody CartDto cartDto) {
-        String userId = userDto.getUserId();
-        String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
-        cartService.addToCart(cartDto, userId, productId, sessionId);
+    @PostMapping("/product")
+    public void addToCart(@RequestBody CartDto cartDto) throws Exception {
+        String userId = UserUtil.getUserId();
+        String sessionId = UserUtil.getSessionId();
+        cartService.addToCart(cartDto, userId, sessionId);
 
     }
 
