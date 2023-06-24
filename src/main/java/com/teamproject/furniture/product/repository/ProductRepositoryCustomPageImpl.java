@@ -53,11 +53,14 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
                 .select(new QProductPageDto(
                         product.productId,
                         product.productName,
+                        product.productPrice,
                         product.description,
+                        product.category,
+                        product.productsInStock,
                         product.imgPath))
                 .from(product)
                 .where(whereClause)  // Apply the WHERE conditions
-                .orderBy(product.productName.desc())
+                .orderBy(product.productId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

@@ -10,6 +10,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,10 +30,42 @@ public class OrderService {
         this.orderInfoRepository = orderInfoRepository;
     }
 
-    public void addToOrderData(OrderDataDto orderDataDto){
-        OrderData orderData = new OrderData(orderDataDto);
+    public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
+        String orderNum = getOrderNum(session);
 
-        orderDataRepository.save(orderData);
+        orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+
+        List<OrderData> orderDataList = new ArrayList<>();
+
+        for (OrderDataDto orderDataDto : orderDataDtoList){
+            OrderData orderData = new OrderData(orderDataDto);
+            orderData.setOrderNum(orderNum);
+            orderDataList.add(orderData);
+        }
+
+        orderDataRepository.saveAll(orderDataList);
+
+    }
+
+
+
+
+
+    public String getOrderNum(HttpSession session){
+        String orderNum = (String) session.getAttribute("orderNum");
+        if(orderNum == null){
+            orderNum = generateOrderNum();
+            session.setAttribute("orderNum", orderNum);
+        }
+        return orderNum;
+    }
+
+    private String generateOrderNum(){
+        LocalDateTime now = LocalDateTime.now();
+        String nowStr = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
+
+        return nowStr + "-" + sessionId;
     }
 
 
