@@ -2,6 +2,7 @@ package com.teamproject.furniture.admin.controller;
 
 import com.teamproject.furniture.member.dtos.MemberPageDto;
 import com.teamproject.furniture.member.service.MemberService;
+import com.teamproject.furniture.product.dtos.ProductDto;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.service.ProductService;
@@ -34,7 +35,7 @@ public class AdminViewController {
 
     @GetMapping("/updateProduct/{productId}")
     public String updateProduct(@PathVariable Long productId, Model model){
-        Product product = productService.getProduct(productId);
+        ProductDto product = productService.getProductDto(productId);
 
         model.addAttribute("product", product);
         return "/admin/updateProduct";

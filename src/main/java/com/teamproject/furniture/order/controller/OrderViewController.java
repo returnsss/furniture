@@ -2,10 +2,13 @@ package com.teamproject.furniture.order.controller;
 
 import com.teamproject.furniture.cart.dtos.CartDto;
 import com.teamproject.furniture.cart.service.CartService;
+import com.teamproject.furniture.member.dtos.MemberDto;
 import com.teamproject.furniture.member.model.Member;
 import com.teamproject.furniture.member.service.MemberService;
 import com.teamproject.furniture.order.service.OrderService;
 import com.teamproject.furniture.util.UserUtil;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,17 +18,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderViewController {
 
     private final OrderService orderService;
     private final CartService cartService;
     private final MemberService memberService;
-
-    public OrderViewController(OrderService orderService, CartService cartService, MemberService memberService) {
-        this.orderService = orderService;
-        this.cartService = cartService;
-        this.memberService = memberService;
-    }
 
     @GetMapping("/Info")
     public String getOrderInfo(Model model){
@@ -40,7 +38,7 @@ public class OrderViewController {
             totalPrice += thisPrice;
         }
 
-        Member member = memberService.findUser(userId);
+        MemberDto member = memberService.findUser(userId);
 
         model.addAttribute("cartDtoList", cartDtoList);
         model.addAttribute("totalPrice", totalPrice);

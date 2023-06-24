@@ -126,8 +126,22 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
     }
 
-    public Member findUser(String userId){
-        return memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+    public MemberDto findUser(String userId){
+        Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        return MemberDto.builder()
+                .memberId(member.getMemberId())
+                .userId(member.getUserId())
+                .password(member.getPassword())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .gender(member.getGender())
+                .email(member.getEmail())
+                .address(member.getAddress())
+                .phone(member.getPhone())
+                .receiveMail(member.getReceiveMail())
+                .receivePhone(member.getReceivePhone())
+                .agreement(member.getAgreement())
+                .build();
     }
 
 
@@ -162,16 +176,16 @@ public class MemberService {
         Long memberId = member.getMemberId();
 
         switch (stateType) {
-            case "0":
+            case "STATE_USER":
                 member.updateStateUser(memberId);
                 break;
-            case "1":
+            case "STATE_LIMIT":
                 member.updateStateLimit(memberId);
                 break;
-            case "2":
+            case "STATE_WITHDRAWAL":
                 member.updateStateWithdrawal(memberId);
                 break;
-            case "3":
+            case "STATE_ADMIN":
                 member.updateStateAdmin(memberId);
                 break;
             default:

@@ -42,11 +42,11 @@
           <td th:text="${list.address}"></td>
           <td th:text="${list.phone}"></td>
           <td>
-            <select>
-              <option th:value="0" th:selected="${list.state == 0}">일반</option>
-              <option th:value="1" th:selected="${list.state == 1}">이용 제한</option>
-              <option th:value="2" th:selected="${list.state == 2}">탈퇴</option>
-              <option th:value="3" th:selected="${list.state == 3}">관리자</option>
+            <select th:attr="data-user-id=${list.userId}">
+              <option th:value="STATE_USER" th:selected="${list.state == 0}">일반</option>
+              <option th:value="STATE_LIMIT" th:selected="${list.state == 1}">이용 제한</option>
+              <option th:value="STATE_WITHDRAWAL" th:selected="${list.state == 2}">탈퇴</option>
+              <option th:value="STATE_ADMIN" th:selected="${list.state == 3}">관리자</option>
             </select>
           </td>
         </tr>
@@ -61,30 +61,30 @@
         <ul class="pagination">
 
           <li th:if="${start > 1}" class="page-item">
-            <a th:href="@{/members(page=0)}" class="page-link" href="#" aria-label="Previous">
+            <a th:href="@{/admin/members(page=0)}" class="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;&laquo;</span>
             </a>
           </li>
 
           <li th:if="${start > 1}" class="page-item">
-            <a th:href="@{/members(page=${start - maxPage - 1})}" class="page-link" href="#" aria-label="Previous">
+            <a th:href="@{/admin/members(page=${start - maxPage - 1})}" class="page-link" href="#" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
 
           <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${list.number+1 == page} ? active">
-            <a th:href="@{/members(page=${page - 1})}" th:text="${page}" class="page-link" href="#">1</a>
+            <a th:href="@{/admin/members(page=${page - 1})}" th:text="${page}" class="page-link" href="#">1</a>
           </li>
 
 
           <li th:if="${end < list.totalPages}" class="page-item">
-            <a th:href="@{/members(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+            <a th:href="@{/admin/members(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
 
           <li th:if="${end < list.totalPages}" class="page-item">
-            <a th:href="@{/members(page=${list.totalPages - 1})}" class="page-link" href="#" aria-label="Next">
+            <a th:href="@{/admin/members(page=${list.totalPages - 1})}" class="page-link" href="#" aria-label="Next">
               <span aria-hidden="true">&raquo;&raquo;</span>
             </a>
           </li>
@@ -97,10 +97,10 @@
 <script layout:fragment="script" th:inline="javascript">
 
   function handleSelectChange(option) {
-    let tr = option.closest('tr');
-    let userId = tr.querySelector('td:first-child').textContent;
+    let userId = option.dataset.userId;
     let selectedValue = option.value; // 선택된 option의 값
 
+    console.log(userId);
 
     // API 호출
     fetch(`/api/admin/members/${userId}/state?stateType=${selectedValue}`, {
