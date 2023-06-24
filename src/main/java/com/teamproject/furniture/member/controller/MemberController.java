@@ -30,10 +30,6 @@ public class MemberController { // 기능
     }
 
 
-    @PatchMapping("/api/members/{memberId}/state")
-    public void updateMemberStateApi(@PathVariable Long memberId, @RequestParam("stateType") String stateType) { // 회원 상태 변경
-        memberService.updateMemberState(memberId, stateType);
-    }
 
 
     @GetMapping("/api/members/{memberId}")

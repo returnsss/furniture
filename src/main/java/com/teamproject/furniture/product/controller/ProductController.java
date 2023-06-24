@@ -22,18 +22,6 @@ public class ProductController {
 
 
     /**
-     * 제품 등록
-     * @param addProductDto
-     * @return
-     */
-    @PostMapping("/api/product")
-    public Long addProductApi(@ModelAttribute AddProductDto addProductDto) throws IOException {
-
-
-        return productService.addProduct(addProductDto);
-    }
-
-    /**
      * 제품 상세보기
      * @param productId
      * @return
@@ -52,24 +40,6 @@ public class ProductController {
         return productService.getProducts();
     }
 
-    /**
-     * 제품 수정
-     * @param updateProductDto
-     */
-    @PatchMapping("/api/product")
-    public void updateApi(@ModelAttribute UpdateProductDto updateProductDto) throws IOException {
-        productService.updateProduct(updateProductDto);
-    }
-
-
-    /**
-     * 제품 삭제
-     * @param productId
-     */
-    @DeleteMapping("/api/products/{productId}")
-    public void deleteApi(@PathVariable Long productId){
-        productService.deleteProduct(productId);
-    }
 
 
     /**

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/adminBasic}">
+<head>
+  <meta charset="UTF-8">
+  <title>상품 수정</title>
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+</head>
+
+<div layout:fragment="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">제품 관리</h1>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-11">
+              <h3>제품 수정</h3>
+            </div>
+            <div class="col-1">
+              <a th:href="@{/admin/products}" class="btn btn-primary" role="button">수정 취소</a>
+            </div>
+          </div>
+          <br>
+          <form name="updateProduct" class="form-horizontal" method="post"
+                enctype="multipart/form-data">
+
+            <input type="hidden" name="productId" th:value="${product.productId}">
+
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">제품명</label>
+              <div class="col-sm-3">
+                <input type="text" name="productName" class="form-control" th:value="${product.productName}">
+              </div>
+            </div>
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">가격</label>
+              <div class="col-sm-3">
+                <input type="text" name="productPrice" class="form-control" th:value="${product.productPrice}">
+              </div>
+            </div>
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">설명</label>
+              <div class="col-sm-5">
+                <textarea name="description" cols="50" rows="2" class="form-control" th:text="${product.description}"></textarea>
+              </div>
+            </div>
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">카테고리</label>
+              <div class="col-sm-3">
+                <input type="text" name="category" class="form-control" th:value="${product.category}">
+              </div>
+            </div>
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">재고 수</label>
+              <div class="col-sm-3">
+                <input type="text" name="productsInStock" class="form-control" th:value="${product.productsInStock}">
+              </div>
+            </div>
+            <br>
+
+            <input type="hidden" name="fileName" th:value="${product.fileName}">
+            <input type="hidden" name="imgPath" th:value="${product.imgPath}">
+
+            <div class="form-group row">
+              <label class="col-sm-2">이미지</label>
+              <div class="col-sm-5">
+                <input type="file" name="productImage" class="form-control">
+              </div>
+            </div>
+
+            <br>
+            <div class="form-group row">
+              <label class="col-sm-2">※주의※</label>
+              <div class="col-sm-3">
+                <span>※ 이미지를 선택하지 않을 경우 이전 이미지가 자동으로 선택됩니다. ※</span>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group row">
+              <div class="col-sm-offset-2 col-sm-10 ">
+                <button type="button" class="btn btn-primary modify">수정</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+
+
+  document.querySelector(".modify").addEventListener("click", function (e){
+    const formObj = document.querySelector("form")
+
+    var num_check = /[0-9]/;	// 숫자만
+
+    if(!formObj.productName.value){
+      alert("제품명을 입력해주세요!!");
+      return false;
+    }
+    if(!formObj.productPrice.value){
+      alert("가격을 입력해주세요!!");
+      return false;
+    }
+
+    if(num_check.test(formObj.productPrice.value) == false){
+      alert("가격은 숫자만 입력해주세요!!");
+      return false;
+    }
+
+    if(!formObj.description.value){
+      alert("설명을 기입해주세요!!");
+      return false;
+    }
+    if(!formObj.category.value){
+      alert("카테고리를 입력해주세요!!");
+      return false;
+    }
+    if(!formObj.productsInStock.value){
+      alert("재고수를 입력해주세요!!");
+      return false;
+    }
+
+    if(num_check.test(formObj.productsInStock.value) == false){
+      alert("재고 수는 숫자만 입력해주세요!!");
+      return false;
+    }
+
+
+
+
+    if (confirm("수정하시겠습니까?")) {
+      fetch('/api/admin/product', {
+        method: 'PATCH',
+        body: new FormData(formObj)
+      })
+              .then(response => {
+                if (response.ok) {
+                  window.location.href = `/admin/products`;
+                } else {
+                  console.log("제품 수정 실패.");
+                }
+              })
+              .catch(error => {
+                // Handle network or other errors
+              });
+    }
+
+  })
+
+</script>
+

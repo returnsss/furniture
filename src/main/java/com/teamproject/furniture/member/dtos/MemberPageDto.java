@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MemberPageDto {
-
+    private Long memberId;
     private String userId;
     private String name;
     private String birth;
@@ -21,7 +21,8 @@ public class MemberPageDto {
 
 
     @QueryProjection
-    public MemberPageDto(String userId, String name, String birth, String gender, String email, String address, String phone, int state) {
+    public MemberPageDto(Long memberId, String userId, String name, String birth, String gender, String email, String address, String phone, int state) {
+        this.memberId = memberId;
         this.userId = userId;
         this.name = name;
         this.birth = birth;

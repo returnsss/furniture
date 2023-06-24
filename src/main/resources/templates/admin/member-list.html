@@ -1,35 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/basic}">
+      layout:decorate="~{/layout/adminBasic}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>회원 목록</title>
+</head>
+
 <div layout:fragment="content" class="content">
   <nav class="container">
     <br>
+    <form th:action="@{/admin/members(searchVal=${param.searchVal})}" method="get">
     <div class="input-group">
-      <input type="text" class="form-control" placeholder="제목을 입력해주세요.">
+      <input type="text" class="form-control" name="searchVal" placeholder="회원 이름을 입력해주세요.">
       <button type="submit" class="btn btn-secondary">검색</button>
     </div>
     <br>
-    <form>
-      <table class="table table-hover">
-        <colgroup>
-          <col width="2%" />
-          <col width="5%" />
-          <col width="20%" />
-          <col width="5%" />
-          <col width="5%" />
-          <col width="5%" />
-          <col width="5%" />
-          <col width="5%" />
-          <col width="5%" />
-        </colgroup>
+
+      <table class="table table-hover table-striped text-center">
         <thead>
         <tr>
-          <th>
-            <label class="checkbox-inline">
-              <input type="checkbox" id="allCheckBox" class="chk">
-            </label>
-          </th>
           <th>아이디</th>
           <th>이름</th>
           <th>생일</th>
@@ -43,27 +34,26 @@
 
         <tbody>
         <tr th:each="list, index : ${list}">
-          <td>
-            <label class="checkbox-inline">
-              <input type="checkbox" class="chk" name="cchk" value="">
-            </label>
           <td th:text="${list.userId}"></td>
-          <td><a th:text="${list.name}" href=""></a></td>
+          <td th:text="${list.name}"></td>
           <td th:text="${list.birth}"></td>
           <td th:text="${list.gender}"></td>
           <td th:text="${list.email}"></td>
           <td th:text="${list.address}"></td>
           <td th:text="${list.phone}"></td>
-          <td th:text="${list.state}"></td>
+          <td>
+            <select>
+              <option th:value="0" th:selected="${list.state == 0}">일반</option>
+              <option th:value="1" th:selected="${list.state == 1}">이용 제한</option>
+              <option th:value="2" th:selected="${list.state == 2}">탈퇴</option>
+              <option th:value="3" th:selected="${list.state == 3}">관리자</option>
+            </select>
+          </td>
         </tr>
         </tbody>
       </table>
       <br>
 
-      <div class="d-flex justify-content-end">
-        <a class="btn btn-danger">글삭제</a>
-        <a href="/write" class="btn btn-primary">글쓰기</a>
-      </div>
       <br>
       <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
            th:with="start=${(list.number / maxPage) * maxPage + 1},
@@ -103,4 +93,43 @@
     </form>
   </nav>
 </div>
-</html>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  function handleSelectChange(option) {
+    let tr = option.closest('tr');
+    let userId = tr.querySelector('td:first-child').textContent;
+    let selectedValue = option.value; // 선택된 option의 값
+
+
+    // API 호출
+    fetch(`/api/admin/members/${userId}/state?stateType=${selectedValue}`, {
+      method: "PATCH"
+    })
+            .then(response => {
+              if (response.ok) {
+                // API 호출 성공 시 필요한 작업 수행
+                console.log("회원등급 변경 성공");
+                window.location.reload();
+              } else {
+                // API 호출 실패 시 필요한 작업 수행
+                console.error("회원등급 변경 실패");
+              }
+            })
+            .catch(error => {
+              // 오류 처리
+              console.error("An error occurred:", error);
+            });
+  }
+
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(select => {
+    select.addEventListener('change', function() {
+      if (!confirm("회원등급을 변경하시겠습니까?")){
+        return;
+      }
+      handleSelectChange(this);
+    });
+  });
+
+</script>

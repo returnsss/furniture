@@ -82,14 +82,24 @@ public class ProductService {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
-        String fileName = getFileName(updateProductDto.getProductImage());
+        if(updateProductDto.getProductImage().getOriginalFilename().equals("")){
+            String fileName = updateProductDto.getFileName();
 
-        updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+            existingProduct.updateProduct(updateProductDto);
 
-        existingProduct.updateProduct(updateProductDto);
+            existingProduct.setFileName(fileName);
+            existingProduct.setImgPath("/PjImg/" + fileName);
+        }else {
+            String fileName = getFileName(updateProductDto.getProductImage());
 
-        existingProduct.setFileName(fileName);
-        existingProduct.setImgPath("/PjImg/" + fileName);
+            updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+
+            existingProduct.updateProduct(updateProductDto);
+
+            existingProduct.setFileName(fileName);
+            existingProduct.setImgPath("/PjImg/" + fileName);
+        }
+
 
     }
 
