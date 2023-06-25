@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class OrderInfoDto {
-    private Long orderNo;        // 주문번호
+    private String orderNum;        // 주문번호
     private String userId;          // 사용자 아이디
     private String orderName;       // 주문자 이름
     private String orderTel;        // 주문자 번호
@@ -25,4 +25,6 @@ public class OrderInfoDto {
     private int payAmount;       // 결제 금액
     private LocalDateTime orderDate;// 주문한 시간
     private LocalDateTime payDate; // 결제한 시간
+
+
 }

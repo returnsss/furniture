@@ -20,8 +20,7 @@ import java.time.LocalDateTime;
 @EntityListeners(value = {AuditingEntityListener.class})
 public class OrderInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderNo;           // key
+    private String orderNum;        // key
     private String userId;          // 사용자 아이디
     private String orderName;       // 주문자 이름
     private String orderTel;        // 주문자 번호
@@ -41,7 +40,7 @@ public class OrderInfo {
 
 
     public OrderInfo(OrderInfoDto orderInfoDto){
-
+        this.orderNum = orderInfoDto.getOrderNum();
         this.userId = orderInfoDto.getUserId();
         this.orderName = orderInfoDto.getOrderName();
         this.orderTel = orderInfoDto.getOrderTel();

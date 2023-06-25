@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{/layout/basic}">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 정보</title>
+</head>
+
+
+<div layout:fragment="content" class="content">
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">결제 정보</h1>
+        </div>
+    </div>
+    <div class="container">
+        <section>
+            <div class="p-3 mb-2 bg-secondary text-white">
+                <h1> 주문 상품 : [[${orderProductName}]]</h1>
+                <h3> 결제 금액 : [[${info.payAmount}]]</h3>
+            </div>
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            주문자
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <p><strong>이름 : [[${info.orderName}]] </strong></p>
+                            <p><strong>연락처 : </strong> [[${info.orderTel}]] </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+                            받는 사람
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show"  aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            <p><strong>이름 : </strong> [[${info.receiveName}]] </p>
+                            <p><strong>연락처 : </strong> [[${info.receiveTel}]] </p>
+                            <p><strong>주소 : </strong> [[${info.receiveAddress}]] </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="card">
+                <h5 class="card-header">결제 방법</h5>
+                <div class="card-body">
+                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="radio" name="method" value="카드" checked/>신용카드</label></div>
+                    <button class="btn btn-primary btn-lg" id="payment-button">결제하기</button>
+                </div>
+            </div>
+        </section>
+        <script src="https://js.tosspayments.com/v1"></script>
+
+    </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    const tossPayments = TossPayments("test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq");
+    const button = document.getElementById("payment-button");
+
+    button.addEventListener("click", function () {
+        let method = document.querySelector('input[name=method]:checked').value;
+
+        let paymentData = {
+            amount: [[${info.payAmount}]],
+            orderId: [[${info.orderNum}]],
+            orderName: [[${orderProductName}]],
+            customerName: [[${info.orderName}]],
+            successUrl: window.location.origin + "/order/success", // 성공시 리턴될  주소
+            failUrl: window.location.origin + "/order/fail.co",  // 실패시 리턴될 주소
+        };
+
+
+        tossPayments.requestPayment(method, paymentData);
+    });
+</script>

@@ -40,6 +40,7 @@
         </table>
         <form class="form-horizontal" name="orderInfoForm">
 
+
             <input type="hidden" name="userId" th:value="${member.userId}">
             <input type="hidden" name="payAmount" th:value="${totalPrice}">
 
@@ -78,8 +79,9 @@
                 <div class="col-sm-3">
                     <input name="zipcode" id="zipcode" type="text" onclick="execDaumPostcode();" class="form-control"
                            placeholder="받는 사람 주소"/>
-                    <input name="receiveAddress" id="address1" type="text" class="form-control"/>
-                    <input name="detailAddr" id="address2" type="text" class="form-control"/>
+                    <input name="address1" id="address1" type="text" class="form-control"/>
+                    <input name="address2" id="address2" type="text" class="form-control"/>
+                    <input type="hidden" name="receiveAddress" id="receiveAddressField">
                 </div>
             </div>
             <div class="form-group row">
@@ -103,6 +105,13 @@
     const orderInfoForm = document.orderInfoForm;
 
     function addToOrderInfo() {
+
+        let zipcode = document.getElementById("zipcode").value;
+        let address1 = document.getElementById("address1").value;
+        let address2 = document.getElementById("address2").value;
+        let receiveAddress = zipcode + "/" + address1 + "/" + address2;
+        document.getElementById("receiveAddressField").value = receiveAddress;
+
         const payload = new FormData(orderInfoForm);
         const jsonData = {};
 
@@ -125,7 +134,7 @@
                     }
                     // 요청이 성공한 경우 추가적인 로직을 작성하세요
                     console.log('orderInfo에 추가 되었습니다.');
-                    //window.location.href = ``;
+                    window.location.href = `/order/payInfo`;
 
                 })
                 .catch(error => {
