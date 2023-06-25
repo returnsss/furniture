@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/adminBasic}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>회원 목록</title>
+</head>
+
+<div layout:fragment="content" class="content">
+  <nav class="container">
+    <br>
+    <form th:action="@{/admin/members(searchVal=${param.searchVal})}" method="get">
+    <div class="input-group">
+      <input type="text" class="form-control" name="searchVal" placeholder="회원 이름을 입력해주세요.">
+      <button type="submit" class="btn btn-secondary">검색</button>
+    </div>
+    <br>
+
+      <table class="table table-hover table-striped text-center">
+        <thead>
+        <tr>
+          <th>아이디</th>
+          <th>이름</th>
+          <th>생일</th>
+          <th>성별</th>
+          <th>이메일</th>
+          <th>주소</th>
+          <th>휴대폰번호</th>
+          <th>회원등급</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="list, index : ${list}">
+          <td th:text="${list.userId}"></td>
+          <td th:text="${list.name}"></td>
+          <td th:text="${list.birth}"></td>
+          <td th:text="${list.gender}"></td>
+          <td th:text="${list.email}"></td>
+          <td th:text="${list.address}"></td>
+          <td th:text="${list.phone}"></td>
+          <td>
+            <select th:attr="data-user-id=${list.userId}">
+              <option th:value="STATE_USER" th:selected="${list.state == 0}">일반</option>
+              <option th:value="STATE_LIMIT" th:selected="${list.state == 1}">이용 제한</option>
+              <option th:value="STATE_WITHDRAWAL" th:selected="${list.state == 2}">탈퇴</option>
+              <option th:value="STATE_ADMIN" th:selected="${list.state == 3}">관리자</option>
+            </select>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <br>
+
+      <br>
+      <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
+           th:with="start=${(list.number / maxPage) * maxPage + 1},
+                  end=(${(list.totalPages == 0) ? 1 : (start + (maxPage - 1) < list.totalPages ? start + (maxPage - 1) : list.totalPages)})">
+        <ul class="pagination">
+
+          <li th:if="${start > 1}" class="page-item">
+            <a th:href="@{/admin/members(page=0)}" class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+
+          <li th:if="${start > 1}" class="page-item">
+            <a th:href="@{/admin/members(page=${start - maxPage - 1})}" class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${list.number+1 == page} ? active">
+            <a th:href="@{/admin/members(page=${page - 1})}" th:text="${page}" class="page-link" href="#">1</a>
+          </li>
+
+
+          <li th:if="${end < list.totalPages}" class="page-item">
+            <a th:href="@{/admin/members(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+          <li th:if="${end < list.totalPages}" class="page-item">
+            <a th:href="@{/admin/members(page=${list.totalPages - 1})}" class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </form>
+  </nav>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  function handleSelectChange(option) {
+    let userId = option.dataset.userId;
+    let selectedValue = option.value; // 선택된 option의 값
+
+    console.log(userId);
+
+    // API 호출
+    fetch(`/api/admin/members/${userId}/state?stateType=${selectedValue}`, {
+      method: "PATCH"
+    })
+            .then(response => {
+              if (response.ok) {
+                // API 호출 성공 시 필요한 작업 수행
+                console.log("회원등급 변경 성공");
+                window.location.reload();
+              } else {
+                // API 호출 실패 시 필요한 작업 수행
+                console.error("회원등급 변경 실패");
+              }
+            })
+            .catch(error => {
+              // 오류 처리
+              console.error("An error occurred:", error);
+            });
+  }
+
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(select => {
+    select.addEventListener('change', function() {
+      if (!confirm("회원등급을 변경하시겠습니까?")){
+        return;
+      }
+      handleSelectChange(this);
+    });
+  });
+
+</script>

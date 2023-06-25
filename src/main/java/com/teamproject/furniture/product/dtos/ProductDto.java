@@ -1,5 +1,6 @@
 package com.teamproject.furniture.product.dtos;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 public class ProductDto {
 
     private Long productId;     // 제품 고유 아이디

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/basic}">
+      layout:decorate="~{/layout/adminBasic}">
 <head>
     <meta charset="UTF-8">
     <title>상품 등록</title>
@@ -36,11 +36,11 @@
                             <h3>제품 등록</h3>
                         </div>
                         <div class="col-1">
-                            <a th:href="@{/product/adminProductList}" class="btn btn-primary" role="button">등록 취소</a>
+                            <a th:href="@{/admin/products}" class="btn btn-primary" role="button">등록 취소</a>
                         </div>
                     </div>
                     <br>
-                    <form name="newProduct" th:action="@{/product/addProduct}" class="form-horizontal" method="post"
+                    <form name="newProduct" class="form-horizontal" method="post"
                           enctype="multipart/form-data">
 
                         <br>
@@ -149,13 +149,13 @@
 
 
         if (confirm("등록하시겠습니까?")) {
-            fetch('/api/product', {
+            fetch('/api/admin/product', {
                 method: 'POST',
                 body: new FormData(formObj)
             })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = `/admin/adminProductList`;
+                        window.location.href = `/admin/products`;
                     } else {
                         console.log("제품 등록 실패.");
                     }

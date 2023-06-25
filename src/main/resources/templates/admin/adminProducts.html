@@ -36,7 +36,7 @@
                     <h3>제품 목록</h3>
                 </div>
                 <div class="col-2" align="right">
-                    <a th:href="@{/product/addproduct}" class="btn btn-primary" role="button">등록하기</a>
+                    <a th:href="@{/admin/addproduct}" class="btn btn-primary" role="button">등록하기</a>
                 </div>
             </div>
             <table class="table table-hover table-striped text-center">
@@ -61,7 +61,7 @@
                         <td th:text="${item.description}"></td>
                         <td th:text="${item.category}"></td>
                         <td th:text="${item.productsInStock}"></td>
-                        <td><a href="#" class="btn btn-success" role="button">수정하기</a></td>
+                        <td><a th:href="@{/admin/updateProduct/{productId}(productId=${item.productId})}" class="btn btn-success" role="button">수정하기</a></td>
                         <td><button type="button" class="btn btn-danger" th:attr="data-product-id=${item.productId}" onclick="deleteProduct(this)">삭제하기</button></td>
 
                     </tr>
@@ -76,14 +76,14 @@
                 <ul class="pagination">
 
                     <li th:if="${start > 1}" class="page-item">
-                        <a th:href="@{/product/adminProductList(page=0, searchVal=${param.searchVal})}" class="page-link" href="#"
+                        <a th:href="@{/admin/products(page=0, searchVal=${param.searchVal})}" class="page-link" href="#"
                            aria-label="Previous">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
                     </li>
 
                     <li th:if="${start > 1}" class="page-item">
-                        <a th:href="@{/product/adminProductList(page=${start - maxPage - 1}, searchVal=${param.searchVal})}"
+                        <a th:href="@{/admin/products(page=${start - maxPage - 1}, searchVal=${param.searchVal})}"
                            class="page-link" href="#" aria-label="Previous">
 
                             <span aria-hidden="true">&laquo;</span>
@@ -92,14 +92,14 @@
 
                     <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item"
                         th:classappend="${list.number+1 == page} ? active">
-                        <a th:href="@{/product/adminProductList(page=${page - 1}, searchVal=${param.searchVal})}" th:text="${page}"
+                        <a th:href="@{/admin/products(page=${page - 1}, searchVal=${param.searchVal})}" th:text="${page}"
                            class="page-link" href="#">1</a>
 
                     </li>
 
 
                     <li th:if="${end < list.totalPages}" class="page-item">
-                        <a th:href="@{/product/adminProductList(page=${start + maxPage - 1}, searchVal=${param.searchVal})}"
+                        <a th:href="@{/admin/products(page=${start + maxPage - 1}, searchVal=${param.searchVal})}"
                            class="page-link" href="#" aria-label="Next">
 
                             <span aria-hidden="true">&raquo;</span>
@@ -107,7 +107,7 @@
                     </li>
 
                     <li th:if="${end < list.totalPages}" class="page-item">
-                        <a th:href="@{/product/adminProductList(page=${list.totalPages - 1}, searchVal=${param.searchVal})}"
+                        <a th:href="@{/admin/products(page=${list.totalPages - 1}, searchVal=${param.searchVal})}"
                            class="page-link" href="#" aria-label="Next">
 
                             <span aria-hidden="true">&raquo;&raquo;</span>
@@ -134,7 +134,7 @@
         if (!confirm('해당 상품을 삭제하시겠습니까?')) {
             return;
         }
-        fetch(`/api/products/${productId}`, {
+        fetch(`/api/admin/products/${productId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

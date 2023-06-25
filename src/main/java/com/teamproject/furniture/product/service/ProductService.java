@@ -1,6 +1,7 @@
 package com.teamproject.furniture.product.service;
 
 import com.teamproject.furniture.product.dtos.AddProductDto;
+import com.teamproject.furniture.product.dtos.ProductDto;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.dtos.UpdateProductDto;
 import com.teamproject.furniture.product.model.Product;
@@ -66,6 +67,21 @@ public class ProductService {
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
     }
 
+    public ProductDto getProductDto(Long productId){
+        Product product = productRepository.findById(productId).orElseThrow();
+        return ProductDto.builder()
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .productPrice(product.getProductPrice())
+                .description(product.getDescription())
+                .category(product.getCategory())
+                .productsInStock(product.getProductsInStock())
+                .fileName(product.getFileName())
+                .imgPath(product.getImgPath())
+                .registDay(product.getRegistDay())
+                .build();
+    }
+
     /**
      * 모든 제품 조회
      * @return
@@ -82,14 +98,24 @@ public class ProductService {
         Product existingProduct = productRepository.findById(updateProductDto.getProductId())
                 .orElseThrow(() -> new NoSuchElementException("해당 제품을 찾을 수 없습니다."));
 
-        String fileName = getFileName(updateProductDto.getProductImage());
+        if("".equals(updateProductDto.getProductImage().getOriginalFilename())){
+            String fileName = updateProductDto.getFileName();
 
-        updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+            existingProduct.updateProduct(updateProductDto);
 
-        existingProduct.updateProduct(updateProductDto);
+            existingProduct.setFileName(fileName);
+            existingProduct.setImgPath("/PjImg/" + fileName);
+        }else {
+            String fileName = getFileName(updateProductDto.getProductImage());
 
-        existingProduct.setFileName(fileName);
-        existingProduct.setImgPath("/PjImg/" + fileName);
+            updateProductDto.getProductImage().transferTo(new File(uploadDir + fileName));
+
+            existingProduct.updateProduct(updateProductDto);
+
+            existingProduct.setFileName(fileName);
+            existingProduct.setImgPath("/PjImg/" + fileName);
+        }
+
 
     }
 

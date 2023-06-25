@@ -126,6 +126,24 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
     }
 
+    public MemberDto findUser(String userId){
+        Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        return MemberDto.builder()
+                .memberId(member.getMemberId())
+                .userId(member.getUserId())
+                .password(member.getPassword())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .gender(member.getGender())
+                .email(member.getEmail())
+                .address(member.getAddress())
+                .phone(member.getPhone())
+                .receiveMail(member.getReceiveMail())
+                .receivePhone(member.getReceivePhone())
+                .agreement(member.getAgreement())
+                .build();
+    }
+
 
     public MemberDto getMember(Long memberId){
         Member member = findOne(memberId);
@@ -153,20 +171,21 @@ public class MemberService {
     }
 
 
-    public void updateMemberState(Long memberId, String stateType){
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+    public void updateMemberState(String userId, String stateType){
+        Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        Long memberId = member.getMemberId();
 
         switch (stateType) {
-            case "user":
+            case "STATE_USER":
                 member.updateStateUser(memberId);
                 break;
-            case "report":
+            case "STATE_LIMIT":
                 member.updateStateLimit(memberId);
                 break;
-            case "withdrawal":
+            case "STATE_WITHDRAWAL":
                 member.updateStateWithdrawal(memberId);
                 break;
-            case "admin":
+            case "STATE_ADMIN":
                 member.updateStateAdmin(memberId);
                 break;
             default:

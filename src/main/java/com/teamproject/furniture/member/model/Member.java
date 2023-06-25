@@ -2,6 +2,7 @@ package com.teamproject.furniture.member.model;
 
 import com.teamproject.furniture.member.dtos.MemberCreateDto;
 import com.teamproject.furniture.member.dtos.MemberUpdateDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
