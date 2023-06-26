@@ -36,9 +36,16 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
     }
 
     private Long getCount(String searchVal) {
+        BooleanBuilder whereClause = new BooleanBuilder();
+
+        if (searchVal != null && !searchVal.isEmpty()) {
+            whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
+        }
+
         Long count = queryFactory
                 .select(orderInfo.count())
                 .from(orderInfo)
+                .where(whereClause)
                 .fetchOne();
         return count;
     }

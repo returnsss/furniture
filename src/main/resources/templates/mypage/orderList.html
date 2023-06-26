@@ -17,21 +17,21 @@
     <h2 class="text-center mt-5">주문 목록</h2>
     <div class="list-group w-auto my-5">
         <!-- 목록 출력 -->
-        <div th:each="list, index : ${list}"
+        <div th:each="orderInfo, index : ${list}"
            class="list-group-item list-group-item-action d-flex gap-3 py-3"
            aria-current="true">
             <div class="d-flex gap-2 w-100 justify-content-between">
                 <div>
-                    <h6 class="mb-0">주문 번호 : [[${list.orderNum}]]</h6>
-                    <p class="mb-0 opacity-75">주문 금액 : [[${list.payAmount}]] 원</p>
-                    <p class="mb-0 opacity-75">주문 상태 : [[${list.orderStep}]]</p>
-                    <p class="mb-0 opacity-75">주문자 이름 : [[${list.orderName}]]</p>
-                    <p class="mb-0 opacity-75">주문자 연락처 : [[${list.orderTel}]]</p>
-                    <p class="mb-0 opacity-75">주문자 이메일 : [[${list.orderEmail}]]</p>
-                    <p class="mb-0 opacity-75">받는사람 이름 : [[${list.receiveName}]]</p>
-                    <p class="mb-0 opacity-75">받는사람 연락처 : [[${list.receiveTel}]]</p>
-                    <p class="mb-0 opacity-75">받는사람 주소 : [[${list.receiveAddress}]]</p>
-                    <small class="opacity-50 text-nowrap" align="right">주문 날짜 : [[${list.payDate}]]</small>
+                    <h6 class="mb-0">주문 번호 : [[${orderInfo.orderNum}]]</h6>
+                    <p class="mb-0 opacity-75">주문 금액 : [[${orderInfo.payAmount}]] 원</p>
+                    <p class="mb-0 opacity-75">주문 상태 : [[${orderInfo.orderStep}]]</p>
+                    <p class="mb-0 opacity-75">주문자 이름 : [[${orderInfo.orderName}]]</p>
+                    <p class="mb-0 opacity-75">주문자 연락처 : [[${orderInfo.orderTel}]]</p>
+                    <p class="mb-0 opacity-75">주문자 이메일 : [[${orderInfo.orderEmail}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 이름 : [[${orderInfo.receiveName}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 연락처 : [[${orderInfo.receiveTel}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 주소 : [[${orderInfo.receiveAddress}]]</p>
+                    <small class="opacity-50 text-nowrap" align="right">주문 날짜 : [[${orderInfo.payDate}]]</small>
                 </div>
             </div>
         </div>

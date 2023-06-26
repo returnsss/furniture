@@ -32,9 +32,16 @@ public class ProductRepositoryCustomPageImpl implements ProductRepositoryCustomP
     }
 
     private Long getCount(String searchVal) {
+        BooleanBuilder whereClause = new BooleanBuilder();
+
+        if (searchVal != null && !searchVal.isEmpty()) {
+            whereClause.and(product.productName.containsIgnoreCase(searchVal));
+        }
+
         Long count = queryFactory
                 .select(product.count())
                 .from(product)
+                .where(whereClause)
                 .fetchOne();
         return count;
     }
