@@ -26,18 +26,18 @@ public class OrderController {
     }
 
     @PostMapping("/info/add")
-    public void addToOrderInfo(@RequestBody OrderInfoDto orderInfoDto) {
-        orderService.addToOrderInfo(orderInfoDto);
+    public void addToOrderInfo(@RequestBody OrderInfoDto orderInfoDto, HttpSession session) {
+        orderService.addToOrderInfo(orderInfoDto, session);
     }
 
-    @GetMapping("/{orderNo}")
-    private OrderInfoDto getOrderInfoDto(@PathVariable Long orderNo){
-        return orderService.getOrderInfoDto(orderNo);
+    @GetMapping("/{orderNum}")
+    public OrderInfoDto getOrderInfoDto(@PathVariable String orderNum){
+        return orderService.getOrderInfoDto(orderNum);
     }
 
-    @PostMapping("/{orderNo}")
-    public void updateOrderStep(@PathVariable Long orderNo){
-        orderService.updateOrderStep(orderNo);
-    }
+    /*@PostMapping("/{orderNum}")
+    public void updateOrderStep(@PathVariable String orderNum){
+        orderService.updateOrderStep(orderNum);
+    }*/
 
 }

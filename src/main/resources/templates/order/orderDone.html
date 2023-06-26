@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 완료</title>
+</head>
+
+
+<div layout:fragment="content" class="content">
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">결제 정보</h1>
+        </div>
+    </div>
+    <div class="container">
+        <table class="table table-hover">
+            <tr>
+                <th>상품</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th>소계</th>
+            </tr>
+
+            <tr th:each="orderData, index : ${orderDataDtoList}">
+                <td th:text="${orderData.productName}"></td>
+                <td th:text="${orderData.productPrice}"></td>
+                <td th:text="${orderData.cnt}"></td>
+                <td th:text="${orderData.totalPrice}"></td>
+            </tr>
+
+        </table>
+        <div class="form-group row">
+            <label class="col-sm-2">결제 단계</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.orderStep}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">주문 번호</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.orderNum}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">결제 금액</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.payAmount}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">주문자 이름</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.orderName}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">주문자 연락처</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.orderTel}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">주문자 이메일</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.orderEmail}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">받는 사람 이름</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.receiveName}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">받는 사람 연락처</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.receiveTel}]]
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2">받는 사람 주소</label>
+            <div class="col-sm-3">
+                [[${orderInfoDto.receiveAddress}]]
+            </div>
+        </div>
+        <br>
+        <a th:href="@{/}" class="btn btn-primary" role="button">완료</a>
+    </div>
+
+</div>
