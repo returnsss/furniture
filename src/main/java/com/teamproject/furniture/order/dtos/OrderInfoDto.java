@@ -1,5 +1,6 @@
 package com.teamproject.furniture.order.dtos;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,5 +27,21 @@ public class OrderInfoDto {
     private LocalDateTime orderDate;// 주문한 시간
     private LocalDateTime payDate; // 결제한 시간
 
+    @QueryProjection
+    public OrderInfoDto(String orderNum, String userId, String orderName, String orderTel, String orderEmail, String receiveName, String receiveTel, String receiveAddress, OrderStep orderStep, int payAmount, LocalDateTime orderDate, LocalDateTime payDate) {
+        this.orderNum = orderNum;
+        this.userId = userId;
+        this.orderName = orderName;
+        this.orderTel = orderTel;
+        this.orderEmail = orderEmail;
+        this.receiveName = receiveName;
+        this.receiveTel = receiveTel;
+        this.receiveAddress = receiveAddress;
+        this.orderStep = orderStep;
+        this.payAmount = payAmount;
+        this.orderDate = orderDate;
+        this.payDate = payDate;
+    }
 
+    public OrderInfoDto(){}
 }
