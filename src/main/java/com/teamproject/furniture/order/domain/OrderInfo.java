@@ -1,6 +1,7 @@
 package com.teamproject.furniture.order.domain;
 
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
+import com.teamproject.furniture.order.dtos.OrderStep;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,9 @@ public class OrderInfo {
     private String receiveName;     // 받는사람 이름
     private String receiveTel;      // 받는사람 번호
     private String receiveAddress;  // 받는사람 주소
-    private String orderStep;       // 주문 단계
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "order_step")
+    private OrderStep orderStep;       // 주문 단계
     private int payAmount;          // 결제 금액
 
     @CreatedDate

@@ -53,7 +53,7 @@ public class OrderViewController {
     }
 
     @GetMapping("/payInfo")
-    public String payInfo(Model model, HttpSession session) {
+    public String payInfo(Model model, HttpSession session) throws Exception {
         String orderNum = orderService.getOrderNum(session);
         OrderInfoDto orderInfoDto = orderService.getOrderInfoDto(orderNum);
         String orderProductName = orderService.getProductName(orderNum);
@@ -65,8 +65,8 @@ public class OrderViewController {
     }
 
     @GetMapping("/success")
-    public void success(HttpServletRequest req, HttpServletResponse res) throws Exception{
-        orderService.processSuccess(req);
+    public void success(HttpServletRequest req, HttpServletResponse res, HttpSession session) throws Exception{
+        orderService.processSuccess(req, session);
         res.sendRedirect("/order/orderDone");
     }
 

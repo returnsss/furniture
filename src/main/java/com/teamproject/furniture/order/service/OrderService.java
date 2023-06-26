@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -65,9 +67,8 @@ public class OrderService {
     public List<OrderDataDto> getOrderDatas(HttpSession session){
         String orderNum = getOrderNum(session);
         List<OrderData> orderDatas = orderDataRepository.findByOrderNum(orderNum);
-        List<OrderDataDto> orderDataDtoList = new ArrayList<>();
 
-        for (OrderData orderData : orderDatas){
+        return orderDatas.stream().map(orderData -> {
             OrderDataDto orderDataDto = new OrderDataDto();
             orderDataDto.setNum(orderData.getNum());
             orderDataDto.setOrderNum(orderData.getOrderNum());
@@ -77,12 +78,8 @@ public class OrderService {
             orderDataDto.setProductPrice(orderData.getProductPrice());
             orderDataDto.setCnt(orderData.getCnt());
             orderDataDto.setTotalPrice(orderData.getTotalPrice());
-
-            orderDataDtoList.add(orderDataDto);
-
-        }
-
-        return orderDataDtoList;
+            return orderDataDto;
+        }).collect(Collectors.toList());
     }
 
 
@@ -114,7 +111,7 @@ public class OrderService {
         orderInfoRepository.deleteOrderInfoByOrderNum(orderNum);
 
         orderInfoDto.setOrderNum(orderNum);
-        orderInfoDto.setOrderStep("ORDER_FAIL");
+        orderInfoDto.setOrderStep(OrderStep.ORDER_FAIL);
         OrderInfo orderInfo = new OrderInfo(orderInfoDto);
 
         orderInfoRepository.save(orderInfo);
@@ -139,7 +136,7 @@ public class OrderService {
 
     }
 
-    public void updateOrderStepShippingProgress(String orderNum){
+    public void shippingProgress(String orderNum){
         OrderInfo orderInfo = orderInfoRepository.findById(orderNum).orElseThrow();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
@@ -148,27 +145,28 @@ public class OrderService {
         if(!orderInfo.getUserId().equals(currentUserId)){
             throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
         }
-        orderInfo.setOrderStep(String.valueOf(OrderStep.ShippingProgress));
+        orderInfo.setOrderStep(OrderStep.SHIPPING_PROGRESS);
         orderInfoRepository.save(orderInfo);
     }
 
 
-    public String getProductName(String orderNum){
+    public String getProductName(String orderNum) throws Exception {
         List<OrderData> orderDataList = orderDataRepository.findByOrderNum(orderNum);
-        int orderProductCnt = 0;
-        String orderProductName = null;
 
-        for (int i=0; i<orderDataList.size(); i++){
-            if (orderProductCnt == 0){
-                orderProductName = orderDataList.get(0).getProductName();
-            }
-            orderProductCnt++;
+        if (orderDataList.isEmpty()){
+            throw new Exception();
         }
-        return orderProductName += " 외 " + (orderProductCnt - 1) + "건";
+
+        String firstProductName = orderDataList.get(0).getProductName();
+
+        if (orderDataList.size() == 1){
+            return firstProductName;
+        }
+        return firstProductName += " 외 " + (orderDataList.size() - 1) + "건";
     }
 
 
-    public void processSuccess(HttpServletRequest req) throws Exception {
+    public void processSuccess(HttpServletRequest req, HttpSession session) throws Exception {
         String orderId = req.getParameter("orderId");
         log.info("orderId : " + orderId);
         String paymentKey = req.getParameter("paymentKey");
@@ -219,7 +217,7 @@ public class OrderService {
         JSONParser parser = new JSONParser();
 
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
-        log.info("��� ������ : " + jsonObject.toJSONString());
+        log.info(jsonObject.toJSONString());
         responseStream.close();
 
         if (isSuccess) {
@@ -227,7 +225,7 @@ public class OrderService {
             log.info("method : " + jsonObject.get("method"));
             log.info("approvedAt : " + jsonObject.get("approvedAt"));
 
-            orderInfo.setOrderStep(String.valueOf(OrderStep.PayReceive));
+            orderInfo.setOrderStep(OrderStep.PAY_RECEIVE);
         }
 
     }

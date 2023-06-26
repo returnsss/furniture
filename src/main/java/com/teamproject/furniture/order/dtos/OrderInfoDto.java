@@ -21,7 +21,7 @@ public class OrderInfoDto {
     private String receiveName;     // 받는사람 이름
     private String receiveTel;      // 받는사람 번호
     private String receiveAddress;  // 받는사람 주소
-    private String orderStep;       // 주문 단계
+    private OrderStep orderStep;       // 주문 단계
     private int payAmount;       // 결제 금액
     private LocalDateTime orderDate;// 주문한 시간
     private LocalDateTime payDate; // 결제한 시간
