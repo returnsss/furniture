@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/adminBasic}">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 관리</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+
+<div layout:fragment="content">
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">주문 관리</h1>
+                </div>
+
+
+                <div th:each="orderInfo, index : ${list}"
+                        class="container">
+                    <div class="row">
+                        <div class="col-6" align="left">
+                            <h3>[[${orderInfo.userId}]]님의 주문 목록</h3>
+                        </div>
+                        <div class="col-6" align="right">
+                            <div th:attr="data-order-num=${orderInfo.orderNum}" onclick="shippingProgress(this)"
+                                    class="btn btn-success" role="button">발송하기</div>
+                        </div>
+                    </div>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>상품 ID</th>
+                            <th>상품 명</th>
+                            <th>가격</th>
+                            <th>수량</th>
+                            <th>소계</th>
+                        </tr>
+
+
+                        <tr th:each="product, index : ${orderInfo.orderDataDtoList}">
+                            <td>[[${product.productId}]]</td>
+                            <td>[[${product.productName}]]</td>
+                            <td>[[${product.productPrice}]]</td>
+                            <td>[[${product.cnt}]]</td>
+                            <td>[[${product.totalPrice}]]</td>
+                        </tr>
+
+
+                    </table>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문 번호</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.orderNum}]]
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문 일자</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.payDate}]]
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문 단계</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.orderStep}]]
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2">결제 금액</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.payAmount}]]
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문자 이름</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.orderName}]]
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문자 연락처</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.orderTel}]]
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2">주문자 이메일</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.orderEmail}]]
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2">받는 사람 이름</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.receiveName}]]
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2">받는 사람 연락처</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.receiveTel}]]
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2">받는 사람 주소</label>
+                        <div class="col-sm-3">
+                            [[${orderInfo.receiveAddress}]]
+                        </div>
+                    </div>
+                    <br><br><br><br><br><br>
+                    <hr>
+
+
+                </div>
+
+                <br>
+                <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
+                     th:with="start=${(list.number / maxPage) * maxPage + 1},
+                  end=(${(list.totalPages == 0) ? 1 : (start + (maxPage - 1) < list.totalPages ? start + (maxPage - 1) : list.totalPages)})">
+                    <ul class="pagination">
+
+                        <li th:if="${start > 1}" class="page-item">
+                            <a th:href="@{/admin/orderManagement(page=0)}" class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:if="${start > 1}" class="page-item">
+                            <a th:href="@{/admin/orderManagement(page=${start - maxPage - 1})}" class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${list.number+1 == page} ? active">
+                            <a th:href="@{/admin/orderManagement(page=${page - 1})}" th:text="${page}" class="page-link" href="#">1</a>
+                        </li>
+
+
+                        <li th:if="${end < list.totalPages}" class="page-item">
+                            <a th:href="@{/admin/orderManagement(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:if="${end < list.totalPages}" class="page-item">
+                            <a th:href="@{/admin/orderManagement(page=${list.totalPages - 1})}" class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    function shippingProgress(element){
+        let orderNum = element.dataset.orderNum;
+
+        console.log(orderNum);
+
+        if (!confirm("주문 단계을 수정 하시겠습니까?")) {
+            return;
+        }
+        fetch(`/api/admin/shippingProgress/${orderNum}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error: ' + response.status);
+                }
+                // 요청이 성공한 경우 추가적인 로직을 작성하세요
+                console.log('주문 단계를 수정했습니다!');
+                alert("주문 단계가 수정 되었습니다!");
+                window.location.reload();
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리 로직을 작성하세요
+                console.error('Error:', error);
+            });
+    }
+
+
+</script>

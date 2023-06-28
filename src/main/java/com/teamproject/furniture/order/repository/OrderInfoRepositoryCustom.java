@@ -6,4 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrderInfoRepositoryCustom {
     Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable);
+    Page<OrderInfoDto> selectAdminOrderList(String searchVal, Pageable pageable);
 }
