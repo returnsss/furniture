@@ -41,6 +41,7 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
         if (searchVal != null && !searchVal.isEmpty()) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
+        whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
 
         Long count = queryFactory
                 .select(orderInfo.count())
