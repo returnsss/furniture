@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/basic}">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 주문 리스트</title>
+    <style>
+        .list-group {
+            max-width: 600px;
+            margin: 4rem auto;
+        }
+    </style>
+</head>
+
+<div layout:fragment="content" class="content">
+    <h2 class="text-center mt-5">주문 목록</h2>
+    <div class="list-group w-auto my-5">
+        <!-- 목록 출력 -->
+        <div th:each="orderInfo, index : ${list}"
+           class="list-group-item list-group-item-action d-flex gap-3 py-3"
+           aria-current="true">
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 class="mb-0">주문 번호 : [[${orderInfo.orderNum}]]</h6>
+                    <p class="mb-0 opacity-75">주문 금액 : [[${orderInfo.payAmount}]] 원</p>
+                    <p class="mb-0 opacity-75">주문 상태 : [[${orderInfo.orderStep}]]</p>
+                    <p class="mb-0 opacity-75">주문자 이름 : [[${orderInfo.orderName}]]</p>
+                    <p class="mb-0 opacity-75">주문자 연락처 : [[${orderInfo.orderTel}]]</p>
+                    <p class="mb-0 opacity-75">주문자 이메일 : [[${orderInfo.orderEmail}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 이름 : [[${orderInfo.receiveName}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 연락처 : [[${orderInfo.receiveTel}]]</p>
+                    <p class="mb-0 opacity-75">받는사람 주소 : [[${orderInfo.receiveAddress}]]</p>
+                    <small class="opacity-50 text-nowrap" align="right">주문 날짜 : [[${orderInfo.payDate}]]</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
+         th:with="start=${(list.number / maxPage) * maxPage + 1},
+                  end=(${(list.totalPages == 0) ? 1 : (start + (maxPage - 1) < list.totalPages ? start + (maxPage - 1) : list.totalPages)})">
+        <ul class="pagination">
+
+            <li th:if="${start > 1}" class="page-item">
+                <a th:href="@{/order/myList(page=0)}" class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+
+            <li th:if="${start > 1}" class="page-item">
+                <a th:href="@{/order/myList(page=${start - maxPage - 1})}" class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${list.number+1 == page} ? active">
+                <a th:href="@{/order/myList(page=${page - 1})}" th:text="${page}" class="page-link" href="#">1</a>
+            </li>
+
+
+            <li th:if="${end < list.totalPages}" class="page-item">
+                <a th:href="@{/order/myList(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+            <li th:if="${end < list.totalPages}" class="page-item">
+                <a th:href="@{/order/myList(page=${list.totalPages - 1})}" class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
+</div>

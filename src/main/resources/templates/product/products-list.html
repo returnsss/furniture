@@ -25,18 +25,18 @@
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">
 
-                    <div class="col my-5" th:each="list, index : ${list}">
+                    <div class="col my-5" th:each="product, index : ${list}">
                         <div class="card shadow-sm" style="height: 550px;">
-                            <img th:src="@{${list.imgPath}}" style="height: 300px; width: 100%" alt=""/>
+                            <img th:src="@{${product.imgPath}}" style="height: 300px; width: 100%" alt=""/>
 
 
                             <div class="card-body">
-                                <h5 class="fw-bold" th:text="${list.productName}"></h5>
-                                <p class="card-text" th:text="${list.description}"></p>
+                                <h5 class="fw-bold" th:text="${product.productName}"></h5>
+                                <p class="card-text" th:text="${product.description}"></p>
                             </div>
                             <div class="card-footer d-flex justify-content-between align-items-end" style="border: 0">
                                 <div class="btn-group">
-                                    <a th:href="@{/product/{productId}(productId=${list.productId})}" class="btn btn-sm btn-outline-secondary" role="button">
+                                    <a th:href="@{/product/{productId}(productId=${product.productId})}" class="btn btn-sm btn-outline-secondary" role="button">
                                         View &raquo;</a>
                                 </div>
 

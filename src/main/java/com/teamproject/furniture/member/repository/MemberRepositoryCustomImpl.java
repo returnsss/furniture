@@ -33,9 +33,16 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     }
 
     private Long getCount(String searchVal) {
+        BooleanBuilder whereClause = new BooleanBuilder();
+
+        if (searchVal != null && !searchVal.isEmpty()) {
+            whereClause.and(member.name.containsIgnoreCase(searchVal));
+        }
+
         Long count = queryFactory
                 .select(member.count())
                 .from(member)
+                .where(whereClause)
                 .fetchOne();
         return count;
     }

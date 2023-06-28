@@ -7,10 +7,13 @@ import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import com.teamproject.furniture.order.dtos.OrderStep;
 import com.teamproject.furniture.order.repository.OrderDataRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepository;
-import lombok.Value;
+import com.teamproject.furniture.order.repository.OrderInfoRepositoryCustom;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,19 +34,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @Slf4j
 public class OrderService {
-    private OrderDataRepository orderDataRepository;
-    private OrderInfoRepository orderInfoRepository;
+    private final OrderDataRepository orderDataRepository;
+    private final OrderInfoRepository orderInfoRepository;
+    private final OrderInfoRepositoryCustom orderInfoRepositoryCustom;
 
-    public OrderService(OrderDataRepository orderDataRepository, OrderInfoRepository orderInfoRepository) {
+    @Autowired
+    public OrderService(OrderDataRepository orderDataRepository, OrderInfoRepository orderInfoRepository, OrderInfoRepositoryCustom orderInfoRepositoryCustom) {
         this.orderDataRepository = orderDataRepository;
         this.orderInfoRepository = orderInfoRepository;
+        this.orderInfoRepositoryCustom = orderInfoRepositoryCustom;
     }
 
     public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
@@ -230,6 +234,10 @@ public class OrderService {
 
     }
 
+
+    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable) {
+        return orderInfoRepositoryCustom.selectOrderList(searchVal, pageable);
+    }
 
 
 }
