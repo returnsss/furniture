@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
 
         String userId = UserUtil.getUserId();
 
-        if (searchVal != null && !searchVal.isEmpty()) {
+        if (StringUtils.hasText(searchVal)) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
         whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
@@ -65,10 +68,10 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
     private Long getAdminCount(String searchVal) {
         BooleanBuilder whereClause = new BooleanBuilder();
 
-        if (searchVal != null && !searchVal.isEmpty()) {
+        if (StringUtils.hasText(searchVal)) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
-        whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
+        whereClause.and(orderInfo.orderStep.eq(OrderStep.PAY_RECEIVE));
 
         Long count = queryFactory
                 .select(orderInfo.count())
@@ -85,7 +88,7 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
 
         String userId = UserUtil.getUserId();
 
-        if (searchVal != null && !searchVal.isEmpty()) {
+        if (StringUtils.hasText(searchVal)) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
 
@@ -119,7 +122,7 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
 
         BooleanBuilder whereClause = new BooleanBuilder();
 
-        if (searchVal != null && !searchVal.isEmpty()) {
+        if (StringUtils.hasText(searchVal)) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
 

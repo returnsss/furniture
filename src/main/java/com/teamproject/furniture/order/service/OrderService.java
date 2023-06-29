@@ -10,6 +10,7 @@ import com.teamproject.furniture.order.repository.OrderInfoRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepositoryCustom;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -32,24 +33,18 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderDataRepository orderDataRepository;
     private final OrderInfoRepository orderInfoRepository;
     private final OrderInfoRepositoryCustom orderInfoRepositoryCustom;
     private final ProductRepository productRepository;
-
-    @Autowired
-    public OrderService(OrderDataRepository orderDataRepository, OrderInfoRepository orderInfoRepository, OrderInfoRepositoryCustom orderInfoRepositoryCustom, ProductRepository productRepository) {
-        this.orderDataRepository = orderDataRepository;
-        this.orderInfoRepository = orderInfoRepository;
-        this.orderInfoRepositoryCustom = orderInfoRepositoryCustom;
-        this.productRepository = productRepository;
-    }
 
     public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
         String orderNum = getOrderNum(session);
@@ -226,11 +221,37 @@ public class OrderService {
 
             orderInfo.setOrderStep(OrderStep.PAY_RECEIVE);
 
-            for (OrderData orderData : orderDataList){
+            /*for (OrderData orderData : orderDataList){
                 Product product = productRepository.findById(Long.valueOf(orderData.getProductId())).orElseThrow();
 
                 product.setProductsInStock(product.getProductsInStock() - orderData.getCnt());
+            }*/
+
+            /**
+             * 네트워크 비용 감소를 위해 해당 방식으로 변경
+             */
+            List<Long> productIds = orderDataList.stream()
+                    .map(orderData -> Long.valueOf(orderData.getProductId()))
+                    .collect(Collectors.toList());
+
+
+            Map<Long, Product> productMap = productRepository.findAllById(productIds).stream()
+                    .collect(Collectors.toMap(Product::getProductId, Function.identity()));
+
+
+            for (OrderData orderData : orderDataList) {
+                Long productId = Long.valueOf(orderData.getProductId());
+                Product product = productMap.get(productId);
+
+                if (product != null) {
+                    product.setProductsInStock(product.getProductsInStock() - orderData.getCnt());
+                }
             }
+
+
+            List<Product> updatedProducts = new ArrayList<>(productMap.values());
+            productRepository.saveAll(updatedProducts);
+
         }
 
     }
