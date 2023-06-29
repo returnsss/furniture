@@ -9,9 +9,12 @@ import com.teamproject.furniture.order.service.OrderService;
 import com.teamproject.furniture.product.dtos.ProductDto;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
 import com.teamproject.furniture.product.service.ProductService;
+import com.teamproject.furniture.util.UserUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +72,12 @@ public class AdminViewController {
 
     @GetMapping("/orderManagement")
     public String orderList(String searchVal, @PageableDefault(size = 5) Pageable pageable, Model model){
-        Page<OrderInfoDto> results = orderService.selectAdminOrderList(searchVal, pageable);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        Page<OrderInfoDto> results = orderService.selectOrderList(searchVal, pageable, isAdmin);
 
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);

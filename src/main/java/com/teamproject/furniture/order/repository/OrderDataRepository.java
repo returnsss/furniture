@@ -19,4 +19,6 @@ public interface OrderDataRepository extends JpaRepository<OrderData, Long> {
     void deleteOrderDataByOrderNum(String orderNum);
 
     List<OrderData> findByOrderNum(String orderNum);
+
+    List<OrderData> findByOrderNumIn(Collection<String> orderNums);
 }

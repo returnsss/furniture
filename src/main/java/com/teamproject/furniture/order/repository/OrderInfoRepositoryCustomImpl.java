@@ -32,46 +32,28 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
         this.queryFactory = queryFactory;
     }
 
+
     @Override
-    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable) {
-        List<OrderInfoDto> content = getOrderInfoDtos(searchVal, pageable);
-        Long count = getCount(searchVal);
+    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable, Boolean isAdmin) {
+        List<OrderInfoDto> content = getOrderInfoDtos(searchVal, pageable, isAdmin);
+        Long count = getCount(searchVal, isAdmin);
         return new PageImpl<>(content, pageable, count);
     }
 
-    @Override
-    public Page<OrderInfoDto> selectAdminOrderList(String searchVal, Pageable pageable) {
-        List<OrderInfoDto> content = getAdminOrderInfoDtos(searchVal, pageable);
-        Long count = getAdminCount(searchVal);
-        return new PageImpl<>(content, pageable, count);
-    }
 
-    private Long getCount(String searchVal) {
+    private Long getCount(String searchVal, Boolean isAdmin) {
         BooleanBuilder whereClause = new BooleanBuilder();
-
         String userId = UserUtil.getUserId();
 
         if (StringUtils.hasText(searchVal)) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
-        whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
-        whereClause.and(orderInfo.userId.eq(userId));
-
-        Long count = queryFactory
-                .select(orderInfo.count())
-                .from(orderInfo)
-                .where(whereClause)
-                .fetchOne();
-        return count;
-    }
-
-    private Long getAdminCount(String searchVal) {
-        BooleanBuilder whereClause = new BooleanBuilder();
-
-        if (StringUtils.hasText(searchVal)) {
-            whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
+        if (isAdmin){
+            whereClause.and(orderInfo.orderStep.eq(OrderStep.PAY_RECEIVE));
+        }else {
+            whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
+            whereClause.and(orderInfo.userId.eq(userId));
         }
-        whereClause.and(orderInfo.orderStep.eq(OrderStep.PAY_RECEIVE));
 
         Long count = queryFactory
                 .select(orderInfo.count())
@@ -82,73 +64,44 @@ public class OrderInfoRepositoryCustomImpl implements OrderInfoRepositoryCustom{
     }
 
 
-    private List<OrderInfoDto> getOrderInfoDtos(String searchVal, Pageable pageable) {
-
+    private List getOrderInfoDtos(String searchVal, Pageable pageable, Boolean isAdmin) {
         BooleanBuilder whereClause = new BooleanBuilder();
-
         String userId = UserUtil.getUserId();
 
-        if (StringUtils.hasText(searchVal)) {
+        if (searchVal != null && !searchVal.isEmpty()) {
             whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
         }
 
-        whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
-        whereClause.and(orderInfo.userId.eq(userId));
+        if (isAdmin) {
+            whereClause.and(orderInfo.orderStep.eq(OrderStep.PAY_RECEIVE));
+        } else {
+            whereClause.and(orderInfo.orderStep.ne(OrderStep.ORDER_FAIL));
+            whereClause.and(orderInfo.userId.eq(userId));
+        }
 
         List<OrderInfoDto> content = queryFactory
                 .select(new QOrderInfoDto(
-                        orderInfo.orderNum
-                        ,orderInfo.userId
-                        ,orderInfo.orderName
-                        ,orderInfo.orderTel
-                        ,orderInfo.orderEmail
-                        ,orderInfo.receiveName
-                        ,orderInfo.receiveTel
-                        ,orderInfo.receiveAddress
-                        ,orderInfo.orderStep
-                        ,orderInfo.payAmount
-                        ,orderInfo.orderDate
-                        ,orderInfo.payDate))
+                        orderInfo.orderNum,
+                        orderInfo.userId,
+                        orderInfo.orderName,
+                        orderInfo.orderTel,
+                        orderInfo.orderEmail,
+                        orderInfo.receiveName,
+                        orderInfo.receiveTel,
+                        orderInfo.receiveAddress,
+                        orderInfo.orderStep,
+                        orderInfo.payAmount,
+                        orderInfo.orderDate,
+                        orderInfo.payDate))
                 .from(orderInfo)
                 .where(whereClause)
                 .orderBy(orderInfo.orderNum.desc())
                 .offset(pageable.getOffset())   // 페이지 번호
                 .limit(pageable.getPageSize())  // 페이지 사이즈
                 .fetch();
+
         return content;
     }
 
-    private List<OrderInfoDto> getAdminOrderInfoDtos(String searchVal, Pageable pageable) {
-
-        BooleanBuilder whereClause = new BooleanBuilder();
-
-        if (StringUtils.hasText(searchVal)) {
-            whereClause.and(orderInfo.orderNum.containsIgnoreCase(searchVal));
-        }
-
-        whereClause.and(orderInfo.orderStep.eq(OrderStep.PAY_RECEIVE));
-
-        List<OrderInfoDto> content = queryFactory
-                .select(new QOrderInfoDto(
-                        orderInfo.orderNum
-                        ,orderInfo.userId
-                        ,orderInfo.orderName
-                        ,orderInfo.orderTel
-                        ,orderInfo.orderEmail
-                        ,orderInfo.receiveName
-                        ,orderInfo.receiveTel
-                        ,orderInfo.receiveAddress
-                        ,orderInfo.orderStep
-                        ,orderInfo.payAmount
-                        ,orderInfo.orderDate
-                        ,orderInfo.payDate))
-                .from(orderInfo)
-                .where(whereClause)
-                .orderBy(orderInfo.orderNum.desc())
-                .offset(pageable.getOffset())   // 페이지 번호
-                .limit(pageable.getPageSize())  // 페이지 사이즈
-                .fetch();
-        return content;
-    }
 
 }

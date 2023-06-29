@@ -257,13 +257,11 @@ public class OrderService {
     }
 
 
-    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable) {
-        return orderInfoRepositoryCustom.selectOrderList(searchVal, pageable);
-    }
+    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable, Boolean isAdmin) {
+
+        Page<OrderInfoDto> results = orderInfoRepositoryCustom.selectOrderList(searchVal, pageable, isAdmin);
 
 
-    public Page<OrderInfoDto> selectAdminOrderList(String searchVal, Pageable pageable) {
-        Page<OrderInfoDto> results = orderInfoRepositoryCustom.selectAdminOrderList(searchVal, pageable);
         List<OrderInfoDto> content = results.getContent();
 
         List<String> orderNums = content.stream().map(OrderInfoDto::getOrderNum).toList();
