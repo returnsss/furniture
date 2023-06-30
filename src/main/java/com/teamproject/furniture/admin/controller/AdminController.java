@@ -1,6 +1,7 @@
 package com.teamproject.furniture.admin.controller;
 
 import com.teamproject.furniture.member.service.MemberService;
+import com.teamproject.furniture.order.service.OrderService;
 import com.teamproject.furniture.product.dtos.AddProductDto;
 import com.teamproject.furniture.product.dtos.UpdateProductDto;
 import com.teamproject.furniture.product.service.ProductService;
@@ -16,11 +17,13 @@ public class AdminController {
 
     private final ProductService productService;
     private final MemberService memberService;
+    private final OrderService orderService;
 
     @Autowired
-    public AdminController(ProductService productService, MemberService memberService) {
+    public AdminController(ProductService productService, MemberService memberService, OrderService orderService) {
         this.productService = productService;
         this.memberService = memberService;
+        this.orderService = orderService;
     }
 
     /**
@@ -57,6 +60,11 @@ public class AdminController {
     @PatchMapping("/members/{userId}/state")
     public void updateMemberStateApi(@PathVariable String userId, @RequestParam("stateType") String stateType) { // 회원 상태 변경
         memberService.updateMemberState(userId, stateType);
+    }
+
+    @PostMapping("/shippingProgress/{orderNum}")
+    public void shippingProgress(@PathVariable String orderNum){
+        orderService.shippingProgress(orderNum);
     }
 
 }

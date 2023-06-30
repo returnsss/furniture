@@ -101,7 +101,8 @@ public class OrderViewController {
 
     @GetMapping("/myList")
     public String list(String searchVal, @PageableDefault(size = 5) Pageable pageable, Model model){
-        Page<OrderInfoDto> results = orderService.selectOrderList(searchVal, pageable);
+        Boolean isAdmin = false;
+        Page<OrderInfoDto> results = orderService.selectOrderList(searchVal, pageable, isAdmin);
 
         model.addAttribute("list", results);
         model.addAttribute("maxPage", 10);

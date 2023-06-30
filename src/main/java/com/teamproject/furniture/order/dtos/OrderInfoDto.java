@@ -1,9 +1,7 @@
 package com.teamproject.furniture.order.dtos;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +11,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderInfoDto {
     private String orderNum;        // 주문번호
     private String userId;          // 사용자 아이디
@@ -43,5 +43,5 @@ public class OrderInfoDto {
         this.payDate = payDate;
     }
 
-    public OrderInfoDto(){}
+
 }

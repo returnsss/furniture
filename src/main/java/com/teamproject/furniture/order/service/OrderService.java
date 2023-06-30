@@ -8,14 +8,15 @@ import com.teamproject.furniture.order.dtos.OrderStep;
 import com.teamproject.furniture.order.repository.OrderDataRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepositoryCustom;
+import com.teamproject.furniture.product.model.Product;
+import com.teamproject.furniture.product.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,25 +32,19 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @Slf4j
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderDataRepository orderDataRepository;
     private final OrderInfoRepository orderInfoRepository;
     private final OrderInfoRepositoryCustom orderInfoRepositoryCustom;
-
-    @Autowired
-    public OrderService(OrderDataRepository orderDataRepository, OrderInfoRepository orderInfoRepository, OrderInfoRepositoryCustom orderInfoRepositoryCustom) {
-        this.orderDataRepository = orderDataRepository;
-        this.orderInfoRepository = orderInfoRepository;
-        this.orderInfoRepositoryCustom = orderInfoRepositoryCustom;
-    }
+    private final ProductRepository productRepository;
 
     public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
         String orderNum = getOrderNum(session);
@@ -143,12 +138,6 @@ public class OrderService {
     public void shippingProgress(String orderNum){
         OrderInfo orderInfo = orderInfoRepository.findById(orderNum).orElseThrow();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // 현재 사용자 인증정보 가져오기
-        String currentUserId = authentication.getName(); // 현재 사용자의 아이디 가져오기
-
-        if(!orderInfo.getUserId().equals(currentUserId)){
-            throw new IllegalStateException("userId가 일치하지 않아서 실행 할 수 없습니다.");
-        }
         orderInfo.setOrderStep(OrderStep.SHIPPING_PROGRESS);
         orderInfoRepository.save(orderInfo);
     }
@@ -179,6 +168,7 @@ public class OrderService {
         log.info("amount : " + amount);
 
         OrderInfo orderInfo = orderInfoRepository.findById(orderId).orElseThrow();
+        List<OrderData> orderDataList = orderDataRepository.findByOrderNum(orderId);
 
         if(!String.valueOf(orderInfo.getPayAmount()).equals(amount)){
             throw new Exception("가격이 다릅니다.");
@@ -230,14 +220,93 @@ public class OrderService {
             log.info("approvedAt : " + jsonObject.get("approvedAt"));
 
             orderInfo.setOrderStep(OrderStep.PAY_RECEIVE);
+
+            /*for (OrderData orderData : orderDataList){
+                Product product = productRepository.findById(Long.valueOf(orderData.getProductId())).orElseThrow();
+
+                product.setProductsInStock(product.getProductsInStock() - orderData.getCnt());
+            }*/
+
+            /**
+             * 네트워크 비용 감소를 위해 해당 방식으로 변경
+             */
+            List<Long> productIds = orderDataList.stream()
+                    .map(orderData -> Long.valueOf(orderData.getProductId()))
+                    .collect(Collectors.toList());
+
+
+            Map<Long, Product> productMap = productRepository.findAllById(productIds).stream()
+                    .collect(Collectors.toMap(Product::getProductId, Function.identity()));
+
+
+            for (OrderData orderData : orderDataList) {
+                Long productId = Long.valueOf(orderData.getProductId());
+                Product product = productMap.get(productId);
+
+                if (product != null) {
+                    product.setProductsInStock(product.getProductsInStock() - orderData.getCnt());
+                }
+            }
+
+
+            List<Product> updatedProducts = new ArrayList<>(productMap.values());
+            productRepository.saveAll(updatedProducts);
+
         }
 
     }
 
 
-    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable) {
-        return orderInfoRepositoryCustom.selectOrderList(searchVal, pageable);
+    public Page<OrderInfoDto> selectOrderList(String searchVal, Pageable pageable, Boolean isAdmin) {
+
+        Page<OrderInfoDto> results = orderInfoRepositoryCustom.selectOrderList(searchVal, pageable, isAdmin);
+
+
+        List<OrderInfoDto> content = results.getContent();
+
+        List<String> orderNums = content.stream().map(OrderInfoDto::getOrderNum).toList();
+
+        List<OrderData> orderDataList = orderDataRepository.findByOrderNumIn(orderNums);
+
+        Map<String, List<OrderDataDto>> tempMap = new HashMap<>();
+
+
+//        Map<String, List<OrderDataDto>> tempMap = orderDataRepository.findByOrderNumIn(orderNums).stream()
+//                .map(orderData -> {
+//                    OrderDataDto orderDataDto = new OrderDataDto();
+//                    orderDataDto.setOrderNum(orderData.getOrderNum());
+//                    // setting 필요
+//                    return orderDataDto;
+//                }).collect(Collectors.groupingBy(OrderDataDto::getOrderNum));
+
+        for (OrderData orderData : orderDataList) {
+            String orderNum = orderData.getOrderNum();
+            OrderDataDto orderDataDto = new OrderDataDto();
+            orderDataDto.setNum(orderData.getNum());
+            orderDataDto.setOrderNum(orderNum);
+            orderDataDto.setCartId(orderData.getCartId());
+            orderDataDto.setProductId(orderData.getProductId());
+            orderDataDto.setProductName(orderData.getProductName());
+            orderDataDto.setProductPrice(orderData.getProductPrice());
+            orderDataDto.setCnt(orderData.getCnt());
+            orderDataDto.setTotalPrice(orderData.getTotalPrice());
+
+
+            List<OrderDataDto> list = tempMap.get(orderNum);
+            if (list == null) {
+                list = new ArrayList<>();
+            }
+            list.add(orderDataDto);
+            tempMap.put(orderNum, list);
+        }
+
+        for (OrderInfoDto orderInfoDto : content) {
+            String orderNum = orderInfoDto.getOrderNum();
+            List<OrderDataDto> dtoList = tempMap.get(orderNum);
+            orderInfoDto.setOrderDataDtoList(dtoList);
+        }
+
+
+        return results;
     }
-
-
 }
