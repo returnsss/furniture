@@ -2,11 +2,10 @@ package com.teamproject.furniture.order.dtos;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,6 +25,7 @@ public class OrderInfoDto {
     private int payAmount;       // 결제 금액
     private LocalDateTime orderDate;// 주문한 시간
     private LocalDateTime payDate; // 결제한 시간
+    private List<OrderDataDto> orderDataDtoList = new ArrayList<>();
 
     @QueryProjection
     public OrderInfoDto(String orderNum, String userId, String orderName, String orderTel, String orderEmail, String receiveName, String receiveTel, String receiveAddress, OrderStep orderStep, int payAmount, LocalDateTime orderDate, LocalDateTime payDate) {

@@ -1,5 +1,7 @@
 package com.teamproject.furniture.product.service;
 
+import com.teamproject.furniture.order.domain.OrderData;
+import com.teamproject.furniture.order.dtos.OrderDataDto;
 import com.teamproject.furniture.product.dtos.AddProductDto;
 import com.teamproject.furniture.product.dtos.ProductDto;
 import com.teamproject.furniture.product.dtos.ProductPageDto;
@@ -19,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -144,6 +147,47 @@ public class ProductService {
 
         return productRepository.searchProducts(column, keyword);
 
+    }
+
+    public void productLockCnt(List<OrderDataDto> orderDataDtoList) throws Exception {
+        List<Product> productList = new ArrayList<>();
+
+        for (OrderDataDto orderDataDto : orderDataDtoList){
+            OrderData orderData = new OrderData(orderDataDto);
+
+            Product product = productRepository.findById(Long.valueOf(orderData.getProductId())).orElseThrow();
+
+            int productsInStock = product.getProductsInStock();
+            int lockCnt = product.getLockCnt();
+
+            if (productsInStock < orderData.getCnt()){
+                throw new Exception("상품의 남은 수량보다 주문하려는 상품의 개수가 더 많음");
+            }
+
+            product.setProductsInStock(productsInStock - orderData.getCnt());
+            product.setLockCnt(lockCnt + orderData.getCnt());
+
+            productList.add(product);
+        }
+        productRepository.saveAll(productList);
+    }
+
+    public void rollBackProductLockCnt(List<OrderDataDto> orderDataDtoList){
+        List<Product> productList = new ArrayList<>();
+
+        for (OrderDataDto orderDataDto : orderDataDtoList){
+            OrderData orderData = new OrderData(orderDataDto);
+
+            Product product = productRepository.findById(Long.valueOf(orderData.getProductId())).orElseThrow();
+
+            int productsInStock = product.getProductsInStock();
+            int lockCnt = product.getLockCnt();
+            product.setProductsInStock(productsInStock + orderData.getCnt());
+            product.setLockCnt(lockCnt - orderData.getCnt());
+
+            productList.add(product);
+        }
+        productRepository.saveAll(productList);
     }
 
 
