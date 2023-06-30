@@ -73,9 +73,7 @@ public class AdminViewController {
     @GetMapping("/orderManagement")
     public String orderList(String searchVal, @PageableDefault(size = 5) Pageable pageable, Model model){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAdmin = true;
 
         Page<OrderInfoDto> results = orderService.selectOrderList(searchVal, pageable, isAdmin);
 
