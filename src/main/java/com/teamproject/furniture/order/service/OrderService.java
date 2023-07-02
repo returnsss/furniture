@@ -10,6 +10,7 @@ import com.teamproject.furniture.order.repository.OrderInfoRepository;
 import com.teamproject.furniture.order.repository.OrderInfoRepositoryCustom;
 import com.teamproject.furniture.product.model.Product;
 import com.teamproject.furniture.product.repository.ProductRepository;
+import com.teamproject.furniture.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -45,11 +46,17 @@ public class OrderService {
     private final OrderInfoRepository orderInfoRepository;
     private final OrderInfoRepositoryCustom orderInfoRepositoryCustom;
     private final ProductRepository productRepository;
+    private final ProductService productService;
 
     public void addToOrderData(List<OrderDataDto> orderDataDtoList, HttpSession session){
         String orderNum = getOrderNum(session);
 
-        orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+        List<OrderData> orderDataExist = orderDataRepository.findByOrderNum(orderNum);
+
+        if (!orderDataExist.isEmpty()) {
+            orderDataRepository.deleteOrderDataByOrderNum(orderNum);
+            productService.rollBackProductLockCnt(orderDataDtoList);
+        }
 
         List<OrderData> orderDataList = new ArrayList<>();
 
@@ -244,7 +251,7 @@ public class OrderService {
                 Product product = productMap.get(productId);
 
                 if (product != null) {
-                    product.setProductsInStock(product.getProductsInStock() - orderData.getCnt());
+                    product.setLockCnt(product.getLockCnt() - orderData.getCnt());
                 }
             }
 

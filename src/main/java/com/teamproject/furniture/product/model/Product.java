@@ -29,6 +29,7 @@ public class Product {
     private String description; // 제품 설명
     private String category;    // 카테고리
     private int productsInStock;// 제품 남은 수량
+    private int lockCnt;        // 구매하려는 상품 갯수만큼 productsInStock에 제한
     private String fileName;    // 이미지 파일 이름
 
     private String imgPath;     // 이미지 조회 경로

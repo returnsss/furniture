@@ -3,6 +3,7 @@ package com.teamproject.furniture.order.controller;
 import com.teamproject.furniture.order.dtos.OrderDataDto;
 import com.teamproject.furniture.order.dtos.OrderInfoDto;
 import com.teamproject.furniture.order.service.OrderService;
+import com.teamproject.furniture.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,12 +18,14 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final ProductService productService;
 
 
     @PostMapping("/data/add")
-    public void addToOrderData(@RequestBody List<OrderDataDto> orderDataList, HttpSession session){
+    public void addToOrderData(@RequestBody List<OrderDataDto> orderDataList, HttpSession session) throws Exception {
 
         orderService.addToOrderData(orderDataList, session);
+        productService.productLockCnt(orderDataList);
     }
 
     @PostMapping("/info/add")
@@ -34,10 +37,5 @@ public class OrderController {
     public OrderInfoDto getOrderInfoDto(@PathVariable String orderNum){
         return orderService.getOrderInfoDto(orderNum);
     }
-
-    /*@PostMapping("/{orderNum}")
-    public void updateOrderStep(@PathVariable String orderNum){
-        orderService.updateOrderStep(orderNum);
-    }*/
 
 }
